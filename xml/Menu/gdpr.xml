@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<menu>
+  <item>
+    <path>civicrm/gdpr/view/tab</path>
+    <page_callback>CRM_Gdpr_Page_Tab</page_callback>
+    <title>GDPR Tab</title>
+    <access_arguments>access CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/gdpr/dashboard</path>
+    <page_callback>CRM_Gdpr_Page_Dashboard</page_callback>
+    <title>GDPR - Dashboard</title>
+    <access_arguments>access CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/gdpr/activitycontact</path>
+    <page_callback>CRM_Gdpr_Form_Activitycontact</page_callback>
+    <title>GDPR - Contacts without Activities</title>
+    <access_arguments>access CiviCRM</access_arguments>
+  </item>
+  <item>
+     <path>civicrm/ajax/gdpractivitycontactlist</path>
+     <page_callback>CRM_Gdpr_Page_AJAX::getGdprActivityContactList</page_callback>
+     <access_arguments>access CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/gdpr/settings</path>
+    <page_callback>CRM_Gdpr_Form_Settings</page_callback>
+    <title>GDPR Settings</title>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+</menu>
