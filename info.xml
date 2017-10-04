@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<extension key="uk.co.vedaconsulting.gdpr" type="module">
+  <file>gdpr</file>
+  <name>General Data Protection Regulation</name>
+  <description>Extension to support General Data Protection Regulation</description>
+  <license>AGPL-3.0</license>
+  <maintainer>
+    <author>Veda NFP Consulting Ltd</author>
+    <email>support@vedaconsulting.co.uk</email>
+  </maintainer>
+  <urls>
+    <url desc="Main Extension Page">http://vedaconsulting.co.uk</url>
+    <url desc="Documentation">http://vedaconsulting.co.uk</url>
+    <url desc="Support">http://vedaconsulting.co.uk</url>
+    <url desc="Licensing">http://www.gnu.org/licenses/agpl-3.0.html</url>
+  </urls>
+  <releaseDate>2017-09-25</releaseDate>
+  <version>1.0</version>
+  <develStage>beta</develStage>
+  <compatibility>
+    <ver>4.7</ver>
+  </compatibility>
+  <comments>This extension is under active development</comments>
+  <civix>
+    <namespace>CRM/Gdpr</namespace>
+  </civix>
+</extension>
