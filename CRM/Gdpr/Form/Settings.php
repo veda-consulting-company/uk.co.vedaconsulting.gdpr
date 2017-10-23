@@ -34,13 +34,16 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
     // Get all contact types
     $contactTypes = CRM_Gdpr_Utils::getAllContactTypes($parentOnly = TRUE);
     $this->add(
-      'select', 
-      'contact_type', 
-      ts('Contact Types'), 
+      'select',
+      'contact_type',
+      ts('Contact Types'),
       array('' => ts('- select -')) + $contactTypes, // list of options
-      TRUE, 
+      TRUE,
       array('class' => 'crm-select2 huge', 'multiple' => 'multiple',)
     );
+
+    // Forget me action
+    $this->add('text', 'forgetme_name', ts('Forgetme contact name'));
 
     $this->add(
       'text',
@@ -73,18 +76,19 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
 
   function postProcess() {
     $values = $this->exportValues();
-    
+
     $settings = array();
     $settings['data_officer'] = $values['data_officer'];
     $settings['activity_type'] = $values['activity_type'];
     $settings['activity_period'] = $values['activity_period'];
     $settings['contact_type'] = $values['contact_type'];
+    $settings['forgetme_name'] = $values['forgetme_name'];
 
     $settingsStr = serialize($settings);
 
     // Save the settings
     CRM_Core_BAO_Setting::setItem($settingsStr, CRM_Gdpr_Constants::GDPR_SETTING_GROUP, CRM_Gdpr_Constants::GDPR_SETTING_NAME);
-    
+
     $message = "GDPR settings saved.";
     $url = CRM_Utils_System::url('civicrm/gdpr/dashboard', 'reset=1');
 
