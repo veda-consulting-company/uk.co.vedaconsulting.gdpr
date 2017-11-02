@@ -60,6 +60,26 @@
 
 </div>
 
+<!-- Forget Me settings -->
+<h3>Forget me</h3>
+
+<div class="crm-block crm-form-block crm-gdpr-settings-form-block">
+	<div id="help">
+		{ts}Settings related to 'Forget me' process.{/ts}
+	</div>
+
+	<div class="crm-section">
+		<div class="label">{$form.forgetme_name.label}</div>
+		<div class="content">
+			{$form.forgetme_name.html}
+			<br />
+	        <span class="description"><i>{ts}Name to be used for contacts that have been made anonymous.{/ts}</i></span>
+		</div>
+		<div class="clear"></div>
+	</div>
+</div>
+<!-- /Forget me settings -->
+
 {* FOOTER *}
 <div class="crm-submit-buttons">
 {include file="CRM/common/formButtons.tpl" location="bottom"}

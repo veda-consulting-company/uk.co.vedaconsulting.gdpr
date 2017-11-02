@@ -11,6 +11,7 @@ class CRM_Gdpr_Page_Tab extends CRM_Core_Page {
   	$groupSubscriptions = CRM_Gdpr_Utils::getallGroupSubscription($contactId);
   	$this->assign('groupSubscriptions', $groupSubscriptions);
   	$this->assign('contactId', $contactId);
+
     parent::run();
   }
 }

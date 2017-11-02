@@ -19,14 +19,21 @@
     <access_arguments>access CiviCRM</access_arguments>
   </item>
   <item>
-     <path>civicrm/ajax/gdpractivitycontactlist</path>
-     <page_callback>CRM_Gdpr_Page_AJAX::getGdprActivityContactList</page_callback>
-     <access_arguments>access CiviCRM</access_arguments>
+    <path>civicrm/ajax/gdpractivitycontactlist</path>
+    <page_callback>CRM_Gdpr_Page_AJAX::getGdprActivityContactList</page_callback>
+    <access_arguments>access CiviCRM</access_arguments>
   </item>
   <item>
     <path>civicrm/gdpr/settings</path>
     <page_callback>CRM_Gdpr_Form_Settings</page_callback>
     <title>GDPR Settings</title>
     <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/gdpr/forgetme</path>
+    <path_arguments>cid=%%cid%%</path_arguments>
+    <page_callback>CRM_Gdpr_Form_Forgetme</page_callback>
+    <title>Forgetme</title>
+    <access_arguments>access CiviCRM</access_arguments>
   </item>
 </menu>

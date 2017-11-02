@@ -98,7 +98,7 @@ class CRM_Gdpr_Utils {
     }
 
     $groupSubscriptions = array();
-    $sql = "SELECT c.sort_name, g.title, s.date, s.id, s.contact_id, s.group_id, s.status FROM 
+    $sql = "SELECT c.sort_name, g.title, s.date, s.id, s.contact_id, s.group_id, s.status FROM
 civicrm_subscription_history s
 INNER JOIN civicrm_contact c ON s.contact_id = c.id
 INNER JOIN civicrm_group g ON g.id = s.group_id
@@ -129,7 +129,7 @@ WHERE s.contact_id = %1 ORDER BY s.date DESC";
     if (empty($name)) {
       return;
     }
-    
+
     // Get all membership types from CiviCRM
     $result = self::CiviCRMAPIWrapper('OptionValue', 'get', array(
       'sequential' => 1,
@@ -151,7 +151,7 @@ WHERE s.contact_id = %1 ORDER BY s.date DESC";
       CRM_Gdpr_Constants::GDPR_SETTING_GROUP,
       CRM_Gdpr_Constants::GDPR_SETTING_NAME
     );
-    
+
     return unserialize($settingsStr);
   }
 
@@ -161,7 +161,7 @@ WHERE s.contact_id = %1 ORDER BY s.date DESC";
    * @return array $activityTypes
    */
   public static function getGDPRActivityTypes() {
-    
+
     $gdprActTypes = array();
 
     // Get GDPR settings
@@ -173,7 +173,7 @@ WHERE s.contact_id = %1 ORDER BY s.date DESC";
     foreach($settings['activity_type'] as $actTypeId) {
       $gdprActTypes[] = $actTypes[$actTypeId];
     }
-    
+
     return $gdprActTypes;
   }
 
@@ -221,14 +221,14 @@ WHERE s.contact_id = %1 ORDER BY s.date DESC";
   public static function getNoActivityContactsList($params) {
 
     $contactList = array();
-      
+
     $contactListSql = self::getActivityContactSQL($params, FALSE, TRUE);
     $resource = CRM_Core_DAO::executeQuery($contactListSql);
     while ($resource->fetch()) {
 
       // get last activity date time
       /*$lastActSql = "SELECT a.activity_date_time FROM civicrm_activity_contact ac
-INNER JOIN civicrm_activity a ON a.id = ac.activity_id   
+INNER JOIN civicrm_activity a ON a.id = ac.activity_id
 WHERE ac.record_type_id = 3 AND a.activity_type_id = %1 AND ac.contact_id = %2
 ORDER BY a.activity_date_time LIMIT 1
       ";
@@ -265,7 +265,7 @@ ORDER BY a.activity_date_time LIMIT 1
 
     $contactListSql = self::getActivityContactSQL($params, TRUE, TRUE);
     $count = CRM_Core_DAO::singleValueQuery($contactListSql);
-    
+
     return $count;
   }
 
@@ -329,11 +329,11 @@ ORDER BY a.activity_date_time LIMIT 1
       $excludeClickSql = " AND c.id NOT IN ({$clickThroughSql})";
     }
 
-    $sql = "SELECT {$selectColumns} FROM civicrm_contact c 
+    $sql = "SELECT {$selectColumns} FROM civicrm_contact c
 WHERE c.id NOT IN (
-SELECT contact_id FROM civicrm_activity_contact ac 
+SELECT contact_id FROM civicrm_activity_contact ac
 INNER JOIN civicrm_activity a ON a.id = ac.activity_id
-WHERE ac.record_type_id = 3 AND a.activity_type_id IN ({$actTypeIdsStr}) 
+WHERE ac.record_type_id = 3 AND a.activity_type_id IN ({$actTypeIdsStr})
 AND a.activity_date_time > '{$date}'
 ) AND c.is_deleted = 0 {$extraWhere} {$excludeClickSql} {$orderBy} {$limit}";
 
