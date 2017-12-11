@@ -169,11 +169,11 @@ WHERE s.contact_id = %1 ORDER BY s.date DESC";
 
     // Get all activity types
     $actTypes = CRM_Gdpr_Utils::getAllActivityTypes();
-
-    foreach($settings['activity_type'] as $actTypeId) {
-      $gdprActTypes[] = $actTypes[$actTypeId];
+    if (!empty($settings['activity_type'])) {
+      foreach($settings['activity_type'] as $actTypeId) {
+        $gdprActTypes[] = $actTypes[$actTypeId];
+      }
     }
-
     return $gdprActTypes;
   }
 
