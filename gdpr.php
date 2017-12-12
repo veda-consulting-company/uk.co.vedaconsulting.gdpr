@@ -27,6 +27,29 @@ function gdpr_civicrm_xmlMenu(&$files) {
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_install
  */
 function gdpr_civicrm_install() {
+  require_once 'CRM/Gdpr/Utils.php';
+  // Check whether the SLA Acceptance type exists already.
+  $activity_params = array(
+    'name' => 'SLA Acceptance',
+    'label' => 'SLA Acceptance',
+    'is_active' => 1,
+    'option_group_id' => 'activity_type',
+  );
+  $activity_result = CRM_Gdpr_Utils::CiviCRMAPIWrapper('OptionValue', 'get', array(
+  	'sequential' => 1,
+  	'option_group_id' => 'activity_type',
+  	'name' => $activity_params['name'],
+	)); 
+  // Create activity type
+  if (empty($activity_result['count'])) {
+    CRM_Gdpr_Utils::CiviCRMAPIWrapper('OptionValue', 'create', $activity_params);
+  }
+  // Import Custom Data.
+  $ext_path = dirname(__FILE__);
+  $xml_path = $ext_path . DIRECTORY_SEPARATOR . 'xml/CustomGroupData.xml';
+  require_once 'CRM/Utils/Migrate/Import.php';
+  $import = new CRM_Utils_Migrate_Import();
+  $import->run($xml_path);
   _gdpr_civix_civicrm_install();
 }
 

@@ -53,6 +53,38 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
       TRUE
     );
 
+    $months = range(6, 60, 6);
+    $slaPeriodOptions = array_combine($months, $months);
+    // SLA Acceptance settings.
+    $this->add(
+      'select',
+      'sla_period',
+      ts('SLA acceptance period (months)'),
+      array('' => ts('- select -')) + $slaPeriodOptions, // list of options
+      TRUE,
+      array('class' => 'crm-select2')
+    );
+    $this->add(
+      'file',
+      'sla_tc_upload',
+      ts('Terms and Conditions')
+    );
+    $this->add(
+      'hidden',
+      'sla_tc'
+    );
+    $this->add(
+      'checkbox',
+      'sla_prompt',
+      ts('Display agreement form after acceptance period has ellapsed.')
+    );
+    $this->add(
+      'textarea',
+      'sla_agreement_text',
+      ts('Text'),
+      array('width' => 50)
+    );
+
     $this->addButtons(array(
       array(
         'type' => 'submit',
@@ -70,6 +102,13 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
     if (!empty($defaults)) {
       $this->setDefaults($defaults);
     }
+    // Pass on variables to link to terms and conditions.
+    if (!empty($defaults['sla_tc'])) {
+      $sla_tc['url'] = $defaults['sla_tc'];
+      $sla_tc['name'] = basename($defaults['sla_tc']);
+      $this->assign('sla_tc_current', $sla_tc);
+    }
+
 
     parent::buildQuickForm();
   }
@@ -83,7 +122,15 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
     $settings['activity_period'] = $values['activity_period'];
     $settings['contact_type'] = $values['contact_type'];
     $settings['forgetme_name'] = $values['forgetme_name'];
-
+    $settings['sla_period'] = $values['sla_period'];
+    $settings['sla_prompt'] = $values['sla_prompt'];
+    $settings['sla_agreement_text'] = $values['sla_agreement_text'];
+    $uploadFile = $this->saveTCFile();
+    if ($uploadFile) {
+      $settings['sla_tc'] = $uploadFile;
+    } else {
+      $settings['sla_tc'] = $values['sla_tc'];
+    }
     $settingsStr = serialize($settings);
 
     // Save the settings
@@ -91,9 +138,47 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
 
     $message = "GDPR settings saved.";
     $url = CRM_Utils_System::url('civicrm/gdpr/dashboard', 'reset=1');
-
     CRM_Core_Session::setStatus($message, 'GDPR', 'success');
     CRM_Utils_System::redirect($url);
     CRM_Utils_System::civiExit();
+  }
+
+  public static function formRule($params, $files) {
+
+  }
+
+  /**
+   * Save an uploaded Terms and Conditions file.
+   *  @return string 
+   *    Path of the saved file.
+   */
+  private function saveTCFile() {
+    $fileElement = $this->_elements[$this->_elementIndex['sla_tc_upload']];
+    if ($fileElement && !empty($fileElement->_value['name'])) {
+      $slaUploadDir = 'SLA';
+      $config = CRM_Core_Config::singleton();
+      $destDir = $config->imageUploadDir;
+      $fileName = basename($fileElement->_value['name']);
+      if ($fileElement->moveUploadedFile($destDir, $fileName) ) {
+        $url = $this->getFileUrl($destDir  . $fileName);
+        return $url ? $url : $fileName;
+      }
+    }
+  }
+
+  /**
+   * Gets the url of an uploaded file from its path.
+   *
+   * @param string $path
+   *
+   * return string
+   */
+  private function getFileUrl($path) {
+    $config = CRM_Core_Config::singleton();
+    $cmsRoot = $config->userSystem->cmsRootPath();
+    if (0 === strpos($path, $cmsRoot)) {
+      $url = substr($path, strlen($cmsRoot));
+      return $url;
+    }
   }
 }
