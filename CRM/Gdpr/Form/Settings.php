@@ -155,13 +155,19 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
   private function saveTCFile() {
     $fileElement = $this->_elements[$this->_elementIndex['sla_tc_upload']];
     if ($fileElement && !empty($fileElement->_value['name'])) {
-      $slaUploadDir = 'SLA';
       $config = CRM_Core_Config::singleton();
-      $destDir = $config->imageUploadDir;
-      $fileName = basename($fileElement->_value['name']);
-      if ($fileElement->moveUploadedFile($destDir, $fileName) ) {
-        $url = $this->getFileUrl($destDir  . $fileName);
-        return $url ? $url : $fileName;
+      $publicUploadDir = $config->imageUploadDir;
+      $fileInfo = $fileElement->_value;
+      $fileName = $fileElement->_value['name'] . '-' . mktime();
+      $fileParams = array(
+        'mime_type' => $fileInfo['type'],
+        'uri' => $destDir . $fileName,
+      );
+      // Move to public uploads directory and create file record.
+      // This will be referenced in Activity custom field.
+      $saved = $fileElement->moveUploadedFile($publicUploadDir,$fileName);
+      if ($saved) {
+        return $this->getFileUrl($publicUploadDir . $fileName);
       }
     }
   }

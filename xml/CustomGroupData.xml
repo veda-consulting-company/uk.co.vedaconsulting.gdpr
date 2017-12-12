@@ -24,20 +24,20 @@
   </CustomGroups>
   <CustomFields>
     <CustomField>
-      <name>Terms_and_Conditions</name>
-      <label>Terms and Conditions</label>
-      <data_type>File</data_type>
-      <html_type>File</html_type>
+      <name>Terms_Conditions</name>
+      <label>Terms &amp; Conditions</label>
+      <data_type>Link</data_type>
+      <html_type>Link</html_type>
       <is_required>0</is_required>
       <is_searchable>0</is_searchable>
       <is_search_range>0</is_search_range>
-      <weight>1</weight>
+      <weight>2</weight>
       <is_active>1</is_active>
       <is_view>1</is_view>
       <text_length>255</text_length>
       <note_columns>60</note_columns>
       <note_rows>4</note_rows>
-      <column_name>terms_and_conditions_7</column_name>
+      <column_name>terms_conditions_8</column_name>
       <in_selector>0</in_selector>
       <custom_group_name>SLA_Acceptance</custom_group_name>
     </CustomField>
