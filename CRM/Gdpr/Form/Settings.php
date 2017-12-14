@@ -8,7 +8,6 @@ require_once 'CRM/Core/Form.php';
  * @see http://wiki.civicrm.org/confluence/display/CRMDOC43/QuickForm+Reference
  */
 class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
-
   function buildQuickForm() {
 
     CRM_Utils_System::setTitle(ts('GDPR - Settings'));
@@ -108,8 +107,6 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
       $sla_tc['name'] = basename($defaults['sla_tc']);
       $this->assign('sla_tc_current', $sla_tc);
     }
-
-
     parent::buildQuickForm();
   }
 
@@ -123,7 +120,7 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
     $settings['contact_type'] = $values['contact_type'];
     $settings['forgetme_name'] = $values['forgetme_name'];
     $settings['sla_period'] = $values['sla_period'];
-    $settings['sla_prompt'] = $values['sla_prompt'];
+    $settings['sla_prompt'] = !empty($values['sla_prompt']) ? 1 : 0;
     $settings['sla_agreement_text'] = $values['sla_agreement_text'];
     $uploadFile = $this->saveTCFile();
     if ($uploadFile) {

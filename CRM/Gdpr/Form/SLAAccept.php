@@ -27,6 +27,7 @@ class CRM_Gdpr_Form_SLAAccept extends CRM_Core_Form {
         'isDefault' => TRUE,
       ),
     ));
+		$this->addRule('accept_tc', ts('This field is required.'), 'required');
 
     // export form elements
     $this->assign('elementNames', $this->getRenderableElementNames());
@@ -34,7 +35,12 @@ class CRM_Gdpr_Form_SLAAccept extends CRM_Core_Form {
   }
 
   public function postProcess() {
+    // Remove the flag to display the form. 
+    CRM_Gdpr_SLA_Utils::unflagShowForm();
     $values = $this->exportValues();
+    if (!empty($values['accept_tc'])) {
+      CRM_Gdpr_SLA_Utils::recordSLAAcceptance();
+    }
     parent::postProcess();
   }
   
