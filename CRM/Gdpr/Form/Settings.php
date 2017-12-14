@@ -58,7 +58,7 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
     $this->add(
       'select',
       'sla_period',
-      ts('SLA acceptance period (months)'),
+      ts('Acceptance period (months)'),
       array('' => ts('- select -')) + $slaPeriodOptions, // list of options
       TRUE,
       array('class' => 'crm-select2')
@@ -66,7 +66,7 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
     $this->add(
       'file',
       'sla_tc_upload',
-      ts('Terms and Conditions')
+      ts('Terms and Conditions file')
     );
     $this->add(
       'hidden',
@@ -75,13 +75,13 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
     $this->add(
       'checkbox',
       'sla_prompt',
-      ts('Display agreement form after acceptance period has ellapsed.')
+      ts('Show the CiviCRM acceptance form. (Keep unchecked if you are using a form via the CMS).')
     );
     $this->add(
       'textarea',
       'sla_agreement_text',
-      ts('Text'),
-      array('width' => 50)
+      ts('Introductory text'),
+      array('cols' => 50)
     );
 
     $this->addButtons(array(

@@ -80,12 +80,12 @@
 </div>
 <!-- /Forget me settings -->
 
-<!-- SLA acceptance settings-->
-<h3>SLA Acceptance</h3>
+<!-- SLA/TC acceptance settings-->
+<h3>Terms and Conditions</h3>
 
 <div class="crm-block crm-form-block crm-gdpr-settings-form-block">
 	<div id="help">
-		{ts}Settings related to eliciting acceptance for Service Level Agreement.{/ts}
+		{ts}Settings related to eliciting the acceptance for Terms and Conditions.{/ts}
 	</div>
 
 	<div class="crm-section">
@@ -99,23 +99,25 @@
 	</div>
 	<div class="crm-section">
 		<div class="label">{$form.sla_tc_upload.label}</div>
+    {if $sla_tc_current} 
+    <div class="clear current-file">
+    <div class="label">Current:</div>
+      <div class="content"> <a href="{$sla_tc_current.url}" target="blank">{$sla_tc_current.name}</a> </div>
+    {/if}
 		<div class="content">
 			{$form.sla_tc_upload.html}
 			<br />
 	        <span class="description"><i>{ts}Pdf document with the Terms and Conditions.{/ts}</i></span>
 		</div>
-    {if $sla_tc_current} 
-    <div class="current-file">Current: <a href="{$sla_tc_current.url}" target="blank">{$sla_tc_current.name}</a> </div>
-    {/if}
 		<div class="clear"></div>
     <div class="crm-section">
       <div class="label">{$form.sla_prompt.label}</div>
-      {$form.sla_prompt.html}
+      <div class="content">{$form.sla_prompt.html}</div>
     </div>
 		<div class="clear"></div>
     <div class="crm-section">
       <div class="label">{$form.sla_agreement_text.label}</div>
-      {$form.sla_agreement_text.html}
+      <div class="content">{$form.sla_agreement_text.html}</div>
     </div>
 	</div>
 </div>
