@@ -205,9 +205,11 @@ WHERE s.contact_id = %1 ORDER BY s.date DESC";
 
     // Get contact count who have not had any GDPR activities
     $actContactSummarySql = self::getActivityContactSQL($actTypeParams, TRUE, TRUE);
-    $resource = CRM_Core_DAO::executeQuery($actContactSummarySql);
-    if ($resource->fetch()) {
-      $count = $resource->count;
+    if ($actContactSummarySql) {
+      $resource = CRM_Core_DAO::executeQuery($actContactSummarySql);
+      if ($resource->fetch()) {
+        $count = $resource->count;
+      }
     }
 
     return $count;
@@ -223,33 +225,34 @@ WHERE s.contact_id = %1 ORDER BY s.date DESC";
     $contactList = array();
 
     $contactListSql = self::getActivityContactSQL($params, FALSE, TRUE);
-    $resource = CRM_Core_DAO::executeQuery($contactListSql);
-    while ($resource->fetch()) {
+    if ($contactListSql) {
+      $resource = CRM_Core_DAO::executeQuery($contactListSql);
+      while ($resource->fetch()) {
 
-      // get last activity date time
-      /*$lastActSql = "SELECT a.activity_date_time FROM civicrm_activity_contact ac
-INNER JOIN civicrm_activity a ON a.id = ac.activity_id
-WHERE ac.record_type_id = 3 AND a.activity_type_id = %1 AND ac.contact_id = %2
-ORDER BY a.activity_date_time LIMIT 1
-      ";
-      $lastActParams = array(
-        1 => array($params['activity_type_id'], 'Integer'),
-        2 => array($resource->id, 'Integer'),
-      );
-      $lastActResource = CRM_Core_DAO::executeQuery($lastActSql, $lastActParams);
-      $lastActDateTime = '';
-      if ($lastActResource->fetch()) {
-        $lastActDateTime = $lastActResource->activity_date_time;
-      }*/
+        // get last activity date time
+        /*$lastActSql = "SELECT a.activity_date_time FROM civicrm_activity_contact ac
+  INNER JOIN civicrm_activity a ON a.id = ac.activity_id
+  WHERE ac.record_type_id = 3 AND a.activity_type_id = %1 AND ac.contact_id = %2
+  ORDER BY a.activity_date_time LIMIT 1
+        ";
+        $lastActParams = array(
+          1 => array($params['activity_type_id'], 'Integer'),
+          2 => array($resource->id, 'Integer'),
+        );
+        $lastActResource = CRM_Core_DAO::executeQuery($lastActSql, $lastActParams);
+        $lastActDateTime = '';
+        if ($lastActResource->fetch()) {
+          $lastActDateTime = $lastActResource->activity_date_time;
+        }*/
 
-      $url = CRM_Utils_System::url('civicrm/contact/view', 'reset=1&cid='.$resource->id);
-      $contactList[$resource->id] = array(
-        'id' => $resource->id,
-        'sort_name' => "<a href='{$url}'>".$resource->sort_name."</a>",
-        //'activity_date_time' => '',
-      );
+        $url = CRM_Utils_System::url('civicrm/contact/view', 'reset=1&cid='.$resource->id);
+        $contactList[$resource->id] = array(
+          'id' => $resource->id,
+          'sort_name' => "<a href='{$url}'>".$resource->sort_name."</a>",
+          //'activity_date_time' => '',
+        );
+      }
     }
-
     return $contactList;
   }
 
@@ -262,10 +265,11 @@ ORDER BY a.activity_date_time LIMIT 1
    * @return null|string
    */
   public static function getActivityContactCount(&$params) {
-
+    $count = 0;
     $contactListSql = self::getActivityContactSQL($params, TRUE, TRUE);
-    $count = CRM_Core_DAO::singleValueQuery($contactListSql);
-
+    if ($contactListSql) {
+      $count = CRM_Core_DAO::singleValueQuery($contactListSql);
+    }
     return $count;
   }
 
