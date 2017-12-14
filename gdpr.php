@@ -10,6 +10,22 @@ use CRM_Gdpr_ExtensionUtil as E;
  */
 function gdpr_civicrm_config(&$config) {
   _gdpr_civix_civicrm_config($config);
+	$cid = CRM_Core_Session::singleton()->getLoggedInContactID();
+  if ($cid) {
+    $session = CRM_Core_Session::singleton();
+    $key = CRM_Gdpr_SLA_Utils::getPromptFlagSessionKey();
+    
+    if (CRM_Gdpr_SLA_Utils::showFormIsFlagged()) {
+      CRM_Gdpr_SLA_Utils::showForm();
+    }
+    else {
+      $promptForSLA = CRM_Gdpr_SLA_Utils::isPromptForAcceptance()
+        && CRM_Gdpr_SLA_Utils::isContactDueAcceptance($cid);
+      if ($promptForSLA && !CRM_Gdpr_SLA_Utils::showFormIsUnflagged()) {
+        CRM_Gdpr_SLA_Utils::flagShowForm();
+      }
+    }
+  }
 }
 
 /**
@@ -39,7 +55,7 @@ function gdpr_civicrm_install() {
   	'sequential' => 1,
   	'option_group_id' => 'activity_type',
   	'name' => $activity_params['name'],
-	)); 
+	));
   // Create activity type
   if (empty($activity_result['count'])) {
     CRM_Gdpr_Utils::CiviCRMAPIWrapper('OptionValue', 'create', $activity_params);
@@ -219,7 +235,7 @@ function gdpr_civicrm_alterContent(&$content, $context, $tplName, &$object) {
         });//end ajax
       }
     });
-    
+
   </script>
 EOD;
       $addressHistoryContent = str_replace('&amp;', '&', $addressHistoryContent);
