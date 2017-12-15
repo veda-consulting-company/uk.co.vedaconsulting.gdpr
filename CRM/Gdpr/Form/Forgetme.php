@@ -134,7 +134,7 @@ class CRM_Gdpr_Form_Forgetme extends CRM_Core_Form {
     if (!$this->_contactId) {
       CRM_Core_Error::fatal(ts("Something went wrong. Please contact Admin."));
     }
-    
+    $params = array('id' => $this->_contactId); 
     // Update contact Record
     $updateResult = CRM_Gdpr_Utils::CiviCRMAPIWrapper('Contact', 'anonymize', $params);
 

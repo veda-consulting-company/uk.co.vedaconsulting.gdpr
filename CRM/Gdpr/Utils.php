@@ -427,15 +427,59 @@ WHERE url.time_stamp > '{$date}'";
     // Add contact ID into params to update the contact record
     $params['id'] = $contactId;
     // Set diplay name as Anonymous by default
-    $params['display_name'] = 'Anonymous';
+    $params['last_name'] = 'Anonymous';
 
     // Get Display Name from GDPR settings
     $settings = CRM_Gdpr_Utils::getGDPRSettings();
     if (!empty($settings['forgetme_name'])) {
-      $params['display_name'] = $settings['forgetme_name'];
+      $params['last_name'] = $settings['forgetme_name'];
     }
     $updateResult = CRM_Gdpr_Utils::CiviCRMAPIWrapper('Contact', 'create', $params);
+    $associatedResult = self::deleteContactAssociatedData($contactId, array(
+      'Email', 
+      'Phone',
+      'IM',
+      'Website',
+    ));
     return $updateResult;
+  }
+  
+  /**
+   * Deletes data directly associated with a contact.
+   *
+   * @param int $contactId
+   *
+   * @param array $types
+   *  Array containing the names of types to delete, may include:
+   *   - Email
+   *   - Phone
+   *   - IM
+   *   - Website
+   *   - Address
+   */
+  static function deleteContactAssociatedData($contactId, $types = array('Email', 'Phone')) {
+    $validTypes = array('Email', 'Phone', 'IM', 'Website', 'Address');
+    $delResult = array();
+    foreach ($types as $entity) {
+      if (!in_array($entity, $validTypes)) {
+        continue;
+      }
+      $getResult = CRM_Gdpr_Utils::CiviCRMAPIWrapper($entity, 'get', array(
+        'sequential' => 1,
+        'contact_id' => $contactId,
+      ));
+
+      if (!empty($getResult['values'])) {
+        foreach ($getResult['values'] as $data) {
+          $id = $data['id'];
+          $delResult[$entity][$id] = CRM_Gdpr_Utils::CiviCRMAPIWrapper($entity, 'delete', array(
+            'id' => $id,
+            'sequential' => 1,
+          ));
+        }
+      }
+    }
+    return $delResult;
   }
 
 }//End Class

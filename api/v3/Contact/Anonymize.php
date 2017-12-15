@@ -33,14 +33,14 @@ function civicrm_api3_contact_Anonymize($params) {
   }
   $session = CRM_Core_Session::singleton();
   if ($contactID == $session->get('userID')) {
-    return civicrm_api3_create_error('This contact record is linked to the currently logged in user account - and cannot be anonymized.');
+    throw new API_Exception('This contact record is linked to the currently logged in user account - and cannot be anonymized.');
   }
   $result = CRM_Gdpr_Utils::anonymizeContact($contactID);
 
   if (empty($result['error'])) {
-    return civicrm_api3_create_success($result['values'], $params, 'NewEntity', 'NewAction');
+    return civicrm_api3_create_success($result['values'], $params);
   }
   else {
-    // throw new API_Exception(/*errorMessage*/ '', /*errorCode*/ 1234);
+     throw new API_Exception($result['error_message'], $result['error_code']);
   }
 }
