@@ -374,4 +374,68 @@ WHERE url.time_stamp > '{$date}'";
     return $sql;
   }
 
+  /**
+   * Anonymize a contact.
+   *
+   * @param int $contactId
+   *  Id for a contact.
+   * 
+   * @return array
+   *  Associative array with the format of an API Contact.create result.
+   */
+  public static function anonymizeContact($contactId) {
+    // Should we check contact exists?
+
+
+    // Retrieve the contact, to check it exists.
+    $contactResult = CRM_Gdpr_Utils::CiviCRMAPIWrapper('Contact', 'get', array(
+      'id' => $contactId,
+      'sequential' => 1,
+    ));
+    if (empty($contactResult['values'][0])) {
+      return $contactResult;
+    }
+    else {
+      $currentContact = $contactResult['values'][0];
+    }
+    // get all fields of contact API
+    $fieldsResult = CRM_Gdpr_Utils::CiviCRMAPIWrapper('Contact', 'getfields', array(
+      'sequential' => 1,
+    ));
+
+    $fields = array();
+    if ($fieldsResult && !empty($fieldsResult['values'])) {
+      $fields = $fieldsResult['values'];
+    }
+
+    // setting up params to update contact record
+    $params = array(
+      'sequential' => 1,
+    );
+
+    // Loop through fields and set them empty
+    foreach ($fields as $key => $field) {
+      //Fix me : skipping if not a core field. We may need to clear the custom fields later
+      if ( !array_key_exists('is_core_field', $field) || $field['is_core_field'] != 1 ) {
+        continue;
+      }
+
+      $fieldName = $field['name'];
+      $params[$fieldName] = '';
+    }
+
+    // Add contact ID into params to update the contact record
+    $params['id'] = $contactId;
+    // Set diplay name as Anonymous by default
+    $params['display_name'] = 'Anonymous';
+
+    // Get Display Name from GDPR settings
+    $settings = CRM_Gdpr_Utils::getGDPRSettings();
+    if (!empty($settings['forgetme_name'])) {
+      $params['display_name'] = $settings['forgetme_name'];
+    }
+    $updateResult = CRM_Gdpr_Utils::CiviCRMAPIWrapper('Contact', 'create', $params);
+    return $updateResult;
+  }
+
 }//End Class
