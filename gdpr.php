@@ -13,14 +13,14 @@ function gdpr_civicrm_config(&$config) {
 	$cid = CRM_Core_Session::singleton()->getLoggedInContactID();
   if ($cid) {
     $session = CRM_Core_Session::singleton();
+    $promptSet = CRM_Gdpr_SLA_Utils::isPromptForAcceptance();
     $key = CRM_Gdpr_SLA_Utils::getPromptFlagSessionKey();
     
-    if (CRM_Gdpr_SLA_Utils::showFormIsFlagged()) {
+    if ($promptSet && CRM_Gdpr_SLA_Utils::showFormIsFlagged()) {
       CRM_Gdpr_SLA_Utils::showForm();
     }
     else {
-      $promptForSLA = CRM_Gdpr_SLA_Utils::isPromptForAcceptance()
-        && CRM_Gdpr_SLA_Utils::isContactDueAcceptance($cid);
+      $promptForSLA = $promptSet && CRM_Gdpr_SLA_Utils::isContactDueAcceptance($cid);
       if ($promptForSLA && !CRM_Gdpr_SLA_Utils::showFormIsUnflagged()) {
         CRM_Gdpr_SLA_Utils::flagShowForm();
       }
