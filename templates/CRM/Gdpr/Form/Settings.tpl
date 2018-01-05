@@ -80,6 +80,48 @@
 </div>
 <!-- /Forget me settings -->
 
+<!-- SLA/TC acceptance settings-->
+<h3>Terms and Conditions</h3>
+
+<div class="crm-block crm-form-block crm-gdpr-settings-form-block">
+	<div id="help">
+		{ts}Settings related to eliciting the acceptance for Terms and Conditions.{/ts}
+	</div>
+
+	<div class="crm-section">
+		<div class="label">{$form.sla_period.label}</div>
+		<div class="content">
+			{$form.sla_period.html}
+			<br />
+	        <span class="description"><i>{ts}Number of months since contact accepted Terms and Conditions until they are due to renew.{/ts}</i></span>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div class="crm-section">
+		<div class="label">{$form.sla_tc_upload.label}</div>
+    {if $sla_tc_current} 
+    <div class="clear current-file">
+    <div class="label">Current:</div>
+      <div class="content"> <a href="{$sla_tc_current.url}" target="blank">{$sla_tc_current.name}</a> </div>
+    {/if}
+		<div class="content">
+			{$form.sla_tc_upload.html}
+			<br />
+	        <span class="description"><i>{ts}Pdf document with the Terms and Conditions.{/ts}</i></span>
+		</div>
+		<div class="clear"></div>
+    <div class="crm-section">
+      <div class="label">{$form.sla_prompt.label}</div>
+      <div class="content">{$form.sla_prompt.html}</div>
+    </div>
+		<div class="clear"></div>
+    <div class="crm-section">
+      <div class="label">{$form.sla_agreement_text.label}</div>
+      <div class="content">{$form.sla_agreement_text.html}</div>
+    </div>
+	</div>
+</div>
+<!-- /SLA Acceptance -->
 {* FOOTER *}
 <div class="crm-submit-buttons">
 {include file="CRM/common/formButtons.tpl" location="bottom"}
