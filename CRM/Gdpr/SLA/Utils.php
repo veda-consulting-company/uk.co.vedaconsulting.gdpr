@@ -111,7 +111,7 @@ EOT;
 			'activity_type_id' => self::$activityTypeName,
 			'target_contact_id' => $contactId,
       'options' => array(
-        'sort' => 'created_date asc',
+        'sort' => 'activity_date_time asc',
         'limit' => 1,
       ),
 		));
@@ -145,6 +145,9 @@ EOT;
 
   static function isContactDueAcceptance($contactId = NULL) {
 	  $contactId = $contactId ? $contactId : CRM_Core_Session::singleton()->getLoggedInContactID();
+    if (!$contactId) {
+      return;
+    }
     $settings = self::getSettings();
     $lastAcceptance = self::getContactLastAcceptance($contactId);
     if (!$lastAcceptance) {
@@ -154,7 +157,7 @@ EOT;
     $months = !empty($settings['sla_period']) ? $settings['sla_period'] : 12;
     $seconds_in_year = 365 * 24 * 60 * 60;
     $acceptancePeriod = (($months / 12) * $seconds_in_year);
-    $acceptanceDate = strtotime($lastAcceptance['created_date']);
+    $acceptanceDate = strtotime($lastAcceptance['activity_date_time']);
     $acceptanceDue = $acceptanceDate + $acceptancePeriod;
     return $acceptanceDue < time();
   }
