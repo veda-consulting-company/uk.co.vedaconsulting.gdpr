@@ -18,7 +18,7 @@
   <version>1.0</version>
   <develStage>beta</develStage>
   <compatibility>
-    <ver>4.7</ver>
+    <ver>4.6, 4.7</ver>
   </compatibility>
   <comments>This extension is under active development</comments>
   <civix>

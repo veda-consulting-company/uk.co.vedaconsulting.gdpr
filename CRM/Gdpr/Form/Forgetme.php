@@ -23,7 +23,7 @@ class CRM_Gdpr_Form_Forgetme extends CRM_Core_Form {
 
     // <!-- To DO - check permission -->
 
-    $this->_contactId = CRM_Utils_Request::retrieve('cid', 'Positive', $this, TRUE);
+    $this->_contactID = CRM_Utils_Request::retrieve('cid', 'Positive', $this, TRUE);
   }
 
   public function buildQuickForm() {
@@ -46,15 +46,15 @@ class CRM_Gdpr_Form_Forgetme extends CRM_Core_Form {
 
   public function postProcess() {
 
-    if (!$this->_contactId) {
+    if (!$this->_contactID) {
       CRM_Core_Error::fatal(ts("Something went wrong. Please contact Admin."));
     }
 
     // Remove all the linked relationship records of this contact
     $params = array(
       'sequential' => 1,
-      'contact_id_a' => $this->_contactId,
-      'contact_id_b' => $this->_contactId,
+      'contact_id_a' => $this->_contactID,
+      'contact_id_b' => $this->_contactID,
       'options' => array('or' => array(array("contact_id_a", "contact_id_b"))),
     );
     self::removeEntityRecords('Relationship', $params);
@@ -62,35 +62,35 @@ class CRM_Gdpr_Form_Forgetme extends CRM_Core_Form {
     // Remove all the address records of this contact
     $params = array(
       'sequential' => 1,
-      'contact_id' => $this->_contactId,
+      'contact_id' => $this->_contactID,
     );
     self::removeEntityRecords('Address', $params);
 
     // Remove all the email records of this contact
     $params = array(
       'sequential' => 1,
-      'contact_id' => $this->_contactId,
+      'contact_id' => $this->_contactID,
     );
     self::removeEntityRecords('Email', $params);
 
     // Remove all the phone records of this contact
     $params = array(
       'sequential' => 1,
-      'contact_id' => $this->_contactId,
+      'contact_id' => $this->_contactID,
     );
     self::removeEntityRecords('Phone', $params);
 
     // Remove all the website records of this contact
     $params = array(
       'sequential' => 1,
-      'contact_id' => $this->_contactId,
+      'contact_id' => $this->_contactID,
     );
     self::removeEntityRecords('Website', $params);
 
     // Remove all the IM records of this contact
     $params = array(
       'sequential' => 1,
-      'contact_id' => $this->_contactId,
+      'contact_id' => $this->_contactID,
     );
     self::removeEntityRecords('Im', $params);
 
@@ -131,10 +131,10 @@ class CRM_Gdpr_Form_Forgetme extends CRM_Core_Form {
   }
 
   private function makeContactAnonymous() {
-    if (!$this->_contactId) {
+    if (!$this->_contactID) {
       CRM_Core_Error::fatal(ts("Something went wrong. Please contact Admin."));
     }
-    $params = array('id' => $this->_contactId); 
+    $params = array('id' => $this->_contactID);
     // Update contact Record
     $updateResult = CRM_Gdpr_Utils::CiviCRMAPIWrapper('Contact', 'anonymize', $params);
 
