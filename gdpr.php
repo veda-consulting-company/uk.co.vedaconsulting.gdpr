@@ -252,16 +252,39 @@ function gdpr_civicrm_tabset($tabsetName, &$tabs, $context) {
   //check if the tabset is Contact Summary Page
   if ($tabsetName == 'civicrm/contact/view') {
     $contactId = $context['contact_id'];
-    $url = CRM_Utils_System::url('civicrm/gdpr/view/tab', "reset=1&cid={$contactId}");
-    $tabs[] = array( 'id'    => 'gdprTab',
-      'url'   => $url,
-      'title' => ts('GDPR'),
-      'weight' => 300,
-      'class'  => 'livePage',
-    );
+    _gdpr_addGDPRTab($tabs, $contactId);
   }
 }
 
+/*
+ * Add a tab to show group subscription
+ */
+function gdpr_civicrm_tabs(&$tabs, $contactID) {
+  if (_gdpr_isCiviCRMVersion47()) {
+    return;
+  }
+
+  _gdpr_addGDPRTab($tabs, $contactID);
+}
+
+function _gdpr_addGDPRTab(&$tabs, $contactID) {
+  $url = CRM_Utils_System::url('civicrm/gdpr/view/tab', "reset=1&cid={$contactID}");
+  $tabs[] = array( 'id'    => 'gdprTab',
+    'url'   => $url,
+    'title' => ts('GDPR'),
+    'weight' => 300,
+    'class'  => 'livePage',
+  );
+}
+
+/**
+ * Checks if civicrm version is 4.7
+ *
+ * @return mixed
+ */
+function _gdpr_isCiviCRMVersion47(){
+  return version_compare(CRM_Utils_System::version(), '4.7', '>');
+}
 /**
  * Add navigation for GDPR Dashboard
  *
