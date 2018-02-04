@@ -208,7 +208,7 @@ TABLE;
       //'activity_date_time',
     );
 
-    CRM_Utils_System::setHttpHeader('Content-Type', 'application/json');
+    header("Content-Type: application/json");
     echo CRM_Utils_JSON::encodeDataTableSelector($contactList, $sEcho, $iTotal, $iFilteredTotal, $selectorElements);
     CRM_Utils_System::civiExit();
   }

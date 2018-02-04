@@ -414,11 +414,22 @@ WHERE url.time_stamp > '{$date}'";
     );
 
     // Loop through fields and set them empty
+    $isCiviCRMVersion47 = _gdpr_isCiviCRMVersion47();
     foreach ($fields as $key => $field) {
       //Fix me : skipping if not a core field. We may need to clear the custom fields later
-      if ( !array_key_exists('is_core_field', $field) || $field['is_core_field'] != 1 ) {
-        continue;
+      if ($isCiviCRMVersion47) {
+        if ( !array_key_exists('is_core_field', $field) || $field['is_core_field'] != 1 ) {
+          continue;
+        }
+      } else {
+        // is_core_field is not supported in 4.6, so we only anonymize fields with
+        // 'where' clause that start with 'civicrm_contact.' since they are usually
+        // the core civi fields.
+        if ( !array_key_exists('where', $field) || strpos($field['where'], 'civicrm_contact.') != 0) {
+          continue;
+        }
       }
+
 
       $fieldName = $field['name'];
       $params[$fieldName] = '';
