@@ -445,6 +445,10 @@ WHERE url.time_stamp > '{$date}'";
     if (!empty($settings['forgetme_name'])) {
       $params['last_name'] = $settings['forgetme_name'];
     }
+
+    // Allow params to be modified via hook
+    CRM_Gdpr_Hook::alterAnonymizeContactParams($params);
+
     $updateResult = CRM_Gdpr_Utils::CiviCRMAPIWrapper('Contact', 'create', $params);
     $associatedResult = self::deleteContactAssociatedData($contactId, array(
       'Email', 

@@ -43,7 +43,7 @@ class CRM_Gdpr_Page_AJAX {
   /**
    * Function to get address log for a contact
    */
-	function get_address_logs($contactId){
+  public static function get_address_logs($contactId){
     
     $aGetMemberships =array();
 
@@ -82,7 +82,7 @@ ORDER BY lca.log_date DESC";
     return $aGetMemberships;
   }
   
-  function get_address_history_table( $data ){
+  public static function get_address_history_table( $data ){
     if(empty($data)){
       return null;
     }
