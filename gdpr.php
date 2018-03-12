@@ -249,20 +249,23 @@ EOD;
  */
 function gdpr_civicrm_buildForm($formName, $form) {
   if ($formName == 'CRM_Custom_Form_CustomDataByType' && $form->_type == 'Event') {
+   CRM_Core_Resources::singleton()->addStyleFile('uk.co.vedaconsulting.gdpr', 'css/gdpr.css');
+
     if (!empty($form->_groupTree)) {
       // Remove custom fields for terms and conditions.
       // They will be included in the tab.
       foreach ($form->_groupTree as $gid => $group) {
         if ($group['name'] == 'Event_terms_and_conditions') {
           foreach($group['fields'] as $field) {
-            $form->removeElement($field['element_name']);
+           // $form->removeElement($field['element_name']);
           }
-          unset($form->_groupTree[$gid]);
+         //unset($form->_groupTree[$gid]);
         }
       }
     }
   }
   if ($formName == 'CRM_Event_Form_Registration_Register') {
+   CRM_Core_Resources::singleton()->addStyleFile('uk.co.vedaconsulting.gdpr', 'css/gdpr.css');
     // Add Terms and Conditions checkbox.
     _gdpr_add_event_form_terms_conditions($form);
   }
@@ -299,25 +302,39 @@ function _gdpr_add_event_form_terms_conditions($form) {
   $links = $tc->getLinks();
   $position = $tc->getCheckboxPosition();
   $text = $tc->getCheckboxText();
-  $form->add(
-    'checkbox',
-    'accept_tc',
-    'Terms & Conditions',
-    'I accept the Terms &amp; Conditions',
-    TRUE,
-    array('required' => TRUE)
-  );
-  $tc_vars = array(
-    'element' => 'accept_tc',
-    'links' => $links,
-    'intro' => $intro,
-    'position' => $position,
-  );
-  $form->assign('terms_conditions', $tc_vars);
-  $template_path = realpath(dirname(__FILE__) . '/templates/CRM/Gdpr');
-  CRM_Core_Region::instance('page-body')->add(array(
-    'template' => "CRM/Gdpr/TermsConditionsField.tpl"
-   ));
+  if (!empty($links['event'])) {
+    $form->add(
+      'checkbox',
+      'accept_event_tc',
+      'Event Terms & Conditions',
+      $text,
+      TRUE,
+      array('required' => TRUE)
+    );
+  }
+  if (!empty($links['global'])) {
+    $form->add(
+      'checkbox',
+      'accept_tc',
+      'Terms & Conditions',
+      'I accept the Terms &amp; Conditions',
+      TRUE,
+      array('required' => TRUE)
+    );
+  }
+  if (!empty($links)) {
+    $tc_vars = array(
+      'element' => 'accept_tc',
+      'links' => $links,
+      'intro' => $intro,
+      'position' => $position,
+    );
+    $form->assign('terms_conditions', $tc_vars);
+    $template_path = realpath(dirname(__FILE__) . '/templates/CRM/Gdpr');
+    CRM_Core_Region::instance('page-body')->add(array(
+      'template' => "CRM/Gdpr/TermsConditionsField.tpl"
+    ));
+  }
 }
 
 /*

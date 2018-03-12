@@ -9,15 +9,29 @@
       <div class="terms-conditions-acceptance-intro">
        {$terms_conditions.intro}
       </div>
-      <ul class="terms-conditions-links">
-       {foreach from=$terms_conditions.links item=link}
-       <li>
-          <a href="{$link.url}" class="terms-conditions-link" target="blank">{$link.label}</a>
-        </li>
-       {/foreach}
-      </ul>
-      {$form.accept_tc.html}
     </div>
+      {if $terms_conditions.links.global}
+      {assign var="link" value=$terms_conditions.links.global}
+    <div class="label"><label>
+    </label></div>
+      <div class="content terms-conditions-item">
+        <a href="{$link.url}" class="terms-conditions-link" target="blank">{$link.label}</a>
+        <div class="terms-conditions-checkbox">
+        {$form.accept_tc.html}
+        </div>
+      </div>
+      {/if}
+      {if $terms_conditions.links.event}
+      {assign var="link" value=$terms_conditions.links.event}
+    <div class="label"><label>
+    </label></div>
+      <div class="content terms-conditions-item">
+          <a href="{$link.url}" class="terms-conditions-link" target="blank">{$link.label}</a>
+        <div class="terms-conditions-checkbox">
+          {$form.accept_event_tc.html}
+        </div>
+      </div>
+      {/if}
   </div>
   <div class="clear"></div>
 </fieldset>
