@@ -42,4 +42,10 @@
     <title>SLAAccept</title>
     <access_arguments>access CiviCRM</access_arguments>
   </item>
+  <item>
+    <path>civicrm/event/manage/terms_conditions</path>
+    <page_callback>CRM_Gdpr_Form_ManageEvent_TermsAndConditions</page_callback>
+    <title>ManageEvent_TermsAndConditions</title>
+    <access_arguments>access CiviCRM</access_arguments>
+  </item>
 </menu>
