@@ -155,11 +155,21 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
       $config = CRM_Core_Config::singleton();
       $publicUploadDir = $config->imageUploadDir;
       $fileInfo = $fileElement->_value;
-      $fileName = $fileElement->_value['name'] . '-' . mktime();
-      $fileParams = array(
-        'mime_type' => $fileInfo['type'],
-        'uri' => $destDir . $fileName,
-      );
+      $pathInfo = pathinfo($fileElement->_value['name']);
+      if (empty($pathInfo['filename'])) {
+        return;
+      }
+      // If necessary add a delta to the file name to avoid writing over an existing file.
+      $delta = 0;
+      $fileName = '';
+      while (!$fileName) {
+        $suffix = $delta ? '-' . $delta : '';
+        $testName = $pathInfo['filename'] . $suffix . '.' . $pathInfo['extension'];
+        if (!file_exists($publicUploadDir . '/' . $testName)) {
+          $fileName = $testName;
+        }
+        $delta++;
+      }
       // Move to public uploads directory and create file record.
       // This will be referenced in Activity custom field.
       $saved = $fileElement->moveUploadedFile($publicUploadDir,$fileName);
@@ -170,7 +180,7 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
   }
 
   /**
-   * Gets the url of an uploaded file from its path.
+   * Gets the url of an uploaded file from its filesystem path.
    *
    * @param string $path
    *
