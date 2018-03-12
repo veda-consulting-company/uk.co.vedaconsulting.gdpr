@@ -11,9 +11,12 @@ class CRM_Gdpr_Upgrader extends CRM_Gdpr_Upgrader_Base {
 
   /**
    * Example: Run an external SQL script when the module is installed.
-   *
+   */
   public function install() {
-    $this->executeSqlFile('sql/myinstall.sql');
+    //$this->executeSqlFile('sql/myinstall.sql');
+
+    // Create 'GDPR Cancelled' membership status
+    $this->createGDPRCancelledMembershipStatus();
   }
 
   /**
@@ -32,27 +35,75 @@ class CRM_Gdpr_Upgrader extends CRM_Gdpr_Upgrader_Base {
     civicrm_api3('Setting', 'create', array(
       'myWeirdFieldSetting' => array('id' => $customFieldId, 'weirdness' => 1),
     ));
-  }
+  }*/
 
   /**
    * Example: Run an external SQL script when the module is uninstalled.
-   *
+   */
   public function uninstall() {
-   $this->executeSqlFile('sql/myuninstall.sql');
+    //$this->executeSqlFile('sql/myuninstall.sql');
+
+    // Delete 'GDPR Cancelled' membership status
+    $result = CRM_Gdpr_Utils::CiviCRMAPIWrapper('MembershipStatus', 'get', array(
+      'sequential' => 1,
+      'return' => array("id"),
+      'name' => "GDPR_Cancelled",
+      'api.MembershipStatus.delete' => array(
+        'id' => "\$value.id",
+      ),
+    ));
+
+    // Delete 'Contacts without any activity for a period' custom search
+    $result = CRM_Gdpr_Utils::CiviCRMAPIWrapper('CustomSearch', 'get', array(
+      'sequential' => 1,
+      'return' => array("id"),
+      'name' => "CRM_Gdpr_Form_Search_ActivityContact",
+      'api.CustomSearch.delete' => array(
+        'id' => "\$value.id",
+      ),
+    ));
+
+    // Delete 'Search Group Subscription by Date Range' custom search
+    $result = CRM_Gdpr_Utils::CiviCRMAPIWrapper('CustomSearch', 'get', array(
+      'sequential' => 1,
+      'return' => array("id"),
+      'name' => "CRM_Gdpr_Form_Search_GroupcontactDetails",
+      'api.CustomSearch.delete' => array(
+        'id' => "\$value.id",
+      ),
+    ));
   }
 
   /**
    * Example: Run a simple query when a module is enabled.
-   *
+   */
   public function enable() {
-    CRM_Core_DAO::executeQuery('UPDATE foo SET is_active = 1 WHERE bar = "whiz"');
+    // Enable 'GDPR Cancelled' membership status
+    $result = CRM_Gdpr_Utils::CiviCRMAPIWrapper('MembershipStatus', 'get', array(
+      'sequential' => 1,
+      'return' => array("id"),
+      'name' => "GDPR_Cancelled",
+      'api.MembershipStatus.create' => array(
+        'id' => "\$value.id",
+        'is_active' => 1,
+      ),
+    ));
   }
 
   /**
    * Example: Run a simple query when a module is disabled.
-   *
+   */
   public function disable() {
-    CRM_Core_DAO::executeQuery('UPDATE foo SET is_active = 0 WHERE bar = "whiz"');
+    // Disable 'GDPR Cancelled' membership status
+    $result = CRM_Gdpr_Utils::CiviCRMAPIWrapper('MembershipStatus', 'get', array(
+      'sequential' => 1,
+      'return' => array("id"),
+      'name' => "GDPR_Cancelled",
+      'api.MembershipStatus.create' => array(
+        'id' => "\$value.id",
+        'is_active' => 0,
+      ),
+    ));
   }
 
   /**
@@ -64,7 +115,7 @@ class CRM_Gdpr_Upgrader extends CRM_Gdpr_Upgrader_Base {
   public function upgrade_1100() {
     $this->log('Applying update 1100');
     // Create 'Contacts without any activity for a period' custom search by API
-    civicrm_api3('CustomSearch', 'create', array(
+    CRM_Gdpr_Utils::CiviCRMAPIWrapper('CustomSearch', 'create', array(
       'sequential' => 1,
       'option_group_id' => "custom_search",
       'name' => "CRM_Gdpr_Form_Search_ActivityContact",
@@ -73,6 +124,43 @@ class CRM_Gdpr_Upgrader extends CRM_Gdpr_Upgrader_Base {
       'description' => "Contacts without any activity for a period",
     ));
     return TRUE;
+  }
+
+  /**
+   * Perform upgrade to version 1.2
+   *
+   * @return TRUE on success
+   * @throws Exception
+   */
+  public function upgrade_1200() {
+    $this->log('Applying update 1200');
+    // Create 'GDPR Cancelled' membership status
+    $this->createGDPRCancelledMembershipStatus();
+    return TRUE;
+  }
+
+  /**
+   * Example: Run an external SQL script when the module is uninstalled.
+   */
+  private function createGDPRCancelledMembershipStatus() {
+    // Get max weight for membership status
+    $result = CRM_Gdpr_Utils::CiviCRMAPIWrapper('MembershipStatus', 'get', array(
+      'sequential' => 1,
+      'return' => array("weight"),
+      'options' => array('sort' => "weight DESC", 'limit' => 1),
+    ));
+    $weight = $result['values'][0]['weight'] + 1;
+
+    // Create 'GDPR Cancelled' membership status
+    CRM_Gdpr_Utils::CiviCRMAPIWrapper('MembershipStatus', 'create', array(
+      'name' => "GDPR_Cancelled",
+      'label' => "GDPR Cancelled",
+      'is_admin' => 1, // Is Admin Only
+      'is_active' => 1,
+      'is_reserved' => 1, // Is reserved, so that users cannot delete it
+      'is_current_member' => 0,
+      'weight' => $weight,
+    ));
   }
 
   private function log($message) {

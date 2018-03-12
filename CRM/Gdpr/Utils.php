@@ -462,8 +462,33 @@ WHERE url.time_stamp > '{$date}'";
       'IM',
       'Website',
     ));
+
+    // Update all active memberships to 'GDPR Cancelled'
+    self::cancelAllActiveMemberships($contactId);
+
     return $updateResult;
   }
+
+  /**
+   * Cancels all active memberships of the contact
+   * and updates status to 'GDPR Cancelled'
+   *
+   * @param int $contactId
+   *
+   */
+  static function cancelAllActiveMemberships($contactId) {
+    self::CiviCRMAPIWrapper('Membership', 'get', array(
+      'sequential' => 1,
+      'contact_id' => $contactId,
+      'active_only' => 1,
+      'api.Membership.create' => array(
+        'id' => "\$value.id",
+        'status_id' => "GDPR_Cancelled",
+        'is_override' => 1,
+      ),
+    ));
+  }
+
   
   /**
    * Deletes data directly associated with a contact.
