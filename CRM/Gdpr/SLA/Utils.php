@@ -106,15 +106,15 @@ EOT;
    * Gets the last SLA Acceptance activity for a contact.
    */
   static function getContactLastAcceptance($contactId) {
-		$result = civicrm_api3('Activity', 'get', array(
-			'sequential' => 1,
-			'activity_type_id' => self::$activityTypeName,
-			'target_contact_id' => $contactId,
+    $result = civicrm_api3('Activity', 'get', array(
+      'sequential' => 1,
+      'activity_type_id' => self::$activityTypeName,
+      'target_contact_id' => $contactId,
       'options' => array(
         'sort' => 'activity_date_time asc',
         'limit' => 1,
       ),
-		));
+    ));
     if (!empty($result['values'])) {
       return $result['values'][0];
     }
@@ -125,7 +125,7 @@ EOT;
    */
   static function recordSLAAcceptance($contactId = NULL) {
     $settings = self::getSettings();
-	  $contactId = $contactId ? $contactId : CRM_Core_Session::singleton()->getLoggedInContactID();
+    $contactId = $contactId ? $contactId : CRM_Core_Session::singleton()->getLoggedInContactID();
     if (!$contactId) {
       return;
     }
@@ -199,7 +199,6 @@ EOT;
     }
     $result = civicrm_api3('CustomGroup', 'get', array(
   	  'sequential' => 1,
-      'name' => "SLA_Acceptance",
       'name' => $groupName,
       'api.CustomField.get' => array(
         'custom_group_id' => "\$value.id",
