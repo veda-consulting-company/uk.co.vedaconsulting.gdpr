@@ -281,7 +281,7 @@ WHERE s.contact_id = %1 ORDER BY s.date DESC";
    *
    * @return where|string
    */
-  public static function getActivityContactSQL(&$params, $getCountOnly = FALSE, $excludeClickThrough = FALSE) {
+  public static function getActivityContactSQL(&$params, $getCountOnly = FALSE, $excludeClickThrough = FALSE, $getWhereClauseOnly = FALSE) {
 
     // Get GDPR settings
     $settings = CRM_Gdpr_Utils::getGDPRSettings();
@@ -305,7 +305,7 @@ WHERE s.contact_id = %1 ORDER BY s.date DESC";
         $limit = " LIMIT {$params['offset']}, {$params['rowCount']} ";
       }
 
-      $orderBy = ' ORDER BY c.id desc';
+      $orderBy = ' ORDER BY contact_a.id desc';
       if (!empty($params['sort'])) {
         $orderBy = ' ORDER BY ' . CRM_Utils_Type::escape($params['sort'], 'String');
       }
@@ -314,14 +314,14 @@ WHERE s.contact_id = %1 ORDER BY s.date DESC";
     $extraWhere = '';
     if (!empty($settings['contact_type'])) {
       $contactTypeStr = "'".implode("','", $settings['contact_type'])."'";
-      $extraWhere .= " AND c.contact_type IN ({$contactTypeStr})";
+      $extraWhere .= " AND contact_a.contact_type IN ({$contactTypeStr})";
     }
 
     if (!empty($params['contact_name'])) {
-      $extraWhere .= " AND c.sort_name LIKE '%{$params['contact_name']}%'";
+      $extraWhere .= " AND contact_a.sort_name LIKE '%{$params['contact_name']}%'";
     }
 
-    $selectColumns = "c.id, c.sort_name";
+    $selectColumns = "contact_a.id, contact_a.sort_name";
     if ($getCountOnly) {
       $selectColumns = "count(*) as count";
       $limit = '';
@@ -330,18 +330,24 @@ WHERE s.contact_id = %1 ORDER BY s.date DESC";
     $excludeClickSql = '';
     if ($excludeClickThrough) {
       $clickThroughSql = self::getContactClickThroughSQL();
-      $excludeClickSql = " AND c.id NOT IN ({$clickThroughSql})";
+      $excludeClickSql = " AND contact_a.id NOT IN ({$clickThroughSql})";
     }
 
-    $sql = "SELECT {$selectColumns} FROM civicrm_contact c
-WHERE c.id NOT IN (
+    $whereClause = "contact_a.id NOT IN (
 SELECT contact_id FROM civicrm_activity_contact ac
 INNER JOIN civicrm_activity a ON a.id = ac.activity_id
-WHERE ac.record_type_id = 3 AND a.activity_type_id IN ({$actTypeIdsStr})
+WHERE ac.record_type_id IN (2, 3) AND a.activity_type_id IN ({$actTypeIdsStr})
 AND a.activity_date_time > '{$date}'
-) AND c.is_deleted = 0 {$extraWhere} {$excludeClickSql} {$orderBy} {$limit}";
+) AND contact_a.is_deleted = 0 {$extraWhere} {$excludeClickSql}";
 
-    return $sql;
+    $sql = "SELECT {$selectColumns} FROM civicrm_contact contact_a
+WHERE {$whereClause} {$orderBy} {$limit}";
+
+    if ($getWhereClauseOnly) {
+      return $whereClause;
+    } else {
+      return $sql;
+    }
   }
 
   /**

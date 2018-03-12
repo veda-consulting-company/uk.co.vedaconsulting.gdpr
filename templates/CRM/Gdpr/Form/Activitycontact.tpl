@@ -26,7 +26,7 @@
 <div class="crm-block crm-form-block crm-activitycontact-search-form-block">
 
   <div id="help">
-    {ts}Contacts who have not had any activity of the types below for {$settings.activity_period} days{/ts}
+    {ts}Contacts who have not had any activity of the below types for {$settings.activity_period} days{/ts}
     <br />
     <strong>{$gdprActTypes}</strong>
   </div>
