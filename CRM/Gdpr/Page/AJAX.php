@@ -172,8 +172,8 @@ TABLE;
    */
   public static function getGdprActivityContactList() {
     $sortMapper = array(
-      0 => 'c.id',
-      1 => 'c.sort_name',
+      0 => 'contact_a.id',
+      1 => 'contact_a.sort_name',
       //2 => 'a.activity_date_time',
     );
 
