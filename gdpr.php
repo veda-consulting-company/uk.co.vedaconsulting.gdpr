@@ -15,7 +15,7 @@ function gdpr_civicrm_config(&$config) {
     $session = CRM_Core_Session::singleton();
     $promptSet = CRM_Gdpr_SLA_Utils::isPromptForAcceptance();
     $key = CRM_Gdpr_SLA_Utils::getPromptFlagSessionKey();
-    
+
     if ($promptSet && CRM_Gdpr_SLA_Utils::showFormIsFlagged()) {
       CRM_Gdpr_SLA_Utils::showForm();
     }
@@ -244,9 +244,84 @@ EOD;
   }
 }
 
+/**
+ * Implements hook_civicrm_buildForm().
+ */
+function gdpr_civicrm_buildForm($formName, $form) {
+  if ($formName == 'CRM_Custom_Form_CustomDataByType' && $form->_type == 'Event') {
+    if (!empty($form->_groupTree)) {
+      // Remove custom fields for terms and conditions.
+      // They will be included in the tab.
+      foreach ($form->_groupTree as $gid => $group) {
+        if ($group['name'] == 'Event_terms_and_conditions') {
+          foreach($group['fields'] as $field) {
+            $form->removeElement($field['element_name']);
+          }
+          unset($form->_groupTree[$gid]);
+        }
+      }
+    }
+  }
+  if ($formName == 'CRM_Event_Form_Registration_Register') {
+    // Add Terms and Conditions checkbox.
+    _gdpr_add_event_form_terms_conditions($form);
+  }
+}
+
+/**
+ * Implements hook_civicrm_post().
+ */
+function gdpr_civicrm_post($op, $objectName, $objectId, &$objectRef) {
+  // Create activity for event Terms and Conditions.
+  if ($op == 'create' && $objectName == 'Participant') {
+    if (!empty($objectRef->event_id) && !empty($objectRef->contact_id)) {
+      if (empty($objectRef->registered_by_id)) {
+        $tc = new CRM_Gdpr_SLA_Event($objectRef->event_id);
+        $isRegisterForm = 'civicrm/event/register' == CRM_Utils_System::getUrlPath();
+        if ($tc->isEnabled() && $isRegisterForm) {
+          CRM_Gdpr_SLA_Utils:: recordSLAAcceptance($objectRef->contact_id);
+          $tc->recordAcceptance($objectRef->contact_id);
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Adds terms and conditions field to event registration form.
+ */
+function _gdpr_add_event_form_terms_conditions($form) {
+  $tc = new CRM_Gdpr_SLA_Event($form->_eventId);
+  if (!$tc->isEnabled()) {
+    return;
+  }
+  $intro = $tc->getIntroduction();
+  $links = $tc->getLinks();
+  $position = $tc->getCheckboxPosition();
+  $text = $tc->getCheckboxText();
+  $form->add(
+    'checkbox',
+    'accept_tc',
+    'Terms & Conditions',
+    'I accept the Terms &amp; Conditions',
+    TRUE,
+    array('required' => TRUE)
+  );
+  $tc_vars = array(
+    'element' => 'accept_tc',
+    'links' => $links,
+    'intro' => $intro,
+    'position' => $position,
+  );
+  $form->assign('terms_conditions', $tc_vars);
+  $template_path = realpath(dirname(__FILE__) . '/templates/CRM/Gdpr');
+  CRM_Core_Region::instance('page-body')->add(array(
+    'template' => "CRM/Gdpr/TermsConditionsField.tpl"
+   ));
+}
 
 /*
- * Add a tab to show group subscription
+ * Implements hook_civicrm_tabset().
  */
 function gdpr_civicrm_tabset($tabsetName, &$tabs, $context) {
   //check if the tabset is Contact Summary Page
@@ -254,6 +329,26 @@ function gdpr_civicrm_tabset($tabsetName, &$tabs, $context) {
     $contactId = $context['contact_id'];
     _gdpr_addGDPRTab($tabs, $contactId);
   }
+  elseif ($tabsetName == 'civicrm/event/manage') {
+    _gdpr_addEventTab($tabs, $context);
+  }
+}
+
+/**
+ * Add a Terms & Conditions tab for Events.
+ */
+function _gdpr_addEventTab(&$tabs, $context) {
+  if (empty($context['event_id'])) {
+    return;
+  }
+  $eventID = $context['event_id'];
+  $url = CRM_Utils_System::url('civicrm/event/manage/terms-conditions', "reset=1&id={$eventID}");
+  $tabs['terms_conditions'] = array(
+    'title' => ts('Terms &amp; Conditions'),
+    'url' => $url,
+    'active' => 1,
+    'class' => 'ajaxForm',
+  );
 }
 
 /*
