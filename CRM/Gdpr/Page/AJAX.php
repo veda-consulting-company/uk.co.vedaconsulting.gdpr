@@ -51,8 +51,17 @@ class CRM_Gdpr_Page_AJAX {
       return $aGetMemberships;
     }
 
+    // Get logging DB
+    if (defined('CIVICRM_LOGGING_DSN')) {
+      $dsn = DB::parseDSN(CIVICRM_LOGGING_DSN);
+    }
+    else {
+      $dsn = DB::parseDSN(CIVICRM_DSN);
+    }
+    $logging_db = $dsn['database'];
+
     $sql = "SELECT lca.*,  lt.display_name as lt_name
-FROM log_civicrm_address as lca 
+FROM {$logging_db}.log_civicrm_address as lca
 LEFT JOIN civicrm_location_type as lt ON ( lca.location_type_id = lt.id )
 WHERE lca.contact_id = %1
 ORDER BY lca.log_date DESC";
