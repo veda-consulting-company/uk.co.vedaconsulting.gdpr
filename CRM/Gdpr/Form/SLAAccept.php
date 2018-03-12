@@ -27,7 +27,7 @@ class CRM_Gdpr_Form_SLAAccept extends CRM_Core_Form {
         'isDefault' => TRUE,
       ),
     ));
-		$this->addRule('accept_tc', ts('This field is required.'), 'required');
+    $this->addRule('accept_tc', ts('This field is required.'), 'required');
 
     // export form elements
     $this->assign('elementNames', $this->getRenderableElementNames());
