@@ -37,7 +37,7 @@
   </div>{* end Channels block *}
   <h3> Subscriptions to Groups </h3>
    <div class="help">
-   Configure which public groups the user can join on the page. Optionally you can alter the group title and description. (How frequently mail is sent to the group etc.). 
+   Configure which public groups the user can join on the page. You can optionally alter the group title and description. (For example to add more details on the content, message frequency etc.). 
    </div>
   {* Groups block *}
   <div class="crm-block crm-form-block crm-gdpr-comms-prefs-form-block">

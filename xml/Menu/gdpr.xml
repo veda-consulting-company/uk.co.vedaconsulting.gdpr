@@ -48,4 +48,10 @@
     <title>ManageEvent_TermsAndConditions</title>
     <access_arguments>access CiviCRM</access_arguments>
   </item>
+  <item>
+    <path>civicrm/gdpr/comms-prefs/settings</path>
+    <page_callback>CRM_Gdpr_Form_CommunicationsPreferences</page_callback>
+    <title>CommunicationsPreferences</title>
+    <access_arguments>access CiviCRM</access_arguments>
+  </item>
 </menu>
