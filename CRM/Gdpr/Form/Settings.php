@@ -9,7 +9,6 @@ require_once 'CRM/Core/Form.php';
  */
 class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
   function buildQuickForm() {
-
     CRM_Utils_System::setTitle(ts('GDPR - Settings'));
 
     $this->addEntityRef('data_officer', ts('Data Protection Officer (DPO)'), array(
@@ -69,13 +68,27 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
       ts('Terms and Conditions file')
     );
     $this->add(
+      'checkbox',
+      'sla_tc_new_version',
+      ts('This is a new version of the document.')
+    );
+    $this->add(
+      'hidden',
+      'sla_tc_version'
+    );
+    $this->add(
+      'text',
+      'sla_link_label',
+      ts('Link Label')
+    );
+    $this->add(
       'hidden',
       'sla_tc'
     );
     $this->add(
-      'checkbox',
-      'sla_prompt',
-      ts('Show the CiviCRM acceptance form. (Keep unchecked if you are using a form via the CMS).')
+      'text',
+      'sla_checkbox_text',
+      ts('Checkbox text')
     );
     $this->add(
       'textarea',
@@ -92,10 +105,15 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
       ),
     ));
 
-    $defaults = array();
+    $bare_defaults = array(
+      'sla_link_label' => ts('Data Policy'),
+      'sla_checkbox_text' => ts('I accept the Terms & Conditions.'),
+      'sla_tc_new_version' => FALSE,
+    );
 
     // Get GDPR settings, for setting defaults
     $defaults = CRM_Gdpr_Utils::getGDPRSettings();
+    array_merge($bare_defaults, $defaults);
 
     // Set defaults
     if (!empty($defaults)) {
@@ -106,6 +124,12 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
       $sla_tc['url'] = $defaults['sla_tc'];
       $sla_tc['name'] = basename($defaults['sla_tc']);
       $this->assign('sla_tc_current', $sla_tc);
+      $version = !empty($defaults['sla_tc_version']) ? $defaults['sla_tc_version'] : 1;
+      $this->assign('sla_tc_version', $version);
+      $updated = !empty($defaults['sla_tc_updated']) ? $defaults['sla_tc_updated'] : '';
+      if ($updated) {
+        $this->assign('sla_tc_updated', $updated);
+      }
     }
     parent::buildQuickForm();
   }
@@ -122,11 +146,18 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
     $settings['sla_period'] = $values['sla_period'];
     $settings['sla_prompt'] = !empty($values['sla_prompt']) ? 1 : 0;
     $settings['sla_agreement_text'] = $values['sla_agreement_text'];
+    $settings['sla_link_label'] = $values['sla_link_label'];
+    $settings['sla_checkbox_text'] = $values['sla_checkbox_text'];
     $uploadFile = $this->saveTCFile();
     if ($uploadFile) {
       $settings['sla_tc'] = $uploadFile;
     } else {
       $settings['sla_tc'] = $values['sla_tc'];
+    }
+    if (!empty($values['sla_tc_new_version'])) {
+      $version = (isset($values['sla_tc_version']) && is_numeric($values['sla_tc_version']) ? $values['sla_tc_version'] + 1 : 1);
+      $settings['sla_tc_version'] = $version;
+      $settings['sla_tc_updated'] = date('Y-m-d');
     }
     $settingsStr = serialize($settings);
 
