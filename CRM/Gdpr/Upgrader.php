@@ -131,4 +131,16 @@ class CRM_Gdpr_Upgrader extends CRM_Gdpr_Upgrader_Base {
     return TRUE;
   } // */
 
+  /**
+   * Example: Run a couple simple queries.
+   *
+   * @return TRUE on success
+   * @throws Exception
+   */
+  public function upgrade_1001() {
+    $this->ctx->log->info('Applying update 1001');
+    $this->executeCustomDataFile('xml/CustomGroupData.xml');
+    return TRUE;
+  }
+
 }

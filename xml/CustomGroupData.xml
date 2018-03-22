@@ -238,6 +238,20 @@
       <is_reserved>1</is_reserved>
       <is_active>1</is_active>
     </OptionGroup>
+    <OptionGroup>
+      <name>activity_type</name>
+      <title>Activity Type</title>
+      <data_type>Integer</data_type>
+      <is_reserved>1</is_reserved>
+      <is_active>1</is_active>
+    </OptionGroup>
+    <OptionGroup>
+      <name>comm_pref_options</name>
+      <title>Communnication Preference options</title>
+      <data_type>String</data_type>
+      <is_reserved>1</is_reserved>
+      <is_active>1</is_active>
+    </OptionGroup>        
   </OptionGroups>
   <OptionValues>
     <OptionValue>
@@ -284,5 +298,48 @@
       <is_active>1</is_active>
       <option_group_name>checkbox_position_20180311180849</option_group_name>
     </OptionValue>
-  </OptionValues>
+    <OptionValue>
+      <label>Update Communication Preferences</label>
+      <name>Update_Communication_Preferences</name>
+      <is_default>0</is_default>
+      <weight>1</weight>
+      <is_optgroup>0</is_optgroup>
+      <is_reserved>0</is_reserved>
+      <is_active>1</is_active>
+      <option_group_name>activity_type</option_group_name>
+    </OptionValue>
+    <OptionValue>
+      <label>Yes</label>
+      <value>YES</value>
+      <name>Yes</name>
+      <is_default>0</is_default>
+      <weight>1</weight>
+      <is_optgroup>0</is_optgroup>
+      <is_reserved>0</is_reserved>
+      <is_active>1</is_active>
+      <option_group_name>comm_pref_options</option_group_name>
+    </OptionValue>
+    <OptionValue>
+      <label>No</label>
+      <value>NO</value>
+      <name>No</name>
+      <is_default>0</is_default>
+      <weight>2</weight>
+      <is_optgroup>0</is_optgroup>
+      <is_reserved>0</is_reserved>
+      <is_active>1</is_active>
+      <option_group_name>comm_pref_options</option_group_name>
+    </OptionValue>
+    <OptionValue>
+      <label>Unknown</label>
+      <value>UNKNOWN</value>
+      <name>Unknown</name>
+      <is_default>1</is_default>
+      <weight>3</weight>
+      <is_optgroup>0</is_optgroup>
+      <is_reserved>0</is_reserved>
+      <is_active>1</is_active>
+      <option_group_name>comm_pref_options</option_group_name>
+    </OptionValue>            
+  </OptionValues>  
 </CustomData>
