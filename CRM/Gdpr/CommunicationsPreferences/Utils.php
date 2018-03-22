@@ -6,6 +6,7 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
   const SETTING_NAME = 'gdpr_communications_preferences_settings';
   /* Setting name for group preferences */
   const GROUP_SETTING_NAME = 'gdpr_communications_preferences_group_settings';
+  const COMM_PREF_OPTIONS = 'comm_pref_options';
 
   private static $groups = array();
 
@@ -110,5 +111,54 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
       }
     }
     return self::$groups;
+  }
+
+  public static function getCommunicationPreferenceMapper() {
+    return array(
+      'email' => array(
+        'UNKNOWN' => array(
+          'do_not_email' => 'NULL',
+        ),
+        'YES' => array(
+          'do_not_email' => 0,
+        ),
+        'NO' => array(
+          'do_not_email' => 1,
+        ),        
+      ),
+      'phone' => array(
+        'UNKNOWN' => array(
+          'do_not_phone' => 'NULL',
+        ),
+        'YES' => array(
+          'do_not_phone' => 0,
+        ),
+        'NO' => array(
+          'do_not_phone' => 1,
+        ),        
+      ),
+      'post' => array(
+        'UNKNOWN' => array(
+          'do_not_mail' => 'NULL',
+        ),
+        'YES' => array(
+          'do_not_mail' => 0,
+        ),
+        'NO' => array(
+          'do_not_mail' => 1,
+        ),        
+      ),
+      'sms' => array(
+        'UNKNOWN' => array(
+          'do_not_sms' => 'NULL',
+        ),
+        'YES' => array(
+          'do_not_sms' => 0,
+        ),
+        'NO' => array(
+          'do_not_sms' => 1,
+        ),        
+      ),                  
+    );
   }
 }

@@ -410,3 +410,29 @@ function gdpr_civicrm_navigationMenu( &$params ) {
     );
   }
 }
+
+/**
+ * implementation of hook_civicrm_token
+ */
+function gdpr_civicrm_tokens( &$tokens ){
+  $tokens['contact'] = array(
+    'contact.comm_pref_supporter_url' => ts("Communication Prefernces URL"),
+  );
+}
+
+/**
+ * implementation of hook_civicrm_tokenValues
+ */
+function gdpr_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = array(), $context = null) {
+  if (!empty($tokens['contact'])) {
+    foreach ($cids as $cid) {
+      $urlParams = array(
+        'reset' => 1,
+        'cid'   => $cid,
+        'cs'    => CRM_Contact_BAO_Contact_Utils::generateChecksum($cid),
+      );
+      $commPrefURL = CRM_Utils_System::url('civicrm/gdpr/comms-prefs/update', $urlParams, TRUE);
+      $values[$cid]['contact.comm_pref_supporter_url'] = $commPrefURL;
+    }
+  }
+}
