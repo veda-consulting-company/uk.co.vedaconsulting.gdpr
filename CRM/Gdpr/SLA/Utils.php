@@ -159,6 +159,14 @@ EOT;
     $acceptancePeriod = (($months / 12) * $seconds_in_year);
     $acceptanceDate = strtotime($lastAcceptance['activity_date_time']);
     $acceptanceDue = $acceptanceDate + $acceptancePeriod;
+    // Has the document been updated more recently.
+    $lastUpdated = self::getLastUpdated();
+    if ($lastUpdated) {
+      $lastUpdatedDate = strtotime($lastUpdated);
+      if ($lastUpdatedDate > $acceptanceDate) {
+        return true;
+      }
+    }
     return $acceptanceDue < time();
   }
 
@@ -212,6 +220,16 @@ EOT;
     return self::getSetting('sla_page_title', 'Terms &amp; Conditions');
   }
 
+  /**
+   * Gets the date when the latest version of the  Terms & Conditions was uploaded.
+   *
+   * @return
+   *  string date in format: Y-m-d
+   */
+  static function getLastUpdated() {
+    return self::getSetting('sla_tc_updated', '');
+
+  }
   private static function getSetting($name, $default = NULL) {
     $val = '';
     $settings = CRM_Gdpr_Utils::getGDPRSettings();
