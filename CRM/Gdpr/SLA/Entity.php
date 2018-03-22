@@ -48,15 +48,16 @@ class CRM_Gdpr_SLA_Entity {
     $url = $this->getUrl();
     $label = $this->getValue('Link_Label');
     if ($url) {
-      $links[] = array(
+      $links['event'] = array(
         'url' => $url,
         'label' => $label,
       );
     }
     $global_link_url = CRM_Gdpr_SLA_Utils::getTermsConditionsUrl();
-    $global_link_label = 'Site Terms &amp; Conditions';
+    $global_link_label = CRM_Gdpr_SLA_Utils::getLinkLabel();
+    $global_checkbox_text = CRM_Gdpr_SLA_Utils::getCheckboxText(); 
     if ($global_link_url) {
-    $links[] = array(
+    $links['global'] = array(
         'url' => $global_link_url,
         'label' => $global_link_label,
       );

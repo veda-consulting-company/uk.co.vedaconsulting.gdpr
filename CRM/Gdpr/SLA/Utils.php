@@ -186,6 +186,34 @@ EOT;
   }
 
   /**
+   * Gets the Link label for Terms & Conditions file.
+   *
+   *  @return string
+   **/
+  static function getLinkLabel() {
+    return self::getSetting('sla_link_label', 'Terms &amp; Conditions');
+  }
+
+  /**
+   * Gets the checkbox text Terms & Conditions agreement.
+   *
+   *  @return string
+   */
+  static function getCheckboxText() {
+    return self::getSetting('sla_checkbox_text', 'I accept the Terms &amp; Conditions.');
+  }
+
+  private static function getSetting($name, $default = NULL) {
+    $val = '';
+    $settings = CRM_Gdpr_Utils::getGDPRSettings();
+    if (!empty($settings[$name])) {
+      $val = $settings[$name];
+    }
+    return $val ? $val : $default;
+
+  }
+
+  /**
    * Gets a custom field definition by name and group name.
    *
    * @param string $fieldName

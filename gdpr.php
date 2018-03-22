@@ -313,11 +313,12 @@ function _gdpr_add_event_form_terms_conditions($form) {
     );
   }
   if (!empty($links['global'])) {
+    $text = CRM_Gdpr_SLA_Utils::getCheckboxText();
     $form->add(
       'checkbox',
       'accept_tc',
       'Terms & Conditions',
-      'I accept the Terms &amp; Conditions',
+      $text,
       TRUE,
       array('required' => TRUE)
     );
