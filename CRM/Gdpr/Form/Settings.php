@@ -55,6 +55,11 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
     $slaPeriodOptions = array_combine($months, $months);
     // SLA Acceptance settings.
     $this->add(
+      'text',
+      'sla_page_title',
+      ts('Page title')
+    );
+    $this->add(
       'select',
       'sla_period',
       ts('Acceptance period (months)'),
@@ -147,6 +152,7 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
     $settings['sla_prompt'] = !empty($values['sla_prompt']) ? 1 : 0;
     $settings['sla_agreement_text'] = $values['sla_agreement_text'];
     $settings['sla_link_label'] = $values['sla_link_label'];
+    $settings['sla_page_title'] = $values['sla_page_title'];
     $settings['sla_checkbox_text'] = $values['sla_checkbox_text'];
     $uploadFile = $this->saveTCFile();
     if ($uploadFile) {

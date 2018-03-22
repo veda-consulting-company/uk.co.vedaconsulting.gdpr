@@ -37,7 +37,7 @@
     <access_arguments>access CiviCRM</access_arguments>
   </item>
   <item>
-    <path>civicrm/sla/accept</path>
+    <path>civicrm/terms/accept</path>
     <page_callback>CRM_Gdpr_Form_SLAAccept</page_callback>
     <title>SLAAccept</title>
     <access_arguments>access CiviCRM</access_arguments>

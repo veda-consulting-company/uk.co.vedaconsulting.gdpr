@@ -203,6 +203,15 @@ EOT;
     return self::getSetting('sla_checkbox_text', 'I accept the Terms &amp; Conditions.');
   }
 
+  /**
+   * Gets the Page title for the Terms & Conditions page.
+   *
+   *  @return string
+   */
+  static function getPageTitle() {
+    return self::getSetting('sla_page_title', 'Terms &amp; Conditions');
+  }
+
   private static function getSetting($name, $default = NULL) {
     $val = '';
     $settings = CRM_Gdpr_Utils::getGDPRSettings();

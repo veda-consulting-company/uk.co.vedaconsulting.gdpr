@@ -85,7 +85,9 @@
 
 <div class="crm-block crm-form-block crm-gdpr-settings-form-block">
 	<div id="help">
-		{ts}Settings related to sitewise agreements such as Terms and Conditions and Data Policies.{/ts}
+		{ts}Settings related to sitewise agreements such as Terms and Conditions and Data Policies.
+     A basic acceptance form <a href="/civicrm/terms/accept">is available here</a>. This is best given to logged in users or with a contact checksum in the url. These settings will also apply when adding the sitewide terms and conditions with Events.
+    {/ts}
 	</div>
 
 	<div class="crm-section">
@@ -138,6 +140,11 @@
       <div class="label">{$form.sla_checkbox_text.label}</div>
       <div class="content">{$form.sla_checkbox_text.html}</div>
       <span class="description"><i>{ts} Text for the checkbox. An acceptance statement.{/ts}</i></span>
+    </div>
+    <div class="crm-section">
+      <div class="label">{$form.sla_page_title.label}</div>
+      <div class="content">{$form.sla_page_title.html}</div>
+      <span class="description"><i>{ts}The title for the user-facing page with the acceptance form.{/ts}</i></span>
     </div>
 		<div class="clear"></div>
     <div class="crm-section">

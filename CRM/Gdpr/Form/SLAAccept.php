@@ -1,6 +1,7 @@
 <?php
 
 use CRM_Gdpr_ExtensionUtil as E;
+use CRM_Gdpr_SLA_Utils as U;
 
 /**
  * Form controller class
@@ -9,16 +10,22 @@ use CRM_Gdpr_ExtensionUtil as E;
  */
 class CRM_Gdpr_Form_SLAAccept extends CRM_Core_Form {
   public function buildQuickForm() {
-    CRM_Utils_System::setTitle(ts('Terms and Conditions'));
+
     $settings = CRM_Gdpr_Utils::getGDPRSettings();
-    $tc = CRM_Gdpr_SLA_Utils::getTermsConditionsUrl();
+    $title = U::getPageTitle(); 
+    CRM_Utils_System::setTitle($title);
+    $tc = U::getTermsConditionsUrl();
+    $checkbox_text = U::getCheckboxText();
+    $link_label = U::getLinkLabel();
+
     $this->assign('tc_url', $tc);
+    $this->assign('tc_link_label', $link_label);
 
     $this->assign('agreement_text', $settings['sla_agreement_text']);
     $this->add(
       'checkbox',
       'accept_tc',
-      ts('I have read and accept the Terms and Conditions')
+      $checkbox_text
     );
     $this->addButtons(array(
       array(
