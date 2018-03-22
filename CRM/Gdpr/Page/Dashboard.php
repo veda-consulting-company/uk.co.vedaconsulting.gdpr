@@ -30,8 +30,12 @@ class CRM_Gdpr_Page_Dashboard extends CRM_Core_Page {
     $gdprActTypesStr = implode(', ', $gdprActTypes);
 
     // Search group subscription custom search
+    $actContactCsDetails = CRM_Gdpr_Utils::getCustomSearchDetails(CRM_Gdpr_Constants::ACT_CONTACT_CUSTOM_SEARCH_NAME);
+    $this->assign('actContactCsDetails', $actContactCsDetails);
+
+    // Search group subscription custom search
     $gsCsDetails = CRM_Gdpr_Utils::getCustomSearchDetails(CRM_Gdpr_Constants::SEARCH_GROUP_SUBSCRIPTION_CUSTOM_SEARCH_NAME);
-    $this->assign('gsCsDetails', $gsCsDetails);    
+    $this->assign('gsCsDetails', $gsCsDetails);
 
     $this->assign('count', $count);
     $this->assign('clickThroughCount', $clickThroughCount);

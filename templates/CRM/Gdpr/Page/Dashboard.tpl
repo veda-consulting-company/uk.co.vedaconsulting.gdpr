@@ -14,7 +14,14 @@
           <br />
           <span class="description"><i>{ts}(Excluding contacts who clicked through links in emails){/ts}</i></span>
           </td>
-          <td><a href='{crmURL p="civicrm/gdpr/activitycontact" q="reset=1"}'>{$count}</a></td>
+          <td>
+            {if $actContactCsDetails.id}
+              {capture assign=actContactCustomSearchUrl}{crmURL p="civicrm/contact/search/custom" q="reset=1&force=1&csid=`$actContactCsDetails.id`"}{/capture}
+              <a href="{$actContactCustomSearchUrl}">{$count}</a>
+            {else}
+              <a href='{crmURL p="civicrm/gdpr/activitycontact" q="reset=1"}'>{$count}</a>
+            {/if}
+          </td>
         </tr>
         <tr>
           <td>Click-throughs
