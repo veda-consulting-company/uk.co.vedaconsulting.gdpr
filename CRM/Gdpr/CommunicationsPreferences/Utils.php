@@ -7,6 +7,7 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
   /* Setting name for group preferences */
   const GROUP_SETTING_NAME = 'gdpr_communications_preferences_group_settings';
   const COMM_PREF_OPTIONS = 'comm_pref_options';
+  const COMM_PREF_ACTIVITY_TYPE = 'Update_Communication_Preferences';
 
   private static $groups = array();
 
