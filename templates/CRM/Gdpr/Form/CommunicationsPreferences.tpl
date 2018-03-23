@@ -61,7 +61,7 @@
   {if $group_containers}
    <table>
    <tr>
-   <th>Group</th><th>Enable</th><th>Title</th><th>Description</th><th>Channel</th>
+   <th>Group</th><th>Add</th><th>Title</th><th>Description</th><th>Channel</th>
    </tr>
    {foreach from=$group_containers item=containerName}
      <tr>
@@ -79,23 +79,11 @@
       <td>
        {$form.$containerName.group_description.html}
       </td>
-      <td>
-        {* begin group channel table *}
-        <table>
-          <tr><td style="min-width: 5em;">
-          {$form.$containerName.email.html}
-          </td></tr>
-          <tr><td>
-          {$form.$containerName.phone.html}
-          </td></tr>
-          <tr><td>
-          {$form.$containerName.post.html}
-          </td></tr>
-          <tr><td>
-          {$form.$containerName.sms.html}
-          </td></tr>
-       </table>
-       {* end group channel table *}
+      <td class="group-channels">
+        {$form.$containerName.email.html}
+        {$form.$containerName.phone.html}
+        {$form.$containerName.post.html}
+        {$form.$containerName.sms.html}
       </td>
 
      </tr>
@@ -105,23 +93,30 @@
    {/if}
    </fieldset>
   </div>{* end Groups block *}
-  <h3> Completion </h3>
+  <h3> Completion </h3> 
   <div class="crm-block crm-form-block crm-gdpr-comms-prefs-form-block">
     <div class="crm-section">
+      <div class="label">{$form.completion_redirect.label}</div>
+      <div class="content">{$form.completion_redirect.html}
+        <div class="description"> </div>
+      </div>
+    </div>
+    <div class="clear"></div>
+    <div class="crm-section completion-message">
       <div class="label">{$form.completion_message.label}</div>
       <div class="content">{$form.completion_message.html}
-        <div class="description">A message to display to the user after the form is submitted. </div>
+        <div class="description">{$descriptions.completion_message}</div>
       </div>
-      <div class="clear"></div>
-    <div class="crm-section">
+    </div>
+    <div class="clear"></div>
+    <div class="crm-section completion-url">
       <div class="label">{$form.completion_url.label}</div>
       <div class="content">{$form.completion_url.html}
-        <div class="description">Optionally, add the URL for a page to redirect the user after they complete the form. Leave blank to stay on the form. The page should already exist. The URL may be absolute (http://example.com/thank-you) or relative (/thank-you).</div>
+        <div class="description">{$descriptions.completion_url}</div>
       </div>
-      <div class="clear"></div>
     </div>
+    <div class="clear"></div>
   </div> {* end Completion block *}
-  
  </div>{* end form *}
 
 {* FOOTER *}
@@ -131,12 +126,48 @@
 {literal}
 <script>
 (function($) {
+  // General toggle
   $('input.toggle-control').on('change', function(){
     var toggleTarget = $(this).data('toggle');
     if (toggleTarget) {
       $(toggleTarget).toggle($(this).is(':checked'));
     }
   }).trigger('change');
+
+  // Toggle completion setting elements.
+  var completionRadio = $('input[name="completion_redirect"]'),
+    completionUrl = $('.completion-url');
+    completionMessage = $('.completion-message'),
+    isOn = completionRadio.val() && completionRadio.is(':checked');
+  completionUrl.toggle(isOn);
+  completionMessage.hide(!isOn);
+  completionRadio.on('change', function(){
+    var isOn = (true == $(this).val());
+    completionUrl.toggle(isOn);
+    completionMessage.toggle(!isOn);
+  });
+  controlGroupChannels();
+  // Disable group channels if channel is disabled or group is disabled.
+  function controlGroupChannels() {
+    var channels = ['email', 'phone', 'post', 'sms'];
+    var channelChk = $('input.enable-channel');
+    var groupChannels = $('.group-channels input[type="checkbox"]');
+    channelChk.on('change', function() {
+      var channel = $(this).attr('id').replace('channels_enable_', '');
+      if (channels.indexOf(channel) === false) {
+        return;
+      }
+      var controller = $(this);
+      var isChecked = controller.is(':checked');
+      // get group channels
+      groupChannels.filter('input[id$="' + channel + '"]').each(function(){
+          if (!isChecked) {
+            $(this).attr('checked', false);
+          }
+          $(this).attr('disabled', !isChecked);
+        });
+    });
+  }
 }(cj));
 </script>
 {/literal}

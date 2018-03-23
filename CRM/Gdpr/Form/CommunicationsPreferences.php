@@ -74,7 +74,8 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
         'checkbox',
         'enable_' . $channel,
         $label,
-        $label
+        $label,
+        array('class' => 'enable-channel')
       );
       $channel_checkboxes[] = $elem;
     }
@@ -137,7 +138,7 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
         'textarea',
         'group_description',
         'Description',
-         array('cols' => 35, 'rows' => 6)
+         array('cols' => 40, 'rows' => 6)
       );
       foreach ($channels as $key => $label) {
         $group_elems[] = HTML_Quickform::createElement(
@@ -150,18 +151,25 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
       $group_container->setElements($group_elems);
       $group_containers[] = $container_name;
     }
+    $this->addRadio(
+      'completion_redirect',
+      'On completion',
+      array(1 => 'Redirect to another page', 0 => 'Display a message on the form page.')
+    );
     $this->add(
       'text',
       'completion_url',
       ts('Completion page'),
       array('size' => 50)
     );
+    $descriptions['completion_url'] = ts('Add the a URL for a page to redirect the user after they complete the form. The page should already exist. The URL may be absolute (http://example.com/thank-you) or relative, starting with a forward slash (/thank-you).');
     $this->add(
       'textarea',
       'completion_message',
       ts('Completion message'),
       $text_area_attributes
     );
+    $descriptions['completion_message'] = ts('A message to display to the user after the form is submitted. ');
     // Let the template know about which fields belong in the groups section.
     $groups_elements = array(
       'groups_heading',
