@@ -18,6 +18,7 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
 
   public function buildQuickForm() {
     CRM_Utils_System::setTitle(ts('Communications Preferences'));
+    $channels = U::getChannelOptions();
     $text_area_attributes = array('cols' => 60, 'rows' => 5);
     $this->add(
       'text',
@@ -38,7 +39,7 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
     $this->assign('page_elements', $page_elements);
     // Comms prefs channels
     $this->add(
-      'checkbox',
+      'advcheckbox',
       'enable_channels',
       ts('Enable Channels'),
       '',
@@ -53,12 +54,6 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
       'channels_intro',
       ts('Introduction'),
       $text_area_attributes
-    );
-    $channels = array(
-      'email' => ts('Email'),
-      'phone' => ts('Phone'),
-      'post' => ts('Post'),
-      'sms' => ts('SMS'),
     );
     $channel_group = $this->add(
       'group',
@@ -81,13 +76,13 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
     );
     $this->assign('channels_elements', $channels_elements);
     $this->add(
-      'checkbox', 
-      'enable_groups', 
+      'checkbox',
+      'enable_groups',
       ts('Allow users to opt-in to mailing groups.'),
       '',
       false,
       array(
-        'data-toggle' => '.groups-wrapper', 
+        'data-toggle' => '.groups-wrapper',
         'class' => 'toggle-control'
       )
     );
@@ -115,7 +110,7 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
       );
       $group_elems = array();
       $group_elems[] = HTML_QuickForm::createElement(
-        'checkbox',
+        'advcheckbox',
         'group_enable',
         'Enable',
         '',
@@ -133,8 +128,16 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
         'textarea',
         'group_description',
         'Description',
-        array('cols' => 40)
+        array('cols' => 40, 'rows' => 4)
       );
+      foreach ($channels as $key => $label) {
+        $group_elems[] = HTML_Quickform::createElement(
+          'advcheckbox',
+          $key,
+          $label,
+          $label
+        );
+      }
       $group_container->setElements($group_elems);
       $group_containers[] = $container_name;
     }
@@ -155,12 +158,12 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
     $this->setDefaults($this->getDefaults());
     parent::buildQuickForm();
   }
-  
+
   /**
    * Gets public groups.
    */
   function getGroups() {
-  
+
     // Just a wrapper for the Utility function.
     if (!$this->groups) {
       $this->groups = U::getGroups();
@@ -206,6 +209,10 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
       $form_defaults = array_merge($settings[$key], $settings[$group_key]);
     }
     return $form_defaults;
+  }
+
+  protected function getProfileOptions() {
+
   }
 
   /**

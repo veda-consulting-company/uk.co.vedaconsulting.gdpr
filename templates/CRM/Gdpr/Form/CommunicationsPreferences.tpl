@@ -57,7 +57,7 @@
   {if $group_containers}
    <table>
    <tr>
-   <th>Group</th><th>Enable</th><th>Title</th><th>Description</th>
+   <th>Group</th><th>Enable</th><th>Title</th><th>Description</th><th>Uses Channel</th>
    </tr>
    {foreach from=$group_containers item=containerName}
      <tr>
@@ -74,6 +74,12 @@
       </td>
       <td>
        {$form.$containerName.group_description.html}
+      </td>
+      <td>
+       {$form.$containerName.email.html}
+       {$form.$containerName.phone.html}
+       {$form.$containerName.post.html}
+       {$form.$containerName.sms.html}
       </td>
 
      </tr>

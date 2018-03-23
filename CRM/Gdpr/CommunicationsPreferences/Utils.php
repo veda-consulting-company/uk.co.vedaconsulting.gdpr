@@ -112,7 +112,19 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
     }
     return self::$groups;
   }
-
+  
+  /**
+   * Get options for channels.
+   * @return array
+   */
+  public static function getChannelOptions() {
+    return $channels = array(
+      'email' => ts('Email'),
+      'phone' => ts('Phone'),
+      'post' => ts('Post'),
+      'sms' => ts('SMS'),
+    );
+  }
   public static function getCommunicationPreferenceMapper() {
     return array(
       'email' => array(
