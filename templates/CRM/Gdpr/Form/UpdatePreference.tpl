@@ -1,6 +1,7 @@
 
 <div class="crm-form-block">
 	<div class="comm-pref-block channel-block">
+		<!-- Page Intro Text from Settings -->
 		{if $page_intro}
 		<div class="help">
 			<span>
@@ -9,6 +10,7 @@
 		</div>
 		{/if}
 
+		<!-- Channels fieldset section -->
 		<fieldset>
 			<legend>{$channels_intro}</legend>
 			{foreach from=$channelEleNames item=elementName}
@@ -21,6 +23,7 @@
 		</fieldset>
 	</div>
 
+	<!-- Groups from settings -->
 	<div class="comm-pref-block groups-block">
 		{if $groups_intro}
 		<div class="help">
@@ -30,15 +33,27 @@
 		</div>	
 		{/if}
 
+		<!-- Groups Fieldset -->
 		<fieldset class="groups-fieldset">
 			<legend>{$groups_heading}</legend>
 			{foreach from=$groupEleNames item=elementName}
 			  <div class="crm-section">
-			    <div class="content">{$form.$elementName.html}</div>
+			    <div class="content">
+			    	{$form.$elementName.html}
+			    	{$form.$elementName.label}
+			    	{if $commPrefGroupsetting.$elementName.group_description}
+				    	<br>
+				    	<span class="group-description">
+				    		{$commPrefGroupsetting.$elementName.group_description}
+				    	</span>
+			    	{/if}
+			  	</div>
 			    <div class="clear"></div>
 			  </div>
 			{/foreach}
 		</fieldset>
+
+		<!-- GDPR Terms and conditions url link and checkbox -->
 		{if $isContactDueAcceptance}
 		<div class="crm-section">
 			{$form.$tcFieldName.html}	
@@ -62,6 +77,10 @@
 	.groups-fieldset .content label{
 		margin-left: 15px;
 		margin-bottom: 15px;
+	}
+	.group-description {
+		display: inline-block;
+		margin: 1em 1em 1em 2.3em;
 	}
 </style>
 {/literal}

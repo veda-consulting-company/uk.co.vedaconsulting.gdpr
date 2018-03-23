@@ -417,6 +417,7 @@ function gdpr_civicrm_navigationMenu( &$params ) {
 function gdpr_civicrm_tokens( &$tokens ){
   $tokens['contact'] = array(
     'contact.comm_pref_supporter_url' => ts("Communication Prefernces URL"),
+    'contact.comm_pref_supporter_link' => ts("Communication Prefernces Link"),
   );
 }
 
@@ -432,7 +433,9 @@ function gdpr_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = array(
         'cs'    => CRM_Contact_BAO_Contact_Utils::generateChecksum($cid),
       );
       $commPrefURL = CRM_Utils_System::url('civicrm/gdpr/comms-prefs/update', $urlParams, TRUE);
+      $link = sprintf("<a href='%s' target='_blank'>%s</a>",$commPrefURL, ts('Communication Prefernces'));
       $values[$cid]['contact.comm_pref_supporter_url'] = $commPrefURL;
+      $values[$cid]['contact.comm_pref_supporter_link'] = html_entity_decode($link);
     }
   }
 }
