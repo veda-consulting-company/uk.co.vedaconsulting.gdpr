@@ -2,13 +2,17 @@
 
 <div>
    <div class="help">
-   Configure the display of the Communications Preferences page.
+   Configure the display of the <a href="/civicrm/gdpr/comms-prefs/update" target="blank">Communications Preferences page</a>.
    </div>
   <div class="crm-block crm-form-block crm-gdpr-comms-prefs-form-block">
   {foreach from=$page_elements item=elementName}
     <div class="crm-section">
       <div class="label">{$form.$elementName.label}</div>
-      <div class="content">{$form.$elementName.html}</div>
+      <div class="content">{$form.$elementName.html}
+      {if $descriptions.$elementName} 
+        <div class="description">{$descriptions.$elementName}</div>
+      {/if}
+      </div>
       <div class="clear"></div>
     </div>
   {/foreach}
@@ -57,7 +61,7 @@
   {if $group_containers}
    <table>
    <tr>
-   <th>Group</th><th>Enable</th><th>Title</th><th>Description</th><th>Uses Channel</th>
+   <th>Group</th><th>Enable</th><th>Title</th><th>Description</th><th>Channel</th>
    </tr>
    {foreach from=$group_containers item=containerName}
      <tr>
@@ -76,10 +80,22 @@
        {$form.$containerName.group_description.html}
       </td>
       <td>
-       {$form.$containerName.email.html}
-       {$form.$containerName.phone.html}
-       {$form.$containerName.post.html}
-       {$form.$containerName.sms.html}
+        {* begin group channel table *}
+        <table>
+          <tr><td style="min-width: 5em;">
+          {$form.$containerName.email.html}
+          </td></tr>
+          <tr><td>
+          {$form.$containerName.phone.html}
+          </td></tr>
+          <tr><td>
+          {$form.$containerName.post.html}
+          </td></tr>
+          <tr><td>
+          {$form.$containerName.sms.html}
+          </td></tr>
+       </table>
+       {* end group channel table *}
       </td>
 
      </tr>
@@ -89,7 +105,23 @@
    {/if}
    </fieldset>
   </div>{* end Groups block *}
-
+  <h3> Completion </h3>
+  <div class="crm-block crm-form-block crm-gdpr-comms-prefs-form-block">
+    <div class="crm-section">
+      <div class="label">{$form.completion_message.label}</div>
+      <div class="content">{$form.completion_message.html}
+        <div class="description">A message to display to the user after the form is submitted. </div>
+      </div>
+      <div class="clear"></div>
+    <div class="crm-section">
+      <div class="label">{$form.completion_url.label}</div>
+      <div class="content">{$form.completion_url.html}
+        <div class="description">Optionally, add the URL for a page to redirect the user after they complete the form. Leave blank to stay on the form. The page should already exist. The URL may be absolute (http://example.com/thank-you) or relative (/thank-you).</div>
+      </div>
+      <div class="clear"></div>
+    </div>
+  </div> {* end Completion block *}
+  
  </div>{* end form *}
 
 {* FOOTER *}

@@ -25,6 +25,7 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
       'enable_groups' => 0,
       'groups_heading' => ts('Interest groups'),
       'groups_intro' => ts('We want to continue to keep you informed about our work. Opt-in to the groups that interest you.'),
+      'completion_message' => ts('Your communications preferences have been updated. Thank you.')
     );
 
     foreach (self::getGroups() as $group) {
@@ -62,6 +63,26 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
   }
 
   /**
+   * Gets available contact profiles as an option array.
+   *
+   * @return array keyed by profile id, with value the profile label.
+   */
+  public static function getProfileOptions() {
+    $result = civicrm_api3('UFGroup', 'get', array(
+      'sequential' => 1,
+      'group_type' => "Individual,Contact",
+    ));
+    $options = array(0 => '-- Please select --');
+    if (!empty($result['values'])) {
+      foreach ($result['values'] as $profile) {
+        $options[$profile['id']] = $profile['title'];
+      }
+    }
+    return $options;
+  }
+
+
+  /**
    * Remove group settings for groups that no longer exist or are no longer
    * public.
    */
@@ -91,7 +112,7 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
       }
     }
   }
-  
+
   /**
    * Gets the public groups.
    *
@@ -112,7 +133,7 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
     }
     return self::$groups;
   }
-  
+
   /**
    * Get options for channels.
    * @return array
@@ -136,7 +157,7 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
         ),
         'NO' => array(
           'do_not_email' => 1,
-        ),        
+        ),
       ),
       'phone' => array(
         'UNKNOWN' => array(
@@ -147,7 +168,7 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
         ),
         'NO' => array(
           'do_not_phone' => 1,
-        ),        
+        ),
       ),
       'post' => array(
         'UNKNOWN' => array(
@@ -158,7 +179,7 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
         ),
         'NO' => array(
           'do_not_mail' => 1,
-        ),        
+        ),
       ),
       'sms' => array(
         'UNKNOWN' => array(
@@ -169,8 +190,8 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
         ),
         'NO' => array(
           'do_not_sms' => 1,
-        ),        
-      ),                  
+        ),
+      ),
     );
   }
 }

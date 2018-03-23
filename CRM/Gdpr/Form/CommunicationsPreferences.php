@@ -32,9 +32,18 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
       ts('Introduction'),
       $text_area_attributes
     );
+    $this->add(
+      'select',
+      'profile',
+      ts('Include Profile'),
+      U::getProfileOptions()
+    );
+    $descriptions['profile'] = ts('Include a profile so the user can identify and check their details are up-to-date.');
+    // Let the template know about elements in this section.
     $page_elements = array(
       'page_title',
-      'page_intro'
+      'page_intro',
+      'profile'
     );
     $this->assign('page_elements', $page_elements);
     // Comms prefs channels
@@ -128,7 +137,7 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
         'textarea',
         'group_description',
         'Description',
-        array('cols' => 40, 'rows' => 4)
+         array('cols' => 35, 'rows' => 6)
       );
       foreach ($channels as $key => $label) {
         $group_elems[] = HTML_Quickform::createElement(
@@ -141,10 +150,24 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
       $group_container->setElements($group_elems);
       $group_containers[] = $container_name;
     }
+    $this->add(
+      'text',
+      'completion_url',
+      ts('Completion page'),
+      array('size' => 50)
+    );
+    $this->add(
+      'textarea',
+      'completion_message',
+      ts('Completion message'),
+      $text_area_attributes
+    );
+    // Let the template know about which fields belong in the groups section.
     $groups_elements = array(
       'groups_heading',
       'groups_intro',
     );
+    $this->assign('descriptions', $descriptions);
     $this->assign('groups_elements', $groups_elements);
     $this->assign('group_containers', $group_containers);
 
