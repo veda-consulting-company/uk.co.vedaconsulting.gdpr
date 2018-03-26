@@ -45,6 +45,14 @@
 				    	<br>
 				    	<span class="group-description">
 				    		{$commPrefGroupsetting.$elementName.group_description}
+				    		<br>
+					    	{foreach from=$channelEleNames item=channelName}
+					    		{if $commPrefGroupsetting.$elementName.$channelName}
+					    		<span class="group-channel-matrix">
+					    			<small>{$channelName|ucwords} </small> 
+					    		</span>
+					    		{/if}
+					    	{/foreach}		    	
 				    	</span>
 			    	{/if}
 			  	</div>
@@ -60,6 +68,11 @@
 			<label for="{$tcFieldName}">{$tcFieldlabel}</label>
 			<div class="clear"></div>
 		</div>
+		{else}
+		<div class="crm-section">
+			<span>{$tcFieldlabel}</span>
+			<div class="clear"></div>
+		</div>		
 		{/if}
 	</div>
 
@@ -82,5 +95,16 @@
 		display: inline-block;
 		margin: 1em 1em 1em 2.3em;
 	}
+	.group-channel-matrix {
+		display: inline-block;
+		padding-top: 10px;	
+		padding-right: 10px;	
+	}
+	.groups-fieldset .crm-error{
+		display: none;
+	}
+	.groups-fieldset .crm-error-label{
+		display: unset;
+	}	
 </style>
 {/literal}
