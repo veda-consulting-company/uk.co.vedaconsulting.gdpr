@@ -135,14 +135,18 @@
   }).trigger('change');
 
   // Toggle completion setting elements.
-  var completionRadio = $('input[name="completion_redirect"]'),
+  var completionRadioSelector = 'input[name="completion_redirect"]',
+    completionRadio = $(completionRadioSelector),
     completionUrl = $('.completion-url');
     completionMessage = $('.completion-message'),
-    isOn = completionRadio.val() && completionRadio.is(':checked');
+    isOn = $(completionRadioSelector + ":checked").val() == 1; 
   completionUrl.toggle(isOn);
-  completionMessage.hide(!isOn);
+  completionMessage.toggle(!isOn);
+  console.log(completionRadio);
   completionRadio.on('change', function(){
     var isOn = (true == $(this).val());
+    console.log('isOn local: ' + isOn);
+
     completionUrl.toggle(isOn);
     completionMessage.toggle(!isOn);
   });
