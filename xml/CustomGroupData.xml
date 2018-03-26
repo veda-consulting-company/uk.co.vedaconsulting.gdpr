@@ -4,7 +4,7 @@
   <CustomGroups>
     <CustomGroup>
       <name>SLA_Acceptance</name>
-      <title>SLA Acceptance</title>
+      <title>Data Policy Acceptance</title>
       <extends>Activity</extends>
       <extends_entity_column_value_option_group>activity_type</extends_entity_column_value_option_group>
       <extends_entity_column_value>SLA Acceptance</extends_entity_column_value>
