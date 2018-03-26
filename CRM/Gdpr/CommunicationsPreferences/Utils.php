@@ -219,4 +219,22 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
       ),
     );
   }
+
+  public static function getCommPreferenceURLForContact($cid, $skipContactIdInURL = FALSE){
+    if (empty($cid)) {
+      return NULL;
+    }
+
+    $urlParams = array(
+      'reset' => 1,
+      'cid'   => $cid,
+      'cs'    => CRM_Contact_BAO_Contact_Utils::generateChecksum($cid),
+    );
+
+    //for sumamry hook, cid would add by default, we dont want duplicate URL params.
+    if ($skipContactIdInURL) {
+      unset($urlParams['cid']);
+    }
+    return CRM_Utils_System::url('civicrm/gdpr/comms-prefs/update', $urlParams, TRUE);
+  }
 }
