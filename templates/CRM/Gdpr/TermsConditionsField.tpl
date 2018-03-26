@@ -1,6 +1,5 @@
 {* Template for terms and conditions field to insert into Event and Contribution forms *}
 <fieldset class="crm-gdpr-terms-conditions" id="gdpr-terms-conditions">
-  <legend></legend>
   <div class="crm-section">
     <div class="label"><label>Terms &amp; Conditions
     <span class="crm-marker" title="This field is required">*</span>
@@ -9,22 +8,24 @@
       <div class="terms-conditions-acceptance-intro">
        {$terms_conditions.intro}
       </div>
-    </div>
+   </div>
+   <div class="crm-section">
       {if $terms_conditions.links.global}
       {assign var="link" value=$terms_conditions.links.global}
-    <div class="label"><label>
-    </label></div>
+    <div class="label"><label></label></div>
       <div class="content terms-conditions-item">
         <a href="{$link.url}" class="terms-conditions-link" target="blank">{$link.label}</a>
         <div class="terms-conditions-checkbox">
         {$form.accept_tc.html}
         </div>
       </div>
+    </div> {* end .crm-section *}
+  <div class="clear"></div>
       {/if}
       {if $terms_conditions.links.event}
       {assign var="link" value=$terms_conditions.links.event}
-    <div class="label"><label>
-    </label></div>
+    <div class="crm-section">
+    <div class="label"><label></label></div>
       <div class="content terms-conditions-item">
           <a href="{$link.url}" class="terms-conditions-link" target="blank">{$link.label}</a>
         <div class="terms-conditions-checkbox">
@@ -32,7 +33,9 @@
         </div>
       </div>
       {/if}
-  </div>
+
+    </div>{* end .content *}
+  </div>{* end .crm-section *}
   <div class="clear"></div>
 </fieldset>
 <script type="text/javascript">
