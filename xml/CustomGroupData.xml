@@ -330,16 +330,5 @@
       <is_active>1</is_active>
       <option_group_name>comm_pref_options</option_group_name>
     </OptionValue>
-    <OptionValue>
-      <label>Unknown</label>
-      <value>UNKNOWN</value>
-      <name>Unknown</name>
-      <is_default>1</is_default>
-      <weight>3</weight>
-      <is_optgroup>0</is_optgroup>
-      <is_reserved>0</is_reserved>
-      <is_active>1</is_active>
-      <option_group_name>comm_pref_options</option_group_name>
-    </OptionValue>            
   </OptionValues>  
 </CustomData>
