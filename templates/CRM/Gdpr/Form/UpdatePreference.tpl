@@ -1,4 +1,3 @@
-
 <div class="crm-form-block">
 	<div class="comm-pref-block channel-block">
 		<!-- Page Intro Text from Settings -->
@@ -8,6 +7,15 @@
 				{ts}{$page_intro}{/ts}
 			</span>
 		</div>
+		{/if}
+
+		<!-- if any profile has condfigured -->
+		{if !empty($custom_pre)}
+		<fieldset>
+		    <div class="crm-public-form-item crm-group custom_pre_profile-group">
+		    {include file="CRM/UF/Form/Block.tpl" fields=$custom_pre}
+		    </div>
+		</fieldset>
 		{/if}
 
 		<!-- Channels fieldset section -->

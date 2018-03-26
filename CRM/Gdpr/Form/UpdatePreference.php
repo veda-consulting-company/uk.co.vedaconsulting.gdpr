@@ -41,10 +41,11 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
 
     //Get all Communication preference settings
     $this->getSettings();
+
     $this->assign('commPrefGroupsetting', $this->commPrefGroupsetting);
 
     if (!empty($this->commPrefSettings['profile'])) {
-      // $this->buildCustom($this->commPrefSettings['profile']);
+      $this->buildCustom($this->commPrefSettings['profile']);
     }
 
     //Display Page Title from settings
@@ -156,6 +157,66 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
     parent::buildQuickForm();
   }
 
+  /**
+   * Add the custom fields.
+   *
+   * @param int $id
+   * @param string $name
+   * @param bool $viewOnly
+   */
+  public function buildCustom($id, $name = 'custom_pre', $viewOnly = FALSE) {
+    if ($id) {
+      $button = substr($this->controller->getButtonName(), -4);
+      $cid = CRM_Utils_Request::retrieve('cid', 'Positive', $this);
+      $session = CRM_Core_Session::singleton();
+      $contactID = $session->get('userID');
+
+      if ($cid) {
+        CRM_Core_BAO_UFGroup::filterUFGroups($id, $cid);
+      }
+      
+      $fields = CRM_Core_BAO_UFGroup::getFields($id, FALSE, CRM_Core_Action::ADD,
+        NULL, NULL, FALSE, NULL,
+        FALSE, NULL, CRM_Core_Permission::CREATE,
+        'field_name', TRUE
+      );
+
+      $addCaptcha = FALSE;
+
+      $this->assign($name, $fields);
+      if (is_array($fields)) {
+        foreach ($fields as $key => $field) {
+          if ($viewOnly &&
+            isset($field['data_type']) &&
+            $field['data_type'] == 'File' || ($viewOnly && $field['name'] == 'image_URL')
+          ) {
+            // ignore file upload fields
+            continue;
+          }
+          //make the field optional if primary participant
+          //have been skip the additional participant.
+          if ($button == 'skip') {
+            $field['is_required'] = FALSE;
+          }
+          // CRM-11316 Is ReCAPTCHA enabled for this profile AND is this an anonymous visitor
+          elseif ($field['add_captcha'] && !$cid) {
+            // only add captcha for first page
+            $addCaptcha = TRUE;
+          }
+          CRM_Core_BAO_UFGroup::buildProfile($this, $field, CRM_Profile_Form::MODE_CREATE, $cid, TRUE);
+
+          $this->_fields[$key] = $field;
+        }
+      }
+
+      if ($addCaptcha && !$viewOnly) {
+        $captcha = CRM_Utils_ReCAPTCHA::singleton();
+        $captcha->add($this);
+        $this->assign('isCaptcha', TRUE);
+      }
+    }
+  }
+
   public static function formRule($fields, $files, $self){
     $errors = array();
 
@@ -219,7 +280,31 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
             $defaults[$container_name] = 1;
           }
         }
-      }      
+      }
+      
+      //Set Profile defaults
+      $fields = array();
+      $removeCustomFieldTypes = array('Contribution', 'Membership');
+      $contribFields = CRM_Contribute_BAO_Contribution::getContributionFields();
+
+      foreach ($this->_fields as $name => $dontCare) {
+        //don't set custom data Used for Contribution (CRM-1344)
+        if (substr($name, 0, 7) == 'custom_') {
+          $id = substr($name, 7);
+          if (!CRM_Core_BAO_CustomGroup::checkCustomField($id, $removeCustomFieldTypes)) {
+            continue;
+          }
+          // ignore component fields
+        }
+        elseif (array_key_exists($name, $contribFields) || (substr($name, 0, 11) == 'membership_') || (substr($name, 0, 13) == 'contribution_')) {
+          continue;
+        }
+        $fields[$name] = 1;
+      }
+
+      if (!empty($fields)) {
+        CRM_Core_BAO_UFGroup::setProfileDefaults($this->_cid, $fields, $defaults);
+      }       
     }
     return $defaults;
   }
@@ -239,6 +324,17 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
     if (!empty($submittedValues[$tcFieldName]) && !empty($this->_cid)) {
       $acceptance = CRM_Gdpr_SLA_Utils::recordSLAAcceptance($this->_cid);
     }
+
+    $contactType = CRM_Core_DAO::getFieldValue('CRM_Contact_DAO_Contact', $this->_cid, 'contact_type');
+    $contactID = CRM_Contact_BAO_Contact::createProfileContact(
+      $submittedValues,
+      $this->_fields,
+      $this->_cid,
+      NULL,
+      NULL,
+      $contactType,
+      TRUE
+    );
 
     //Prepare Comm pref params
     $commPref = array('id' => $this->_cid);
@@ -302,7 +398,7 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
     }
 
     //Get the destination url from settings and redirect if we found one.
-    if ($destinationURL = $this->settings['completion_url']) {
+    if (!empty($this->settings['completion_url']) && $destinationURL = $this->settings['completion_url']) {
       $destinationURL = CRM_Utils_System::url($destinationURL);
       CRM_Utils_System::redirect($destinationURL);
     }
