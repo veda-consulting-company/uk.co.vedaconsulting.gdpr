@@ -147,25 +147,30 @@
     completionMessage.toggle(!isOn);
   });
   controlGroupChannels();
-  // Disable group channels if channel is disabled or group is disabled.
   function controlGroupChannels() {
     var channels = ['email', 'phone', 'post', 'sms'];
     var channelChk = $('input.enable-channel');
     var groupChannels = $('.group-channels input[type="checkbox"]');
+    // Disable group channels if channel is disabled.
+    function checkGroupChannels(controller) {
+        var channel = $(controller).attr('id').replace('channels_enable_', '');
+        if (channels.indexOf(channel) === false) {
+          return;
+        }
+        var isChecked = $(controller).is(':checked');
+        // get group channels
+        groupChannels.filter('input[id$="' + channel + '"]').each(function(){
+            if (!isChecked) {
+              $(this).attr('checked', false);
+            }
+            $(this).attr('disabled', !isChecked);
+          });
+    }
+    channelChk.each(function() { 
+      checkGroupChannels(this)
+    });
     channelChk.on('change', function() {
-      var channel = $(this).attr('id').replace('channels_enable_', '');
-      if (channels.indexOf(channel) === false) {
-        return;
-      }
-      var controller = $(this);
-      var isChecked = controller.is(':checked');
-      // get group channels
-      groupChannels.filter('input[id$="' + channel + '"]').each(function(){
-          if (!isChecked) {
-            $(this).attr('checked', false);
-          }
-          $(this).attr('disabled', !isChecked);
-        });
+      checkGroupChannels(this);
     });
   }
 }(cj));
