@@ -103,7 +103,7 @@ EOT;
   }
 
   /**
-   * Gets the last SLA Acceptance activity for a contact.
+   * Gets the last Acceptance activity for a contact.
    */
   static function getContactLastAcceptance($contactId) {
     $result = civicrm_api3('Activity', 'get', array(
@@ -111,7 +111,7 @@ EOT;
       'activity_type_id' => self::$activityTypeName,
       'target_contact_id' => $contactId,
       'options' => array(
-        'sort' => 'activity_date_time asc',
+        'sort' => 'activity_date_time desc',
         'limit' => 1,
       ),
     ));

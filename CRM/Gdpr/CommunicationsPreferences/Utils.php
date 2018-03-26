@@ -134,6 +134,29 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
     }
     return self::$groups;
   }
+  /**
+   * Gets details of the last time a contact updated their communications
+   * preferences.
+   *
+   * @param int $cid
+   *  Contact Id.
+   *
+   * @return array
+   *  Array of activity details or empty array.
+   */
+  public static function getLastUpdatedForContact($cid) {
+    $return = array();
+    if (!$cid) {
+      return $return;
+    }
+    $result = civicrm_api3('Activity', 'get', array(
+      'sequential' => 1,
+      'activity_type_id' => "Update_Communication_Preferences",
+      'contact_id' => $cid,
+      'options' => array('sort' => "id desc"),
+    ));
+    return !empty($result['values']) ? $result['values'][0] : $return;
+  }
 
   /**
    * Get options for channels.
@@ -147,6 +170,7 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
       'sms' => ts('SMS'),
     );
   }
+
   public static function getCommunicationPreferenceMapper() {
     return array(
       'email' => array(
