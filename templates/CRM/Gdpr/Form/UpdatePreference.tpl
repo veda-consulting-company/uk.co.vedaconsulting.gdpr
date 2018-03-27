@@ -112,11 +112,28 @@
     	var groupDiv	= $(controller).parent('.group-channel-div');
     	var isChecked = $(controller).is(':checked');
 
+    	var mismatchedChannels = [];
     	if (isChecked) {
 	    	$(groupDiv).find('.group-channel-matrix').each(function(){
 	    		var groupChannel = $.trim($(this).text().toLowerCase());
-	    		$('#' + containerPrefix + groupChannel).val('YES');
+	    		var currentChannelValue = $('#' + containerPrefix + groupChannel).val();
+	    		if (currentChannelValue != 'YES') {
+	    			mismatchedChannels.push(groupChannel);
+	    		}
 	    	});
+
+	    	if (mismatchedChannels.length !== 0) {
+	    		var mismatchedChannelTxt = mismatchedChannels.join(', ');
+          CRM.confirm({
+            title: ts('Group Channels'),
+            message: ts('%1 has to be enabled for this group communication',  {1: '<em>' + mismatchedChannelTxt + '</em>'})
+          })
+          .on('crmConfirm:yes', function() {
+            $(mismatchedChannels).each(function(index, value){
+            	$('#'+containerPrefix + value).val('YES');
+            });
+          });	    		
+	    	}
     	}
     }
 	});
