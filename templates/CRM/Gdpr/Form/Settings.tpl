@@ -80,13 +80,14 @@
 </div>
 <!-- /Forget me settings -->
 
-<!-- TC acceptance settings-->
-<h3>Terms and Conditions</h3>
+<!--  Acceptance settings-->
+<h3>Data Policy</h3>
 
 <div class="crm-block crm-form-block crm-gdpr-settings-form-block">
 	<div id="help">
-		{ts}Settings related to sitewise agreements such as Terms and Conditions and Data Policies.
-     A basic acceptance form <a href="/civicrm/terms/accept">is available here</a>. This is best given to logged in users or with a contact checksum in the url. These settings will also apply when adding the sitewide terms and conditions with Events.
+		{ts}Settings related to sitewise agreements such as Data Policy or Terms and Conditions.
+     A basic acceptance form <a href="/civicrm/terms/accept">is available here</a>. 
+     These settings will apply in the Communications Preferences page and when Terms and Conditions are used with Events.
     {/ts}
 	</div>
 
@@ -95,7 +96,7 @@
 		<div class="content">
 			{$form.sla_period.html}
 			<br />
-	        <span class="description"><i>{ts}Number of months since contact accepted Terms and Conditions until they are due to renew.{/ts}</i></span>
+	        <span class="description"><i>{ts}Number of months since contact accepted until they are due to renew.{/ts}</i></span>
 		</div>
 		<div class="clear"></div>
 	</div>
@@ -117,7 +118,7 @@
 		<div class="content">
 			{$form.sla_tc_upload.html}
 			<br />
-	        <span class="description"><i>{ts}Pdf document with the Terms and Conditions.{/ts}</i></span>
+	        <span class="description"><i>{ts}Pdf document with the Policy/Terms.{/ts}</i></span>
 		</div>
 	<div class="crm-section tc-new-version-section">
 		<div class="label">{$form.sla_tc_new_version.label}</div>
@@ -132,19 +133,22 @@
 		<div class="clear"></div>
     <div class="crm-section">
       <div class="label">{$form.sla_link_label.label}</div>
-      <div class="content">{$form.sla_link_label.html}</div>
-      <span class="description"><i>{ts} Text to use for the link. Usually the document title.{/ts}</i></span>
+      <div class="content">{$form.sla_link_label.html}
+        <br /><span class="description"><i>{ts} Text to use for the link. Usually the document title.{/ts}</i></span>
+      </div>
     </div>
 		<div class="clear"></div>
     <div class="crm-section">
       <div class="label">{$form.sla_checkbox_text.label}</div>
-      <div class="content">{$form.sla_checkbox_text.html}</div>
-      <span class="description"><i>{ts} Text for the checkbox. An acceptance statement.{/ts}</i></span>
+      <div class="content">{$form.sla_checkbox_text.html}
+        <br /><span class="description"><i>{ts} Text for the checkbox. An acceptance statement.{/ts}</i></span>
+      </div>
     </div>
     <div class="crm-section">
       <div class="label">{$form.sla_page_title.label}</div>
-      <div class="content">{$form.sla_page_title.html}</div>
-      <span class="description"><i>{ts}The title for the user-facing page with the acceptance form.{/ts}</i></span>
+      <div class="content">{$form.sla_page_title.html}
+        <br /><span class="description"><i>{ts}The title for the user-facing page with the acceptance form.{/ts}</i></span>
+      </div>
     </div>
 		<div class="clear"></div>
     <div class="crm-section">

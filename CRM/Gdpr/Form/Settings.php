@@ -70,7 +70,7 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
     $this->add(
       'file',
       'sla_tc_upload',
-      ts('Terms and Conditions file')
+      ts('Data Policy file')
     );
     $this->add(
       'checkbox',
@@ -112,7 +112,7 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
 
     $bare_defaults = array(
       'sla_link_label' => ts('Data Policy'),
-      'sla_checkbox_text' => ts('I accept the Terms & Conditions.'),
+      'sla_checkbox_text' => ts('I accept the Data Policy.'),
       'sla_tc_new_version' => FALSE,
     );
 
