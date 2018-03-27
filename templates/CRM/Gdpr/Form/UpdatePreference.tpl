@@ -51,9 +51,10 @@
 				    		{$commPrefGroupsetting.$elementName.group_description}
 				    		<br>
 					    	{foreach from=$channelEleNames item=channelName}
-					    		{if $commPrefGroupsetting.$elementName.$channelName}
+					    		{assign var=groupChannel value=$channelName|replace:$containerPrefix:''}
+					    		{if $commPrefGroupsetting.$elementName.$groupChannel}
 					    		<span class="group-channel-matrix">
-					    			{$channelName|ucwords}
+					    			{$groupChannel|ucwords}
 					    		</span>
 					    		{/if}
 					    	{/foreach}
@@ -97,7 +98,8 @@
 <script type="text/javascript">
 	CRM.$(function($){
 		var groupChk = $('.groups-fieldset input[type="checkbox"]');
-
+		var containerPrefix = "{/literal}{$containerPrefix}{literal}";
+		
     groupChk.each(function() { 
       checkGroupChannels(this)
     });
@@ -113,7 +115,7 @@
     	if (isChecked) {
 	    	$(groupDiv).find('.group-channel-matrix').each(function(){
 	    		var groupChannel = $.trim($(this).text().toLowerCase());
-	    		$('#' + groupChannel).val('YES');
+	    		$('#' + containerPrefix + groupChannel).val('YES');
 	    	});
     	}
     }
