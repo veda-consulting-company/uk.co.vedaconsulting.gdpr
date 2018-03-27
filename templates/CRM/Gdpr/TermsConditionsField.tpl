@@ -1,14 +1,18 @@
 {* Template for terms and conditions field to insert into Event and Contribution forms *}
 <fieldset class="crm-gdpr-terms-conditions" id="gdpr-terms-conditions">
   <div class="crm-section">
-    <div class="label"><label>Terms &amp; Conditions
-    <span class="crm-marker" title="This field is required">*</span>
-    </label></div>
+    <div class="label">
+      <label>Terms &amp; Conditions
+        <span class="crm-marker" title="This field is required">*</span>
+      </label>
+    </div>
     <div class="content">
       <div class="terms-conditions-acceptance-intro">
        {$terms_conditions.intro}
       </div>
    </div>
+   </div>{* end crm-section *}
+  <div class="clear"></div>
    <div class="crm-section">
       {if $terms_conditions.links.global}
       {assign var="link" value=$terms_conditions.links.global}
