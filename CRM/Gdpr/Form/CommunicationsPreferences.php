@@ -38,7 +38,8 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
       ts('Include Profile'),
       U::getProfileOptions()
     );
-    $descriptions['profile'] = ts('Include a profile so the user can identify and check their details are up-to-date.');
+    $descriptions['profile'] = ts('Include a profile so the user can identify and check their details are up-to-date. It should  include a primary email address field.');
+
     // Let the template know about elements in this section.
     $page_elements = array(
       'page_title',
