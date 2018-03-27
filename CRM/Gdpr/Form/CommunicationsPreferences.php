@@ -163,7 +163,7 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
       ts('Completion page'),
       array('size' => 50)
     );
-    $descriptions['completion_url'] = ts('Add the a URL for a page to redirect the user after they complete the form. The page should already exist. The URL may be absolute (http://example.com/thank-you) or relative, starting with a forward slash (/thank-you).');
+    $descriptions['completion_url'] = ts('Add the a URL for a page to redirect the user after they complete the form. The page should already exist. The URL may be absolute (http://example.com/thank-you) or relative (thank-you), with no leading forward slash. Leave blank to redirect to the front page.');
     $this->add(
       'textarea',
       'completion_message',
@@ -257,7 +257,7 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
     $errors = array();
     if (!empty($values['completion_redirect'])) {
       if (empty($values['completion_url'])) {
-        $errors['completion_url'] = ts('Please add the URL of a page to redirect the user after they complete the form.');
+        // This is okay, we will redirect to the home page.
       }
       else {
         $url = $values['completion_url'];
