@@ -86,7 +86,6 @@
 <div class="crm-block crm-form-block crm-gdpr-settings-form-block">
 	<div id="help">
 		{ts}Settings related to sitewise agreements such as Data Policy or Terms and Conditions.
-     A basic acceptance form <a href="/civicrm/terms/accept">is available here</a>. 
      These settings will apply in the Communications Preferences page and when Terms and Conditions are used with Events.
     {/ts}
 	</div>
