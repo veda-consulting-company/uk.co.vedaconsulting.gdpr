@@ -1,11 +1,9 @@
-<div class="crm-form-block">
+<div class="crm-communications-preferences-form-block crm-public">
 	<div class="comm-pref-block channel-block">
 		<!-- Page Intro Text from Settings -->
 		{if $page_intro}
-		<div class="help">
-			<span>
+		<div class="section-description">
 				{ts}{$page_intro}{/ts}
-			</span>
 		</div>
 		{/if}
 
@@ -38,10 +36,8 @@
 		<fieldset class="groups-fieldset">
 			<legend>{$groups_heading}</legend>
       {if $groups_intro}
-      <div class="help">
-        <span>
+      <div class="section-description">
         {ts}{$groups_intro}{/ts}
-        </span>
       </div>
 			{/if}
 			{foreach from=$groupEleNames item=elementName}
