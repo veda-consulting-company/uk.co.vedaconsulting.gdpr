@@ -142,11 +142,8 @@
     isOn = $(completionRadioSelector + ":checked").val() == 1; 
   completionUrl.toggle(isOn);
   completionMessage.toggle(!isOn);
-  console.log(completionRadio);
   completionRadio.on('change', function(){
     var isOn = (true == $(this).val());
-    console.log('isOn local: ' + isOn);
-
     completionUrl.toggle(isOn);
     completionMessage.toggle(!isOn);
   });
