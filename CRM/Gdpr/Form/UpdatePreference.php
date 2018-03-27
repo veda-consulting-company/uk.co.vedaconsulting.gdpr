@@ -135,9 +135,8 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
     else {
       $accept_activity = CRM_Gdpr_SLA_utils::getContactLastAcceptance($this->_cid);
       $accept_date = '';
-      if (!empty($accept_activity['created_date'])) {
-        dpm($accept_activity);
-        $accept_date = date('d/m/Y', strtotime($accept_activity['created_date']));
+      if (!empty($accept_activity['activity_date_time'])) {
+        $accept_date = date('d/m/Y', strtotime($accept_activity['activity_date_time']));
       }
       $tcFieldlabel = sprintf("Here is our <a href='%s' target='_blank'>%s</a>, which you agreed to on %s."
         , $gdprTermsConditionsUrl
