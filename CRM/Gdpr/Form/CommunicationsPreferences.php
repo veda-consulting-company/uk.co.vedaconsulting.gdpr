@@ -267,10 +267,15 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
           $full_url = $url;
         }
         else {
+          // Remove leading slash from base and trailing slash from path.
           if (0 === strpos($url, '/')) {
             $url = substr($url, 1);
           }
-          $full_url =  CIVICRM_UF_BASEURL . $url;
+          $last_pos = strlen($base_url) -1;
+          if (strrpos($base_url, '/') === $last_pos) {
+            $base_url = substr($base_url, 0, $last_pos);
+          }
+          $full_url = $base_url . '/' . $url;
         }
 
         // We have been unable to construct a URL.
