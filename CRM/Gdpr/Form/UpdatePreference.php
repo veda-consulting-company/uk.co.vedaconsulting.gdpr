@@ -54,7 +54,8 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
 
     //Get all Communication preference settings
     $this->getSettings();
-
+    $this->_session = CRM_Core_Session::singleton();
+    
     $this->assign('commPrefGroupsetting', $this->commPrefGroupsetting);
 
     if (!empty($this->commPrefSettings['profile'])) {
