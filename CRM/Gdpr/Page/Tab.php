@@ -29,7 +29,7 @@ class CRM_Gdpr_Page_Tab extends CRM_Core_Page {
     $isDue = CRM_Gdpr_SLA_Utils::isContactDueAcceptance($contactId);
     if ($activity) {
       $details['details'] = $activity['subject'];
-      $details['date'] = $activity['created_date'];
+      $details['date'] = $activity['activity_date_time'];
       $field = CRM_Gdpr_SLA_Utils::getTermsConditionsField();
       $key = 'custom_' . $field['id'];
       $url = !empty($activity[$key]) ? $activity[$key] : '';
@@ -53,7 +53,7 @@ class CRM_Gdpr_Page_Tab extends CRM_Core_Page {
     $activity = CRM_Gdpr_CommunicationsPreferences_Utils::getLastUpdatedForContact($contactId);
     if ($activity) {
       $details['details'] = $activity['subject'];
-      $details['date'] = $activity['created_date'];
+      $details['date'] = $activity['activity_date_time'];
     }
     return $details;
   }
