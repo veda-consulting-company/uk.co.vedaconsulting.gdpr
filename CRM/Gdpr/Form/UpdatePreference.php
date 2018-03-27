@@ -29,14 +29,7 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
     
     //Do not allow anon users to update unless have a valid checksum
     if(empty($this->_cid)){
-      //Display some status message and notify that user record doesn't have valid checksum
-      //So, we will do dedupe and update the record if found one. OR you can contact administer to update communication preferences.
-      $msg = ts("Link may be expired or not valid. <br>
-        You can contact administer to update your communication preference / to get valid communication preferences Link. <br>
-        or <br>
-        You still can update your preferences with your contact details.
-      ");
-      CRM_Core_Session::setStatus($msg, 'Invalid Communication Preferences Link', 'alert');
+      //Do Nothing for now
     }
 
     //Add Gdpr CSS file

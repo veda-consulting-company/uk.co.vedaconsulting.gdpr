@@ -179,9 +179,10 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
         ),
         'YES' => array(
           'do_not_email' => 0,
+          'is_opt_out' => 0,
         ),
         'NO' => array(
-          'do_not_email' => 1,
+          'is_opt_out' => 1,
         ),
       ),
       'phone' => array(
