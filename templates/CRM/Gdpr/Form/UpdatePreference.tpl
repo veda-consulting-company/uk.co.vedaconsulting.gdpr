@@ -43,10 +43,10 @@
         {ts}{$groups_intro}{/ts}
         </span>
       </div>
-		{/if}
+			{/if}
 			{foreach from=$groupEleNames item=elementName}
 			  <div class="crm-section">
-			    <div class="content">
+			    <div class="content group-channel-div">
 			    	{$form.$elementName.html}
 			    	{$form.$elementName.label}
 			    	{if $commPrefGroupsetting.$elementName.group_description}
@@ -57,7 +57,7 @@
 					    	{foreach from=$channelEleNames item=channelName}
 					    		{if $commPrefGroupsetting.$elementName.$channelName}
 					    		<span class="group-channel-matrix">
-					    			<small>{$channelName|ucwords} </small>
+					    			{$channelName|ucwords}
 					    		</span>
 					    		{/if}
 					    	{/foreach}
@@ -98,28 +98,29 @@
 </div>
 
 {literal}
-<style type="text/css">
-	.comm-pref-block .crm-form-select {
-		width: 15%;
-	}
-	.groups-fieldset .content label{
-		margin-left: 15px;
-		margin-bottom: 15px;
-	}
-	.group-description {
-		display: inline-block;
-		margin: 1em 1em 1em 2.3em;
-	}
-	.group-channel-matrix {
-		display: inline-block;
-		padding-top: 10px;
-		padding-right: 10px;
-	}
-	.groups-fieldset .crm-error{
-		display: none;
-	}
-	.groups-fieldset .crm-error-label{
-		display: unset;
-	}
-</style>
+<script type="text/javascript">
+	CRM.$(function($){
+		var groupChk = $('.groups-fieldset input[type="checkbox"]');
+
+    groupChk.each(function() { 
+      checkGroupChannels(this)
+    });
+    groupChk.on('change', function() {
+      checkGroupChannels(this);
+    });
+
+    function checkGroupChannels(controller) {
+    	var groupId 	= $(controller).attr('id')
+    	var groupDiv	= $(controller).parent('.group-channel-div');
+    	var isChecked = $(controller).is(':checked');
+
+    	if (isChecked) {
+	    	$(groupDiv).find('.group-channel-matrix').each(function(){
+	    		var groupChannel = $.trim($(this).text().toLowerCase());
+	    		$('#' + groupChannel).val('YES');
+	    	});
+    	}
+    }
+	});
+</script>
 {/literal}
