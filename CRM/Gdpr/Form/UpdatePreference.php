@@ -110,7 +110,7 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
     
     //GDPR Terms and conditions
     //if already accepted then we dont this link at all
-    $isContactDueAcceptance = CRM_Gdpr_SLA_Utils::isContactDueAcceptance();
+    $isContactDueAcceptance = CRM_Gdpr_SLA_Utils::isContactDueAcceptance($this->_cid);
     if ($gdprTermsConditionsUrl = CRM_Gdpr_SLA_Utils::getTermsConditionsUrl()) {
       $this->assign('gdprTcURL', $gdprTermsConditionsUrl);
     }    
@@ -133,9 +133,16 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
       $this->add('checkbox', $tcFieldName, ts(''), NULL, TRUE);
     }
     else {
-      $tcFieldlabel = sprintf("You can click and download the GDPR <a href='%s' target='_blank'>%s</a> which you already agreed"
+      $accept_activity = CRM_Gdpr_SLA_utils::getContactLastAcceptance($this->_cid);
+      $accept_date = '';
+      if (!empty($accept_activity['created_date'])) {
+        dpm($accept_activity);
+        $accept_date = date('d/m/Y', strtotime($accept_activity['created_date']));
+      }
+      $tcFieldlabel = sprintf("Here is our <a href='%s' target='_blank'>%s</a>, which you agreed to on %s."
         , $gdprTermsConditionsUrl
         , $gdprTermsConditionslabel
+        , $accept_date
       );
       $this->assign('tcFieldlabel', $tcFieldlabel);
     }

@@ -106,18 +106,25 @@ EOT;
    * Gets the last Acceptance activity for a contact.
    */
   static function getContactLastAcceptance($contactId) {
-    $result = civicrm_api3('Activity', 'get', array(
-      'sequential' => 1,
-      'activity_type_id' => self::$activityTypeName,
-      'target_contact_id' => $contactId,
-      'options' => array(
-        'sort' => 'activity_date_time desc',
-        'limit' => 1,
-      ),
-    ));
-    if (!empty($result['values'])) {
-      return $result['values'][0];
+    static $cache = array();
+    if (empty($cache[$contactId])) {
+      $result = civicrm_api3('Activity', 'get', array(
+        'sequential' => 1,
+        'activity_type_id' => self::$activityTypeName,
+        'target_contact_id' => $contactId,
+        'options' => array(
+          'sort' => 'activity_date_time desc',
+          'limit' => 1,
+        ),
+      ));
+      if (!empty($result['values'])) {
+        $cache[$contactId] = $result['values'][0];
+      }
+      else {
+        $cache[$contactId] = array();
+      }
     }
+    return $cache[$contactId];
   }
 
   /**

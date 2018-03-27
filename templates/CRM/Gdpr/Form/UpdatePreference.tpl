@@ -42,7 +42,7 @@
         <span>
         {ts}{$groups_intro}{/ts}
         </span>
-      </div>	
+      </div>
 		{/if}
 			{foreach from=$groupEleNames item=elementName}
 			  <div class="crm-section">
@@ -57,10 +57,10 @@
 					    	{foreach from=$channelEleNames item=channelName}
 					    		{if $commPrefGroupsetting.$elementName.$channelName}
 					    		<span class="group-channel-matrix">
-					    			<small>{$channelName|ucwords} </small> 
+					    			<small>{$channelName|ucwords} </small>
 					    		</span>
 					    		{/if}
-					    	{/foreach}		    	
+					    	{/foreach}
 				    	</span>
 			    	{/if}
 			  	</div>
@@ -69,20 +69,27 @@
 			{/foreach}
 		</fieldset>
 
+	<div class="clear"></div>
 		<!-- GDPR Terms and conditions url link and checkbox -->
+    <fieldset class="data-policy-fieldset">
 		{if $isContactDueAcceptance}
-		<div class="crm-section">
-			{$form.$tcFieldName.html}	
-			<label for="{$tcFieldName}">{$tcFieldlabel}</label>
-			<div class="clear"></div>
-		</div>
-		{else}
-		<div class="crm-section">
-			<span>{$tcFieldlabel}</span>
-			<div class="clear"></div>
-		</div>		
-		{/if}
-	</div>
+      <div class="crm-section data-policy">
+        <div class="content">
+          {$form.$tcFieldName.html}
+          <label for="{$tcFieldName}">{$tcFieldlabel}</label>
+        </div>
+        <div class="clear"></div>
+      </div>
+      {else}
+      <div class="crm-section">
+        <div class="content">
+          <span>{$tcFieldlabel}</span>
+          <div class="clear"></div>
+        </div>
+      </div>
+      {/if}
+    </div>
+  </fieldset>
 
 	<div class="crm-submit-buttons">
 	{include file="CRM/common/formButtons.tpl" location="bottom"}
@@ -105,14 +112,14 @@
 	}
 	.group-channel-matrix {
 		display: inline-block;
-		padding-top: 10px;	
-		padding-right: 10px;	
+		padding-top: 10px;
+		padding-right: 10px;
 	}
 	.groups-fieldset .crm-error{
 		display: none;
 	}
 	.groups-fieldset .crm-error-label{
 		display: unset;
-	}	
+	}
 </style>
 {/literal}
