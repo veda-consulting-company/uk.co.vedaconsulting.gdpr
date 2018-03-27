@@ -55,7 +55,7 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
     //Get all Communication preference settings
     $this->getSettings();
     $this->_session = CRM_Core_Session::singleton();
-    
+
     $this->assign('commPrefGroupsetting', $this->commPrefGroupsetting);
 
     if (!empty($this->commPrefSettings['profile'])) {
@@ -428,16 +428,18 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
       civicrm_api3('Activity', 'Create', $activityParams);
     }
 
-    if (!empty($this->settings['completion_message'])) {
-      $thankYouMsg = html_entity_decode($this->settings['completion_message']);
+    if (!empty($this->commPrefSettings['completion_message'])) {
+      $thankYouMsg = html_entity_decode($this->commPrefSettings['completion_message']);
 
       //FIXME Redirect to Thank you page or destination url from setting
-      CRM_Core_Session::setStatus($thankYouMsg, 'Communication Preference', 'Success');
+      CRM_Core_Session::setStatus($thankYouMsg, ts('Communication Preferences'), 'Success');
     }
 
     //Get the destination url from settings and redirect if we found one.
-    if (!empty($this->settings['completion_url']) && $destinationURL = $this->settings['completion_url']) {
-      $destinationURL = CRM_Utils_System::url($destinationURL);
+    if (!empty($this->commPrefSettings['completion_redirect'])) {
+      $destinationURL = !empty($this->commPrefSettings['completion_url']) ? $this->commPrefSettings['completion_url'] : NULL;
+      $destinationURL = CRM_Utils_System::url($destinationURL, NULL, TRUE);
+      CRM_Core_Error::debug_var('destinationURL', $destinationURL );
       CRM_Utils_System::redirect($destinationURL);
     }
     parent::postProcess();
