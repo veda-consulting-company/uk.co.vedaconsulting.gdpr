@@ -33,3 +33,11 @@
   {include file="CRM/common/formButtons.tpl" location="bottom"}
   </div>
 </div>
+{literal}
+<script>
+(function($) {
+  // Hide save and done button.
+  var save = $('.crm-tc-manage-block .crm-button_qf_TermsAndConditions_upload_done').hide();
+}(cj))
+</script>
+{/literal}
