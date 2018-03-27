@@ -9,7 +9,7 @@
 		</div>
 		{/if}
 
-		<!-- if any profile has condfigured -->
+		<!-- if any profile has configured -->
 		{if !empty($custom_pre)}
 		<fieldset>
 		    <div class="crm-public-form-item crm-group custom_pre_profile-group">
@@ -33,17 +33,17 @@
 
 	<!-- Groups from settings -->
 	<div class="comm-pref-block groups-block">
-		{if $groups_intro}
-		<div class="help">
-			<span>
-			{ts}{$groups_intro}{/ts}
-			</span>
-		</div>	
-		{/if}
 
 		<!-- Groups Fieldset -->
 		<fieldset class="groups-fieldset">
 			<legend>{$groups_heading}</legend>
+      {if $groups_intro}
+      <div class="help">
+        <span>
+        {ts}{$groups_intro}{/ts}
+        </span>
+      </div>	
+		{/if}
 			{foreach from=$groupEleNames item=elementName}
 			  <div class="crm-section">
 			    <div class="content">
