@@ -12,6 +12,49 @@ class CRM_Gdpr_Page_Tab extends CRM_Core_Page {
   	$this->assign('groupSubscriptions', $groupSubscriptions);
   	$this->assign('contactId', $contactId);
 
+    $summary['communications_preferences'] = $this->getCommunicationsPreferencesDetails($contactId);
+    $summary['data_policy'] = $this->getDataPolicyDetails($contactId);
+    $this->assign('summary', $summary);
+
+
     parent::run();
+  }
+
+  public function getDataPolicyDetails($contactId) {
+    $details = array(
+      'title' => ts('Data Policy acceptance.'),
+      'details' => ts('Not yet accepted by the contact.'),
+    );
+    $activity = CRM_Gdpr_SLA_Utils::getContactLastAcceptance($contactId);
+    $isDue = CRM_Gdpr_SLA_Utils::isContactDueAcceptance($contactId);
+    if ($activity) {
+      $details['details'] = $activity['subject'];
+      $details['date'] = $activity['activity_date_time'];
+      $field = CRM_Gdpr_SLA_Utils::getTermsConditionsField();
+      $key = 'custom_' . $field['id'];
+      $url = !empty($activity[$key]) ? $activity[$key] : '';
+      $label = CRM_Gdpr_SLA_Utils::getLinkLabel();
+      $separator = '<br />';
+      if ($isDue) {
+        $dueMsg = '<span class="notice">The contact is due to renew their acceptance.</span>';
+      }
+      if ($url) {
+        $details['details']  .= $separator . '<a target="blank" href="' . $url . '">' . $label  .'</a>' . $separator . $dueMsg;
+      }
+    }
+    return $details;
+  }
+
+  public function getCommunicationsPreferencesDetails($contactId) {
+    $details = array(
+      'title' => ts('Communications Preferences'),
+      'details' => ts('Not yet updated by the contact.'),
+    );
+    $activity = CRM_Gdpr_CommunicationsPreferences_Utils::getLastUpdatedForContact($contactId);
+    if ($activity) {
+      $details['details'] = $activity['subject'];
+      $details['date'] = $activity['activity_date_time'];
+    }
+    return $details;
   }
 }

@@ -103,21 +103,28 @@ EOT;
   }
 
   /**
-   * Gets the last SLA Acceptance activity for a contact.
+   * Gets the last Acceptance activity for a contact.
    */
   static function getContactLastAcceptance($contactId) {
-		$result = civicrm_api3('Activity', 'get', array(
-			'sequential' => 1,
-			'activity_type_id' => self::$activityTypeName,
-			'target_contact_id' => $contactId,
-      'options' => array(
-        'sort' => 'activity_date_time asc',
-        'limit' => 1,
-      ),
-		));
-    if (!empty($result['values'])) {
-      return $result['values'][0];
+    static $cache = array();
+    if (empty($cache[$contactId])) {
+      $result = civicrm_api3('Activity', 'get', array(
+        'sequential' => 1,
+        'activity_type_id' => self::$activityTypeName,
+        'target_contact_id' => $contactId,
+        'options' => array(
+          'sort' => 'activity_date_time desc',
+          'limit' => 1,
+        ),
+      ));
+      if (!empty($result['values'])) {
+        $cache[$contactId] = $result['values'][0];
+      }
+      else {
+        $cache[$contactId] = array();
+      }
     }
+    return $cache[$contactId];
   }
 
   /**
@@ -125,7 +132,7 @@ EOT;
    */
   static function recordSLAAcceptance($contactId = NULL) {
     $settings = self::getSettings();
-	  $contactId = $contactId ? $contactId : CRM_Core_Session::singleton()->getLoggedInContactID();
+    $contactId = $contactId ? $contactId : CRM_Core_Session::singleton()->getLoggedInContactID();
     if (!$contactId) {
       return;
     }
@@ -159,6 +166,14 @@ EOT;
     $acceptancePeriod = (($months / 12) * $seconds_in_year);
     $acceptanceDate = strtotime($lastAcceptance['activity_date_time']);
     $acceptanceDue = $acceptanceDate + $acceptancePeriod;
+    // Has the document been updated more recently.
+    $lastUpdated = self::getLastUpdated();
+    if ($lastUpdated) {
+      $lastUpdatedDate = strtotime($lastUpdated);
+      if ($lastUpdatedDate > $acceptanceDate) {
+        return true;
+      }
+    }
     return $acceptanceDue < time();
   }
 
@@ -186,6 +201,53 @@ EOT;
   }
 
   /**
+   * Gets the Link label for Terms & Conditions file.
+   *
+   *  @return string
+   **/
+  static function getLinkLabel() {
+    return self::getSetting('sla_link_label', 'Terms &amp; Conditions');
+  }
+
+  /**
+   * Gets the checkbox text Terms & Conditions agreement.
+   *
+   *  @return string
+   */
+  static function getCheckboxText() {
+    return self::getSetting('sla_checkbox_text', 'I accept the Terms &amp; Conditions.');
+  }
+
+  /**
+   * Gets the Page title for the Terms & Conditions page.
+   *
+   *  @return string
+   */
+  static function getPageTitle() {
+    return self::getSetting('sla_page_title', 'Terms &amp; Conditions');
+  }
+
+  /**
+   * Gets the date when the latest version of the  Terms & Conditions was uploaded.
+   *
+   * @return
+   *  string date in format: Y-m-d
+   */
+  static function getLastUpdated() {
+    return self::getSetting('sla_tc_updated', '');
+
+  }
+  private static function getSetting($name, $default = NULL) {
+    $val = '';
+    $settings = CRM_Gdpr_Utils::getGDPRSettings();
+    if (!empty($settings[$name])) {
+      $val = $settings[$name];
+    }
+    return $val ? $val : $default;
+
+  }
+
+  /**
    * Gets a custom field definition by name and group name.
    *
    * @param string $fieldName
@@ -199,7 +261,6 @@ EOT;
     }
     $result = civicrm_api3('CustomGroup', 'get', array(
   	  'sequential' => 1,
-      'name' => "SLA_Acceptance",
       'name' => $groupName,
       'api.CustomField.get' => array(
         'custom_group_id' => "\$value.id",

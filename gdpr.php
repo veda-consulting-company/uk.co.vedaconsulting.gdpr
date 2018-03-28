@@ -10,23 +10,8 @@ use CRM_Gdpr_ExtensionUtil as E;
  */
 function gdpr_civicrm_config(&$config) {
   _gdpr_civix_civicrm_config($config);
-	$cid = CRM_Core_Session::singleton()->getLoggedInContactID();
-  if ($cid) {
-    $session = CRM_Core_Session::singleton();
-    $promptSet = CRM_Gdpr_SLA_Utils::isPromptForAcceptance();
-    $key = CRM_Gdpr_SLA_Utils::getPromptFlagSessionKey();
-    
-    if ($promptSet && CRM_Gdpr_SLA_Utils::showFormIsFlagged()) {
-      CRM_Gdpr_SLA_Utils::showForm();
-    }
-    else {
-      $promptForSLA = $promptSet && CRM_Gdpr_SLA_Utils::isContactDueAcceptance($cid);
-      if ($promptForSLA && !CRM_Gdpr_SLA_Utils::showFormIsUnflagged()) {
-        CRM_Gdpr_SLA_Utils::flagShowForm();
-      }
-    }
-  }
 }
+
 
 /**
  * Implements hook_civicrm_xmlMenu().
@@ -244,9 +229,102 @@ EOD;
   }
 }
 
+/**
+ * Implements hook_civicrm_buildForm().
+ */
+function gdpr_civicrm_buildForm($formName, $form) {
+  if ($formName == 'CRM_Custom_Form_CustomDataByType' && $form->_type == 'Event') {
+   CRM_Core_Resources::singleton()->addStyleFile('uk.co.vedaconsulting.gdpr', 'css/gdpr.css');
+
+    if (!empty($form->_groupTree)) {
+      // Remove custom fields for terms and conditions.
+      // They will be included in the tab.
+      foreach ($form->_groupTree as $gid => $group) {
+        if ($group['name'] == 'Event_terms_and_conditions') {
+          foreach($group['fields'] as $field) {
+           // $form->removeElement($field['element_name']);
+          }
+         //unset($form->_groupTree[$gid]);
+        }
+      }
+    }
+  }
+  if ($formName == 'CRM_Event_Form_Registration_Register') {
+   CRM_Core_Resources::singleton()->addStyleFile('uk.co.vedaconsulting.gdpr', 'css/gdpr.css');
+    // Add Terms and Conditions checkbox.
+    _gdpr_add_event_form_terms_conditions($form);
+  }
+}
+
+/**
+ * Implements hook_civicrm_post().
+ */
+function gdpr_civicrm_post($op, $objectName, $objectId, &$objectRef) {
+  // Create activity for event Terms and Conditions.
+  if ($op == 'create' && $objectName == 'Participant') {
+    if (!empty($objectRef->event_id) && !empty($objectRef->contact_id)) {
+      if (empty($objectRef->registered_by_id)) {
+        $tc = new CRM_Gdpr_SLA_Event($objectRef->event_id);
+        $isRegisterForm = 'civicrm/event/register' == CRM_Utils_System::getUrlPath();
+        if ($tc->isEnabled() && $isRegisterForm) {
+          CRM_Gdpr_SLA_Utils:: recordSLAAcceptance($objectRef->contact_id);
+          $tc->recordAcceptance($objectRef->contact_id);
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Adds terms and conditions field to event registration form.
+ */
+function _gdpr_add_event_form_terms_conditions($form) {
+  $tc = new CRM_Gdpr_SLA_Event($form->_eventId);
+  if (!$tc->isEnabled()) {
+    return;
+  }
+  $intro = $tc->getIntroduction();
+  $links = $tc->getLinks();
+  $position = $tc->getCheckboxPosition();
+  $text = $tc->getCheckboxText();
+  if (!empty($links['event'])) {
+    $form->add(
+      'checkbox',
+      'accept_event_tc',
+      'Event Terms & Conditions',
+      $text,
+      TRUE,
+      array('required' => TRUE)
+    );
+  }
+  if (!empty($links['global'])) {
+    $text = CRM_Gdpr_SLA_Utils::getCheckboxText();
+    $form->add(
+      'checkbox',
+      'accept_tc',
+      'Terms & Conditions',
+      $text,
+      TRUE,
+      array('required' => TRUE)
+    );
+  }
+  if (!empty($links)) {
+    $tc_vars = array(
+      'element' => 'accept_tc',
+      'links' => $links,
+      'intro' => $intro,
+      'position' => $position,
+    );
+    $form->assign('terms_conditions', $tc_vars);
+    $template_path = realpath(dirname(__FILE__) . '/templates/CRM/Gdpr');
+    CRM_Core_Region::instance('page-body')->add(array(
+      'template' => "CRM/Gdpr/TermsConditionsField.tpl"
+    ));
+  }
+}
 
 /*
- * Add a tab to show group subscription
+ * Implements hook_civicrm_tabset().
  */
 function gdpr_civicrm_tabset($tabsetName, &$tabs, $context) {
   //check if the tabset is Contact Summary Page
@@ -254,6 +332,26 @@ function gdpr_civicrm_tabset($tabsetName, &$tabs, $context) {
     $contactId = $context['contact_id'];
     _gdpr_addGDPRTab($tabs, $contactId);
   }
+  elseif ($tabsetName == 'civicrm/event/manage') {
+    _gdpr_addEventTab($tabs, $context);
+  }
+}
+
+/**
+ * Add a Terms & Conditions tab for Events.
+ */
+function _gdpr_addEventTab(&$tabs, $context) {
+  if (empty($context['event_id'])) {
+    return;
+  }
+  $eventID = $context['event_id'];
+  $url = CRM_Utils_System::url('civicrm/event/manage/terms-conditions', "reset=1&id={$eventID}");
+  $tabs['terms_conditions'] = array(
+    'title' => ts('Terms &amp; Conditions'),
+    'url' => $url,
+    'active' => 1,
+    'class' => 'ajaxForm',
+  );
 }
 
 /*
@@ -311,4 +409,41 @@ function gdpr_civicrm_navigationMenu( &$params ) {
       )
     );
   }
+}
+
+/**
+ * implementation of hook_civicrm_token
+ */
+function gdpr_civicrm_tokens( &$tokens ){
+  $tokens['contact'] = array(
+    'contact.comm_pref_supporter_url' => ts("Communication Preferences URL"),
+    'contact.comm_pref_supporter_link' => ts("Communication Preferences Link"),
+  );
+}
+
+/**
+ * implementation of hook_civicrm_tokenValues
+ */
+function gdpr_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = array(), $context = null) {
+  if (!empty($tokens['contact'])) {
+    foreach ($cids as $cid) {
+      $commPrefURL = CRM_Gdpr_CommunicationsPreferences_Utils::getCommPreferenceURLForContact($cid);
+      $link = sprintf("<a href='%s' target='_blank'>%s</a>",$commPrefURL, ts('Communication Preferences'));
+      $values[$cid]['contact.comm_pref_supporter_url'] = $commPrefURL;
+      $values[$cid]['contact.comm_pref_supporter_link'] = html_entity_decode($link);
+    }
+  }
+}
+
+/**
+ * implementation of hook_civicrm_summaryActions
+ */
+function gdpr_civicrm_summaryActions( &$actions, $contactID ) {
+  $actions['comm_pref'] = array(
+    'title' => 'Communication Preferences Link',
+    'weight' => 999,
+    'ref' => 'comm_pref',
+    'key' => 'comm_pref',
+    'href' => CRM_Gdpr_CommunicationsPreferences_Utils::getCommPreferenceURLForContact($contactID, TRUE),
+  );  
 }

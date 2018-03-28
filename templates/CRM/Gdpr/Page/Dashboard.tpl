@@ -48,7 +48,10 @@
 <div class="crm-block crm-form-block crm-gdpr-dashboard-settings-form-block">
     <div>
         <div id="help">
-          Click <a href="{crmURL p="civicrm/gdpr/settings" q="reset=1"}">here</a> to update GDPR settings.
+          <ul>
+           <li>Click <a href="{crmURL p="civicrm/gdpr/settings" q="reset=1"}">here</a> to update GDPR settings.</li>
+           <li>Click <a href="{crmURL p="civicrm/gdpr/comms-prefs/settings" q="reset=1"}">here</a> to update Communications Preferences settings.</li>
+          </ul>
         </div>
     </div>
 </div>

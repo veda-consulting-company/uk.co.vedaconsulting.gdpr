@@ -5,6 +5,30 @@
   <br/><br/>
 </div>
 
+<h3>Summary</h3>
+
+<div class="crm-block crm-form-block">
+    <div>
+      <table class="selector row-highlight" id="SummaryTable">
+        <thead class="sticky">
+        <tr>
+         <th scope="col">{ts}Subject{/ts}</th>
+         <th scope="col">{ts}Status{/ts}</th>
+         <th scope="col">{ts}Date{/ts}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {foreach from=$summary item=summaryItem}
+        <tr>
+          <td>{$summaryItem.title}</td>
+          <td>{$summaryItem.details}</td>
+          <td>{$summaryItem.date}</td>
+        </tr>
+        {/foreach}
+        </tbody>
+      </table>
+    </div>
+</div>
 {if $groupSubscriptions}
 
 <h3>Group Subscription Log</h3>
