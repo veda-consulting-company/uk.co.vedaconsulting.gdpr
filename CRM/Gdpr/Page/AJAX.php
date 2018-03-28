@@ -43,7 +43,7 @@ class CRM_Gdpr_Page_AJAX {
   /**
    * Function to get address log for a contact
    */
-	function get_address_logs($contactId){
+  public static function get_address_logs($contactId){
     
     $aGetMemberships =array();
 
@@ -51,8 +51,17 @@ class CRM_Gdpr_Page_AJAX {
       return $aGetMemberships;
     }
 
+    // Get logging DB
+    if (defined('CIVICRM_LOGGING_DSN')) {
+      $dsn = DB::parseDSN(CIVICRM_LOGGING_DSN);
+    }
+    else {
+      $dsn = DB::parseDSN(CIVICRM_DSN);
+    }
+    $logging_db = $dsn['database'];
+
     $sql = "SELECT lca.*,  lt.display_name as lt_name
-FROM log_civicrm_address as lca 
+FROM {$logging_db}.log_civicrm_address as lca
 LEFT JOIN civicrm_location_type as lt ON ( lca.location_type_id = lt.id )
 WHERE lca.contact_id = %1
 ORDER BY lca.log_date DESC";
@@ -82,7 +91,7 @@ ORDER BY lca.log_date DESC";
     return $aGetMemberships;
   }
   
-  function get_address_history_table( $data ){
+  public static function get_address_history_table( $data ){
     if(empty($data)){
       return null;
     }
@@ -172,8 +181,8 @@ TABLE;
    */
   public static function getGdprActivityContactList() {
     $sortMapper = array(
-      0 => 'c.id',
-      1 => 'c.sort_name',
+      0 => 'contact_a.id',
+      1 => 'contact_a.sort_name',
       //2 => 'a.activity_date_time',
     );
 
@@ -208,7 +217,7 @@ TABLE;
       //'activity_date_time',
     );
 
-    CRM_Utils_System::setHttpHeader('Content-Type', 'application/json');
+    header("Content-Type: application/json");
     echo CRM_Utils_JSON::encodeDataTableSelector($contactList, $sEcho, $iTotal, $iFilteredTotal, $selectorElements);
     CRM_Utils_System::civiExit();
   }

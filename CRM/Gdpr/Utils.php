@@ -169,11 +169,11 @@ WHERE s.contact_id = %1 ORDER BY s.date DESC";
 
     // Get all activity types
     $actTypes = CRM_Gdpr_Utils::getAllActivityTypes();
-
-    foreach($settings['activity_type'] as $actTypeId) {
-      $gdprActTypes[] = $actTypes[$actTypeId];
+    if (!empty($settings['activity_type'])) {
+      foreach($settings['activity_type'] as $actTypeId) {
+        $gdprActTypes[] = $actTypes[$actTypeId];
+      }
     }
-
     return $gdprActTypes;
   }
 
@@ -205,9 +205,11 @@ WHERE s.contact_id = %1 ORDER BY s.date DESC";
 
     // Get contact count who have not had any GDPR activities
     $actContactSummarySql = self::getActivityContactSQL($actTypeParams, TRUE, TRUE);
-    $resource = CRM_Core_DAO::executeQuery($actContactSummarySql);
-    if ($resource->fetch()) {
-      $count = $resource->count;
+    if ($actContactSummarySql) {
+      $resource = CRM_Core_DAO::executeQuery($actContactSummarySql);
+      if ($resource->fetch()) {
+        $count = $resource->count;
+      }
     }
 
     return $count;
@@ -223,33 +225,34 @@ WHERE s.contact_id = %1 ORDER BY s.date DESC";
     $contactList = array();
 
     $contactListSql = self::getActivityContactSQL($params, FALSE, TRUE);
-    $resource = CRM_Core_DAO::executeQuery($contactListSql);
-    while ($resource->fetch()) {
+    if ($contactListSql) {
+      $resource = CRM_Core_DAO::executeQuery($contactListSql);
+      while ($resource->fetch()) {
 
-      // get last activity date time
-      /*$lastActSql = "SELECT a.activity_date_time FROM civicrm_activity_contact ac
-INNER JOIN civicrm_activity a ON a.id = ac.activity_id
-WHERE ac.record_type_id = 3 AND a.activity_type_id = %1 AND ac.contact_id = %2
-ORDER BY a.activity_date_time LIMIT 1
-      ";
-      $lastActParams = array(
-        1 => array($params['activity_type_id'], 'Integer'),
-        2 => array($resource->id, 'Integer'),
-      );
-      $lastActResource = CRM_Core_DAO::executeQuery($lastActSql, $lastActParams);
-      $lastActDateTime = '';
-      if ($lastActResource->fetch()) {
-        $lastActDateTime = $lastActResource->activity_date_time;
-      }*/
+        // get last activity date time
+        /*$lastActSql = "SELECT a.activity_date_time FROM civicrm_activity_contact ac
+  INNER JOIN civicrm_activity a ON a.id = ac.activity_id
+  WHERE ac.record_type_id = 3 AND a.activity_type_id = %1 AND ac.contact_id = %2
+  ORDER BY a.activity_date_time LIMIT 1
+        ";
+        $lastActParams = array(
+          1 => array($params['activity_type_id'], 'Integer'),
+          2 => array($resource->id, 'Integer'),
+        );
+        $lastActResource = CRM_Core_DAO::executeQuery($lastActSql, $lastActParams);
+        $lastActDateTime = '';
+        if ($lastActResource->fetch()) {
+          $lastActDateTime = $lastActResource->activity_date_time;
+        }*/
 
-      $url = CRM_Utils_System::url('civicrm/contact/view', 'reset=1&cid='.$resource->id);
-      $contactList[$resource->id] = array(
-        'id' => $resource->id,
-        'sort_name' => "<a href='{$url}'>".$resource->sort_name."</a>",
-        //'activity_date_time' => '',
-      );
+        $url = CRM_Utils_System::url('civicrm/contact/view', 'reset=1&cid='.$resource->id);
+        $contactList[$resource->id] = array(
+          'id' => $resource->id,
+          'sort_name' => "<a href='{$url}'>".$resource->sort_name."</a>",
+          //'activity_date_time' => '',
+        );
+      }
     }
-
     return $contactList;
   }
 
@@ -262,10 +265,11 @@ ORDER BY a.activity_date_time LIMIT 1
    * @return null|string
    */
   public static function getActivityContactCount(&$params) {
-
+    $count = 0;
     $contactListSql = self::getActivityContactSQL($params, TRUE, TRUE);
-    $count = CRM_Core_DAO::singleValueQuery($contactListSql);
-
+    if ($contactListSql) {
+      $count = CRM_Core_DAO::singleValueQuery($contactListSql);
+    }
     return $count;
   }
 
@@ -277,7 +281,7 @@ ORDER BY a.activity_date_time LIMIT 1
    *
    * @return where|string
    */
-  public static function getActivityContactSQL(&$params, $getCountOnly = FALSE, $excludeClickThrough = FALSE) {
+  public static function getActivityContactSQL(&$params, $getCountOnly = FALSE, $excludeClickThrough = FALSE, $getWhereClauseOnly = FALSE) {
 
     // Get GDPR settings
     $settings = CRM_Gdpr_Utils::getGDPRSettings();
@@ -301,7 +305,7 @@ ORDER BY a.activity_date_time LIMIT 1
         $limit = " LIMIT {$params['offset']}, {$params['rowCount']} ";
       }
 
-      $orderBy = ' ORDER BY c.id desc';
+      $orderBy = ' ORDER BY contact_a.id desc';
       if (!empty($params['sort'])) {
         $orderBy = ' ORDER BY ' . CRM_Utils_Type::escape($params['sort'], 'String');
       }
@@ -310,14 +314,14 @@ ORDER BY a.activity_date_time LIMIT 1
     $extraWhere = '';
     if (!empty($settings['contact_type'])) {
       $contactTypeStr = "'".implode("','", $settings['contact_type'])."'";
-      $extraWhere .= " AND c.contact_type IN ({$contactTypeStr})";
+      $extraWhere .= " AND contact_a.contact_type IN ({$contactTypeStr})";
     }
 
     if (!empty($params['contact_name'])) {
-      $extraWhere .= " AND c.sort_name LIKE '%{$params['contact_name']}%'";
+      $extraWhere .= " AND contact_a.sort_name LIKE '%{$params['contact_name']}%'";
     }
 
-    $selectColumns = "c.id, c.sort_name";
+    $selectColumns = "contact_a.id, contact_a.sort_name";
     if ($getCountOnly) {
       $selectColumns = "count(*) as count";
       $limit = '';
@@ -326,18 +330,24 @@ ORDER BY a.activity_date_time LIMIT 1
     $excludeClickSql = '';
     if ($excludeClickThrough) {
       $clickThroughSql = self::getContactClickThroughSQL();
-      $excludeClickSql = " AND c.id NOT IN ({$clickThroughSql})";
+      $excludeClickSql = " AND contact_a.id NOT IN ({$clickThroughSql})";
     }
 
-    $sql = "SELECT {$selectColumns} FROM civicrm_contact c
-WHERE c.id NOT IN (
+    $whereClause = "contact_a.id NOT IN (
 SELECT contact_id FROM civicrm_activity_contact ac
 INNER JOIN civicrm_activity a ON a.id = ac.activity_id
-WHERE ac.record_type_id = 3 AND a.activity_type_id IN ({$actTypeIdsStr})
+WHERE ac.record_type_id IN (2, 3) AND a.activity_type_id IN ({$actTypeIdsStr})
 AND a.activity_date_time > '{$date}'
-) AND c.is_deleted = 0 {$extraWhere} {$excludeClickSql} {$orderBy} {$limit}";
+) AND contact_a.is_deleted = 0 {$extraWhere} {$excludeClickSql}";
 
-    return $sql;
+    $sql = "SELECT {$selectColumns} FROM civicrm_contact contact_a
+WHERE {$whereClause} {$orderBy} {$limit}";
+
+    if ($getWhereClauseOnly) {
+      return $whereClause;
+    } else {
+      return $sql;
+    }
   }
 
   /**
@@ -368,6 +378,154 @@ INNER JOIN civicrm_mailing_event_queue queue ON queue.id = url.event_queue_id
 WHERE url.time_stamp > '{$date}'";
 
     return $sql;
+  }
+
+  /**
+   * Anonymize a contact.
+   *
+   * @param int $contactId
+   *  Id for a contact.
+   * 
+   * @return array
+   *  Associative array with the format of an API Contact.create result.
+   */
+  public static function anonymizeContact($contactId) {
+    // Should we check contact exists?
+
+
+    // Retrieve the contact, to check it exists.
+    $contactResult = CRM_Gdpr_Utils::CiviCRMAPIWrapper('Contact', 'get', array(
+      'id' => $contactId,
+      'sequential' => 1,
+    ));
+    if (empty($contactResult['values'][0])) {
+      return $contactResult;
+    }
+    else {
+      $currentContact = $contactResult['values'][0];
+    }
+    // get all fields of contact API
+    $fieldsResult = CRM_Gdpr_Utils::CiviCRMAPIWrapper('Contact', 'getfields', array(
+      'sequential' => 1,
+    ));
+
+    $fields = array();
+    if ($fieldsResult && !empty($fieldsResult['values'])) {
+      $fields = $fieldsResult['values'];
+    }
+
+    // setting up params to update contact record
+    $params = array(
+      'sequential' => 1,
+    );
+
+    // Loop through fields and set them empty
+    $isCiviCRMVersion47 = _gdpr_isCiviCRMVersion47();
+    foreach ($fields as $key => $field) {
+      //Fix me : skipping if not a core field. We may need to clear the custom fields later
+      if ($isCiviCRMVersion47) {
+        if ( !array_key_exists('is_core_field', $field) || $field['is_core_field'] != 1 ) {
+          continue;
+        }
+      } else {
+        // is_core_field is not supported in 4.6, so we only anonymize fields with
+        // 'where' clause that start with 'civicrm_contact.' since they are usually
+        // the core civi fields.
+        if ( !array_key_exists('where', $field) || strpos($field['where'], 'civicrm_contact.') != 0) {
+          continue;
+        }
+      }
+
+
+      $fieldName = $field['name'];
+      $params[$fieldName] = '';
+    }
+
+    // Add contact ID into params to update the contact record
+    $params['id'] = $contactId;
+    // Set diplay name as Anonymous by default
+    $params['last_name'] = 'Anonymous';
+
+    // Get Display Name from GDPR settings
+    $settings = CRM_Gdpr_Utils::getGDPRSettings();
+    if (!empty($settings['forgetme_name'])) {
+      $params['last_name'] = $settings['forgetme_name'];
+    }
+
+    // Allow params to be modified via hook
+    CRM_Gdpr_Hook::alterAnonymizeContactParams($params);
+
+    $updateResult = CRM_Gdpr_Utils::CiviCRMAPIWrapper('Contact', 'create', $params);
+    $associatedResult = self::deleteContactAssociatedData($contactId, array(
+      'Email', 
+      'Phone',
+      'IM',
+      'Website',
+    ));
+
+    // Update all active memberships to 'GDPR Cancelled'
+    self::cancelAllActiveMemberships($contactId);
+
+    return $updateResult;
+  }
+
+  /**
+   * Cancels all active memberships of the contact
+   * and updates status to 'GDPR Cancelled'
+   *
+   * @param int $contactId
+   *
+   */
+  static function cancelAllActiveMemberships($contactId) {
+    self::CiviCRMAPIWrapper('Membership', 'get', array(
+      'sequential' => 1,
+      'contact_id' => $contactId,
+      'active_only' => 1,
+      'api.Membership.create' => array(
+        'id' => "\$value.id",
+        'status_id' => "GDPR_Cancelled",
+        'is_override' => 1,
+      ),
+    ));
+  }
+
+  
+  /**
+   * Deletes data directly associated with a contact.
+   *
+   * @param int $contactId
+   *
+   * @param array $types
+   *  Array containing the names of types to delete, may include:
+   *   - Email
+   *   - Phone
+   *   - IM
+   *   - Website
+   *   - Address
+   */
+  static function deleteContactAssociatedData($contactId, $types = array('Email', 'Phone')) {
+    $validTypes = array('Email', 'Phone', 'IM', 'Website', 'Address');
+    $delResult = array();
+    foreach ($types as $entity) {
+      if (!in_array($entity, $validTypes)) {
+        continue;
+      }
+      $getResult = CRM_Gdpr_Utils::CiviCRMAPIWrapper($entity, 'get', array(
+        'sequential' => 1,
+        'contact_id' => $contactId,
+      ));
+
+      if (!empty($getResult['values'])) {
+        foreach ($getResult['values'] as $data) {
+          $id = $data['id'];
+          $delResult[$entity][$id] = CRM_Gdpr_Utils::CiviCRMAPIWrapper($entity, 'delete', array(
+            'id' => $id,
+            'sequential' => 1,
+          ));
+        }
+      }
+    }
+    return $delResult;
   }
 
 }//End Class

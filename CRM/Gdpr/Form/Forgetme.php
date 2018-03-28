@@ -23,7 +23,7 @@ class CRM_Gdpr_Form_Forgetme extends CRM_Core_Form {
 
     // <!-- To DO - check permission -->
 
-    $this->_contactId = CRM_Utils_Request::retrieve('cid', 'Positive', $this, TRUE);
+    $this->_contactID = CRM_Utils_Request::retrieve('cid', 'Positive', $this, TRUE);
   }
 
   public function buildQuickForm() {
@@ -46,15 +46,15 @@ class CRM_Gdpr_Form_Forgetme extends CRM_Core_Form {
 
   public function postProcess() {
 
-    if (!$this->_contactId) {
+    if (!$this->_contactID) {
       CRM_Core_Error::fatal(ts("Something went wrong. Please contact Admin."));
     }
 
     // Remove all the linked relationship records of this contact
     $params = array(
       'sequential' => 1,
-      'contact_id_a' => $this->_contactId,
-      'contact_id_b' => $this->_contactId,
+      'contact_id_a' => $this->_contactID,
+      'contact_id_b' => $this->_contactID,
       'options' => array('or' => array(array("contact_id_a", "contact_id_b"))),
     );
     self::removeEntityRecords('Relationship', $params);
@@ -62,35 +62,35 @@ class CRM_Gdpr_Form_Forgetme extends CRM_Core_Form {
     // Remove all the address records of this contact
     $params = array(
       'sequential' => 1,
-      'contact_id' => $this->_contactId,
+      'contact_id' => $this->_contactID,
     );
     self::removeEntityRecords('Address', $params);
 
     // Remove all the email records of this contact
     $params = array(
       'sequential' => 1,
-      'contact_id' => $this->_contactId,
+      'contact_id' => $this->_contactID,
     );
     self::removeEntityRecords('Email', $params);
 
     // Remove all the phone records of this contact
     $params = array(
       'sequential' => 1,
-      'contact_id' => $this->_contactId,
+      'contact_id' => $this->_contactID,
     );
     self::removeEntityRecords('Phone', $params);
 
     // Remove all the website records of this contact
     $params = array(
       'sequential' => 1,
-      'contact_id' => $this->_contactId,
+      'contact_id' => $this->_contactID,
     );
     self::removeEntityRecords('Website', $params);
 
     // Remove all the IM records of this contact
     $params = array(
       'sequential' => 1,
-      'contact_id' => $this->_contactId,
+      'contact_id' => $this->_contactID,
     );
     self::removeEntityRecords('Im', $params);
 
@@ -131,49 +131,12 @@ class CRM_Gdpr_Form_Forgetme extends CRM_Core_Form {
   }
 
   private function makeContactAnonymous() {
-    if (!$this->_contactId) {
+    if (!$this->_contactID) {
       CRM_Core_Error::fatal(ts("Something went wrong. Please contact Admin."));
     }
-
-    // get all fields of contact API
-    $fieldsResult = CRM_Gdpr_Utils::CiviCRMAPIWrapper('Contact', 'getfields', array(
-      'sequential' => 1,
-    ));
-
-    $fields = array();
-    if ($fieldsResult && !empty($fieldsResult['values'])) {
-      $fields = $fieldsResult['values'];
-    }
-
-    // setting up params to update contact record
-    $params = array(
-      'sequential' => 1,
-    );
-
-    // Loop through fields and set them empty
-    foreach ($fields as $key => $field) {
-      //Fix me : skipping if not a core field. We may need to clear the custom fields later
-      if ( !array_key_exists('is_core_field', $field) || $field['is_core_field'] != 1 ) {
-        continue;
-      }
-
-      $fieldName = $field['name'];
-      $params[$fieldName] = '';
-    }
-
-    // Add contact ID into params to update the contact record
-    $params['id'] = $this->_contactId;
-    // Set diplay name as Anonymous by default
-    $params['display_name'] = 'Anonymous';
-
-    // Get Display Name from GDPR settings
-    $settings = CRM_Gdpr_Utils::getGDPRSettings();
-    if (!empty($settings['forgetme_name'])) {
-      $params['display_name'] = $settings['forgetme_name'];
-    }
-
+    $params = array('id' => $this->_contactID);
     // Update contact Record
-    $updateResult = CRM_Gdpr_Utils::CiviCRMAPIWrapper('Contact', 'create', $params);
+    $updateResult = CRM_Gdpr_Utils::CiviCRMAPIWrapper('Contact', 'anonymize', $params);
 
     if ($updateResult && !empty($updateResult['values'])) {
       CRM_Core_Session::setStatus(ts("Contact has been made anonymous."), ts('Forget successful'), 'success');

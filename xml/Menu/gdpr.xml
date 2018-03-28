@@ -36,4 +36,30 @@
     <title>Forgetme</title>
     <access_arguments>access CiviCRM</access_arguments>
   </item>
+  <item>
+    <path>civicrm/terms/accept</path>
+    <page_callback>CRM_Gdpr_Form_SLAAccept</page_callback>
+    <title>SLAAccept</title>
+    <access_arguments>access CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/event/manage/terms_conditions</path>
+    <page_callback>CRM_Gdpr_Form_ManageEvent_TermsAndConditions</page_callback>
+    <title>ManageEvent_TermsAndConditions</title>
+    <access_arguments>access CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/gdpr/comms-prefs/settings</path>
+    <page_callback>CRM_Gdpr_Form_CommunicationsPreferences</page_callback>
+    <title>CommunicationsPreferences</title>
+    <access_arguments>access CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/gdpr/comms-prefs/update</path>
+    <page_callback>CRM_Gdpr_Form_UpdatePreference</page_callback>
+    <title>UpdatePreference</title>
+    <is_public>1</is_public>
+    <access_callback>1</access_callback>
+    <weight>0</weight>
+  </item>
 </menu>
