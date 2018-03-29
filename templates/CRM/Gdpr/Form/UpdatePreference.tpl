@@ -71,6 +71,9 @@
     <fieldset class="data-policy-fieldset">
 		{if $isContactDueAcceptance}
       <div class="crm-section data-policy">
+        <div class="label">
+          <label><span class="crm-marker" title="This field is required.">*</span></label>
+        </div>
         <div class="content">
           {$form.$tcFieldName.html}
           <label for="{$tcFieldName}">{$tcFieldlabel}</label>
