@@ -156,7 +156,37 @@
     </div>
 	</div>
 </div>
-<!-- /SLA Acceptance -->
+</div>
+{* Event terms and conditions *}
+<h3>{ts}Event Terms &amp; Conditions{/ts}</h3>
+<div class="crm-block crm-form-block crm-gdpr-settings-form-block">
+  <div class="help">{ts}Set defaults for Event Terms &amp Conditions. You can override these for individual events in the Event settings.{/ts}
+  </div>{* end .help *}
+ {foreach from="$entity_tc_elements" item="elem"}
+  <div class="crm-section">
+    <div class="label">{$form.$elem.label}</div>
+    <div class="content">{$form.$elem.html}
+      <br /><span class="description"><i></i></span>
+    </div>{* end .content *}
+  </div>{* end .section *}
+  <div class="clear"></div>
+  {/foreach}
+	<div class="crm-section">
+    <div class="label">
+      {$form.entity_tc_upload.label}
+    </div>
+    <div class="content">
+			{$form.entity_tc_upload.html}
+
+    {if $entity_tc_current} 
+      <div class="clear current-file">
+      <div class="">Current:</div>
+      <div class=""><a href="{$entity_tc_current.url}" target="blank">{$entity_tc_current.name}</a><br /></div>
+    {/if}
+     <div class="description">A default terms and conditions file for use in Event registrations etc. This can be overridden on the settings for the particular event.</div>
+    </div>
+  </div>
+</div>
 {* FOOTER *}
 <div class="crm-submit-buttons">
 {include file="CRM/common/formButtons.tpl" location="bottom"}
