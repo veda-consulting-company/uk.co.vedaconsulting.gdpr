@@ -361,7 +361,6 @@ function gdpr_civicrm_tabs(&$tabs, $contactID) {
   if (_gdpr_isCiviCRMVersion47()) {
     return;
   }
-
   _gdpr_addGDPRTab($tabs, $contactID);
 }
 
@@ -373,6 +372,29 @@ function _gdpr_addGDPRTab(&$tabs, $contactID) {
     'weight' => 300,
     'class'  => 'livePage',
   );
+}
+
+/**
+ * Implements hook_civicrm_permission().
+ */
+function gdpr_civicrm_permission(&$permissions) {
+  $prefix = ts('GDPR') . ': ';
+  $version = CRM_Utils_System::version();
+  if (version_compare($version, '4.6.1') >= 0) { 
+    $permissions['administer GDPR'] = array(
+      $prefix . ts('Administer GDPR.'),
+      ts('Configure GDPR and anonymize contacts.'),
+    );
+    $permissions['access GDPR'] = array(
+      $prefix . ts('Access GDPR Pages.'),
+      ts('View GDPR-related information.'),
+    );
+  }
+  else {
+    $permissions['administer GDPR'] = $prefix . ts('Administer GDPR.');
+    $permissions['access GDPR'] = $prefix . ts('Access GDPR Pages');
+
+  }
 }
 
 /**
