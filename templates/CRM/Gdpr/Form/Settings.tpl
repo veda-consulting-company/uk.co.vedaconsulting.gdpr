@@ -157,10 +157,10 @@
 	</div>
 </div>
 </div>
-{* Event terms and conditions *}
-<h3>{ts}Event Terms &amp; Conditions{/ts}</h3>
+{* Terms and conditions for Events and Contribution Pages *}
+<h3>{ts}Terms &amp; Conditions: Events and Contribution Pages{/ts}</h3>
 <div class="crm-block crm-form-block crm-gdpr-settings-form-block">
-  <div class="help">{ts}Set defaults for Event Terms &amp Conditions. You can override these for individual events in the Event settings.{/ts}
+  <div class="help">{ts}Set defaults for Terms &amp Conditions. You can override these in the settings for individual Events and Contribution Pages.{/ts}
   </div>{* end .help *}
  {foreach from="$entity_tc_elements" item="elem"}
   <div class="crm-section">

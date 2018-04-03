@@ -236,18 +236,6 @@ function gdpr_civicrm_buildForm($formName, $form) {
   if ($formName == 'CRM_Custom_Form_CustomDataByType' && $form->_type == 'Event') {
    CRM_Core_Resources::singleton()->addStyleFile('uk.co.vedaconsulting.gdpr', 'css/gdpr.css');
 
-    if (!empty($form->_groupTree)) {
-      // Remove custom fields for terms and conditions.
-      // They will be included in the tab.
-      foreach ($form->_groupTree as $gid => $group) {
-        if ($group['name'] == 'Event_terms_and_conditions') {
-          foreach($group['fields'] as $field) {
-           // $form->removeElement($field['element_name']);
-          }
-         //unset($form->_groupTree[$gid]);
-        }
-      }
-    }
   }
   if ($formName == 'CRM_Event_Form_Registration_Register') {
    CRM_Core_Resources::singleton()->addStyleFile('uk.co.vedaconsulting.gdpr', 'css/gdpr.css');
@@ -279,14 +267,24 @@ function gdpr_civicrm_post($op, $objectName, $objectId, &$objectRef) {
  * Adds terms and conditions field to event registration form.
  */
 function _gdpr_add_event_form_terms_conditions($form) {
+  $settings = CRM_Gdpr_Utils::getGDPRSettings();
   $tc = new CRM_Gdpr_SLA_Event($form->_eventId);
-  if (!$tc->isEnabled()) {
-    return;
+  // Event specific terms and conditions.
+  if ($tc->isEnabled()) {
+    $intro = $tc->getIntroduction();
+    $links = $tc->getLinks();
+    $position = $tc->getCheckboxPosition();
+    $text = $tc->getCheckboxText();
   }
-  $intro = $tc->getIntroduction();
-  $links = $tc->getLinks();
-  $position = $tc->getCheckboxPosition();
-  $text = $tc->getCheckboxText();
+  elseif (!empty($settings['event_tc_enable']) && !empty($settings['entity_tc'])) {
+    // Use sitewide defaults for terms and conditions.
+    $intro = $settings['entity_tc_intro'];
+    $position = $settings['entity_tc_position'];
+    $links = $tc->getLinks();
+    $links['event']['label'] = $settings['entity_tc_link_label'];
+    $links['event']['url'] = $settings['entity_tc'];
+    $text = $settings['entity_tc_checkbox_text'];
+  }
   if (!empty($links['event'])) {
     $form->add(
       'checkbox',
@@ -361,7 +359,9 @@ function gdpr_civicrm_tabs(&$tabs, $contactID) {
   if (_gdpr_isCiviCRMVersion47()) {
     return;
   }
-  _gdpr_addGDPRTab($tabs, $contactID);
+  if (CRM_Core_Permission::check('access GDPR')) {
+    _gdpr_addGDPRTab($tabs, $contactID);
+  }
 }
 
 function _gdpr_addGDPRTab(&$tabs, $contactID) {

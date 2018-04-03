@@ -115,6 +115,17 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
     //If T+C is enabled for both Events Contribution Pages they will share the 
     //following settings.
     $this->add(
+      'select',
+      'entity_tc_position',
+      ts('Checkbox Position'),
+      array(
+        'customPre' => ts('Top profile'),
+        'customPost' => ts('Bottom profile'),
+        'formTop' => ts('Top of form'),
+        'formBottom' => ts('Bottom of form')
+      )
+    );
+    $this->add(
       'text',
       'entity_tc_link_label',
       ts('Link Label')
@@ -142,6 +153,7 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
     $entity_tc_elements = array(
       'event_tc_enable',
       'cp_tc_enable',
+      'entity_tc_position',
       'entity_tc_link_label',
       'entity_tc_checkbox_text',
       'entity_tc_intro',
@@ -208,6 +220,7 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
     $settings['sla_checkbox_text'] = $values['sla_checkbox_text'];
     $settings['event_tc_enable'] = $values['event_tc_enable'];
     $settings['cp_tc_enable'] = $values['cp_tc_enable'];
+    $settings['entity_tc_position'] = $values['entity_tc_position'];
     $settings['entity_tc_link_label'] = $values['entity_tc_link_label'];
     $settings['entity_tc_checkbox_text'] = $values['entity_tc_checkbox_text'];
     $settings['entity_tc_intro'] = $values['entity_tc_intro'];
