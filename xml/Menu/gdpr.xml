@@ -34,7 +34,7 @@
     <path_arguments>cid=%%cid%%</path_arguments>
     <page_callback>CRM_Gdpr_Form_Forgetme</page_callback>
     <title>Forgetme</title>
-    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>forget contact</access_arguments>
   </item>
   <item>
     <path>civicrm/terms/accept</path>

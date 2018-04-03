@@ -447,3 +447,21 @@ function gdpr_civicrm_summaryActions( &$actions, $contactID ) {
     'href' => CRM_Gdpr_CommunicationsPreferences_Utils::getCommPreferenceURLForContact($contactID, TRUE),
   );  
 }
+
+function gdpr_civicrm_permission(&$permissions) {
+  $prefix = ts('GDPR') . ': ';
+  $version = CRM_Utils_System::version();
+  if (version_compare($version, '4.6.1') >= 0) {
+    $permissions += array(
+      'forget contact' => array(
+        $prefix . ts('Forget Contact'),
+        ts('Grants the necessary permissions to anonymize a contact'),
+      ),
+    );
+  }
+  else {
+    $permissions += array(
+      'forget contact' => $prefix . ts('Forget Contact'),
+    );
+  }
+}
