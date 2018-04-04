@@ -400,7 +400,7 @@ function gdpr_civicrm_navigationMenu( &$params ) {
         'label'      => 'GDPR Dashboard',
         'name'       => 'GDPR Dashboard',
         'url'        => 'civicrm/gdpr/dashboard?reset=1',
-        'permission' => 'access CiviCRM',
+        'permission' => 'access GDPR',
         'operator'   => NULL,
         'separator'  => FALSE,
         'parentID'   => $contactsMenuId,
@@ -453,15 +453,26 @@ function gdpr_civicrm_permission(&$permissions) {
   $version = CRM_Utils_System::version();
   if (version_compare($version, '4.6.1') >= 0) {
     $permissions += array(
+      'access GDPR' => array(
+        $prefix . ts('access GDPR'),
+        ts('View GDPR related information'),
+      ),
       'forget contact' => array(
-        $prefix . ts('Forget Contact'),
-        ts('Grants the necessary permissions to anonymize a contact'),
+        $prefix . ts('forget contact'),
+        ts('Anonymize contacts'),
+      ),
+      'administer GDPR' => array(
+        $prefix . ts('administer GDPR'),
+        ts('Manage GDPR settings'),
       ),
     );
   }
   else {
     $permissions += array(
-      'forget contact' => $prefix . ts('Forget Contact'),
+      'access GDPR' => $prefix . ts('access GDPR'),
+      'forget contact' => $prefix . ts('forget contact'),
+      'administer GDPR' => $prefix . ts('administer GDPR'),
     );
   }
 }
+
