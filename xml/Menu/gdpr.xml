@@ -4,13 +4,13 @@
     <path>civicrm/gdpr/view/tab</path>
     <page_callback>CRM_Gdpr_Page_Tab</page_callback>
     <title>GDPR Tab</title>
-    <access_arguments>access GDPR</access_arguments>
+    <access_arguments>access CiviCRM</access_arguments>
   </item>
   <item>
     <path>civicrm/gdpr/dashboard</path>
     <page_callback>CRM_Gdpr_Page_Dashboard</page_callback>
     <title>GDPR - Dashboard</title>
-    <access_arguments>access GDPR</access_arguments>
+    <access_arguments>access CiviCRM</access_arguments>
   </item>
   <item>
     <path>civicrm/gdpr/activitycontact</path>
@@ -46,13 +46,13 @@
     <path>civicrm/event/manage/terms_conditions</path>
     <page_callback>CRM_Gdpr_Form_ManageEvent_TermsAndConditions</page_callback>
     <title>ManageEvent_TermsAndConditions</title>
-    <access_arguments>access GDPR</access_arguments>
+    <access_arguments>access CiviCRM</access_arguments>
   </item>
   <item>
     <path>civicrm/gdpr/comms-prefs/settings</path>
     <page_callback>CRM_Gdpr_Form_CommunicationsPreferences</page_callback>
     <title>CommunicationsPreferences</title>
-    <access_arguments>administer CiviCRM</access_arguments>
+    <access_arguments>access CiviCRM</access_arguments>
   </item>
   <item>
     <path>civicrm/gdpr/comms-prefs/update</path>

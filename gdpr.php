@@ -454,19 +454,14 @@ function gdpr_civicrm_permission(&$permissions) {
   if (version_compare($version, '4.6.1') >= 0) {
     $permissions += array(
       'forget contact' => array(
-        $prefix . ts('forget contact'),
-        ts('Anonymize contacts'),
-      ),
-      'access GDPR' => array(
-        $prefix . ts('access GDPR'),
-        ts('Access GDPR related information'),
+        $prefix . ts('Forget Contact'),
+        ts('Grants the necessary permissions to anonymize a contact'),
       ),
     );
   }
   else {
     $permissions += array(
-      'forget contact' => $prefix . ts('forget contact'),
-      'access GDPR' => $prefix . ts('access GDPR'),
+      'forget contact' => $prefix . ts('Forget Contact'),
     );
   }
 }
