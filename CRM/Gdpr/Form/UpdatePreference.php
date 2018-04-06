@@ -138,7 +138,7 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
       $this->assign('tcFieldName', $tcFieldName);
       $this->assign('isContactDueAcceptance', $isContactDueAcceptance);
       
-      $this->add('checkbox', $tcFieldName, ts(''), NULL, TRUE);
+      $this->add('checkbox', $tcFieldName, $gdprTermsConditionslabel, NULL, TRUE);
     }
     else {
       $accept_activity = CRM_Gdpr_SLA_utils::getContactLastAcceptance($this->_cid);

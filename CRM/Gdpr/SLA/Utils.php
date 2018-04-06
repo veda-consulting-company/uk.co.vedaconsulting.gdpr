@@ -151,7 +151,7 @@ EOT;
   }
 
   static function isContactDueAcceptance($contactId = NULL) {
-	  $contactId = $contactId ? $contactId : CRM_Core_Session::singleton()->getLoggedInContactID();
+    $contactId = $contactId ? $contactId : CRM_Core_Session::singleton()->getLoggedInContactID();
     if (!$contactId) {
       return;
     }
