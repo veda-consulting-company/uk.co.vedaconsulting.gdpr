@@ -86,6 +86,19 @@ function gdpr_civicrm_upgrade($op, CRM_Queue_Queue $queue = NULL) {
  */
 function gdpr_civicrm_managed(&$entities) {
   _gdpr_civix_civicrm_managed($entities);
+  $entities[] = [
+    'module' => 'uk.co.vedaconsulting.gdpr',
+    'name' => 'contributionpagecustomdata',
+    'update' => 'never',
+    'entity' => 'OptionValue',
+    'params' => [
+      'label' => ts('Contribution Page'),
+      'name' => 'civicrm_contribution_page',
+      'value' => 'ContributionPage',
+      'option_group_id' => 'cg_extend_objects',
+      'is_active' => 1,
+    ],
+  ];
 }
 
 /**
@@ -210,9 +223,8 @@ EOD;
  * Implements hook_civicrm_buildForm().
  */
 function gdpr_civicrm_buildForm($formName, $form) {
-  if ($formName == 'CRM_Custom_Form_CustomDataByType' && $form->_type == 'Event') {
-   CRM_Core_Resources::singleton()->addStyleFile('uk.co.vedaconsulting.gdpr', 'css/gdpr.css');
-
+  if ($formName == 'CRM_Event_Form_ManageEvent_EventInfo') {
+    CRM_Core_Resources::singleton()->addStyleFile('uk.co.vedaconsulting.gdpr', 'css/gdpr.css');
   }
   if ($formName == 'CRM_Event_Form_Registration_Register') {
    CRM_Core_Resources::singleton()->addStyleFile('uk.co.vedaconsulting.gdpr', 'css/gdpr.css');
@@ -307,24 +319,42 @@ function gdpr_civicrm_tabset($tabsetName, &$tabs, $context) {
     $contactId = $context['contact_id'];
     _gdpr_addGDPRTab($tabs, $contactId);
   }
-  elseif ($tabsetName == 'civicrm/event/manage') {
-    _gdpr_addEventTab($tabs, $context);
+  elseif ($tabsetName == 'civicrm/event/manage' && !empty($context['event_id'])) {
+    _gdpr_addTermsConditionsTab($tabs, 'event', $context['event_id']);
+  }
+  elseif ($tabsetName == 'civicrm/admin/contribute' && !empty($context['contribution_page_id'])) {
+    _gdpr_addTermsConditionsTab($tabs, 'contribution_page', $context['contribution_page_id']);
   }
 }
 
 /**
- * Add a Terms & Conditions tab for Events.
+ * Add a Terms & Conditions tab for Event or Contribution Page.
  */
-function _gdpr_addEventTab(&$tabs, $context) {
-  if (empty($context['event_id'])) {
-    return;
+function _gdpr_addTermsConditionsTab(&$tabs, $entityType, $id) {
+  switch ($entityType) {
+    case 'event' :
+      $urlParams = array(
+        'path' => 'civicrm/event/manage/terms_conditions',
+        'qs' => 'reset=1&id=' . $id,
+      );
+    break;
+
+    case 'contribution_page' :
+      $urlParams = array(
+        'path' => 'civicrm/admin/contribute/terms_conditions',
+        'qs' => 'reset=1&action=update&id=' . $id,
+      );
+    break;
+
+    default:
+      return;
   }
-  $eventID = $context['event_id'];
-  $url = CRM_Utils_System::url('civicrm/event/manage/terms-conditions', "reset=1&id={$eventID}");
+
+  $url = CRM_Utils_System::url($urlParams['path'], $urlParams['qs']);
   $tabs['terms_conditions'] = array(
     'title' => ts('Terms &amp; Conditions'),
     'url' => $url,
-    'active' => 1,
+    'active' => NULL,
     'class' => 'ajaxForm',
   );
 }
@@ -370,7 +400,6 @@ function gdpr_civicrm_permission(&$permissions) {
   else {
     $permissions['administer GDPR'] = $prefix . ts('Administer GDPR.');
     $permissions['access GDPR'] = $prefix . ts('Access GDPR Pages');
-
   }
 }
 
