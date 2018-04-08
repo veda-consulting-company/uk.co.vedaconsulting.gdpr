@@ -347,7 +347,7 @@ function _gdpr_addEventTab(&$tabs, $context) {
   $eventID = $context['event_id'];
   $url = CRM_Utils_System::url('civicrm/event/manage/terms-conditions', "reset=1&id={$eventID}");
   $tabs['terms_conditions'] = array(
-    'title' => ts('Terms &amp; Conditions'),
+    'title' => E::ts('Terms &amp; Conditions'),
     'url' => $url,
     'active' => 1,
     'class' => 'ajaxForm',
@@ -369,7 +369,7 @@ function _gdpr_addGDPRTab(&$tabs, $contactID) {
   $url = CRM_Utils_System::url('civicrm/gdpr/view/tab', "reset=1&cid={$contactID}");
   $tabs[] = array( 'id'    => 'gdprTab',
     'url'   => $url,
-    'title' => ts('GDPR'),
+    'title' => E::ts('GDPR'),
     'weight' => 300,
     'class'  => 'livePage',
   );
@@ -416,8 +416,8 @@ function gdpr_civicrm_navigationMenu( &$params ) {
  */
 function gdpr_civicrm_tokens( &$tokens ){
   $tokens['contact'] = array(
-    'contact.comm_pref_supporter_url' => ts("Communication Preferences URL"),
-    'contact.comm_pref_supporter_link' => ts("Communication Preferences Link"),
+    'contact.comm_pref_supporter_url' => E::ts("Communication Preferences URL"),
+    'contact.comm_pref_supporter_link' => E::ts("Communication Preferences Link"),
   );
 }
 
@@ -428,7 +428,7 @@ function gdpr_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = array(
   if (!empty($tokens['contact'])) {
     foreach ($cids as $cid) {
       $commPrefURL = CRM_Gdpr_CommunicationsPreferences_Utils::getCommPreferenceURLForContact($cid);
-      $link = sprintf("<a href='%s' target='_blank'>%s</a>",$commPrefURL, ts('Communication Preferences'));
+      $link = sprintf("<a href='%s' target='_blank'>%s</a>",$commPrefURL, E::ts('Communication Preferences'));
       $values[$cid]['contact.comm_pref_supporter_url'] = $commPrefURL;
       $values[$cid]['contact.comm_pref_supporter_link'] = html_entity_decode($link);
     }

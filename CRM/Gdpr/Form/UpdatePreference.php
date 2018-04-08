@@ -57,7 +57,7 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
 
     //Display Page Title from settings
     if ($pageTitle = $this->commPrefSettings['page_title']) {
-      CRM_Utils_System::setTitle(ts($pageTitle));
+      CRM_Utils_System::setTitle(E::ts($pageTitle));
     }
 
     //Display Page intro from settings.
@@ -75,7 +75,7 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
       }
 
       $commPrefOpGroup = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_OptionGroup', U::COMM_PREF_OPTIONS, 'id', 'name');
-      $commPrefOptions = array('' => ts('Unknown')) + CRM_Core_BAO_OptionValue::getOptionValuesAssocArray($commPrefOpGroup);
+      $commPrefOptions = array('' => E::ts('Unknown')) + CRM_Core_BAO_OptionValue::getOptionValuesAssocArray($commPrefOpGroup);
 
       foreach ($this->commPrefSettings['channels'] as $key => $value) {
         if ($value) {
@@ -129,16 +129,12 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
       $termsConditionsField = $this->getTermsAndConditionFieldId();
       
       $tcFieldName  = 'custom_'.$termsConditionsField;
-      $tcFieldlabel = sprintf("I have read and agree to the <a href='%s' target='_blank'>%s</a>"
-        , $gdprTermsConditionsUrl
-        , $gdprTermsConditionslabel
-      );
-      
+      $tcFieldlabel = E::ts("I have read and agree to the <a href='%1' target='_blank'>%2</a>", array(1 => $gdprTermsConditionsUrl, 2 => $gdprTermsConditionslabel));
       $this->assign('tcFieldlabel', $tcFieldlabel);
       $this->assign('tcFieldName', $tcFieldName);
       $this->assign('isContactDueAcceptance', $isContactDueAcceptance);
       
-      $this->add('checkbox', $tcFieldName, ts(''), NULL, TRUE);
+      $this->add('checkbox', $tcFieldName, E::ts(''), NULL, TRUE);
     }
     else {
       $accept_activity = CRM_Gdpr_SLA_utils::getContactLastAcceptance($this->_cid);
@@ -157,7 +153,7 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
     $this->addButtons(array(
       array(
         'type' => 'submit',
-        'name' => ts('Save'),
+        'name' => E::ts('Save'),
         'isDefault' => TRUE,
       ),
     ));
@@ -261,7 +257,7 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
       if(!empty($fields[$groupEleName]) && ($diff = array_diff_assoc($groupChannelAray, $channelArray))){
         //do something here.
         $diff = implode(', ', array_keys($diff));
-        $errors[$groupEleName] = ts("Communication Preferences {$diff} has to be selected for this group");
+        $errors[$groupEleName] = E::ts("Communication Preferences {$diff} has to be selected for this group");
       }
     }
 
@@ -414,7 +410,7 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
         'activity_type_id'  => $activityTypeIds[U::COMM_PREF_ACTIVITY_TYPE],
         'source_contact_id' => $contactID,
         'target_id'         => $contactID,
-        'subject'           => ts('Communication Preferences updated'),
+        'subject'           => E::ts('Communication Preferences updated'),
         'activity_date_time'=> date('Y-m-d H:i:s'),
         'status_id'         => "Completed",
       );
@@ -425,7 +421,7 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
       $thankYouMsg = html_entity_decode($this->commPrefSettings['completion_message']);
 
       //FIXME Redirect to Thank you page or destination url from setting
-      CRM_Core_Session::setStatus($thankYouMsg, ts('Communication Preferences'), 'Success');
+      CRM_Core_Session::setStatus($thankYouMsg, E::ts('Communication Preferences'), 'Success');
     }
 
     //Get the destination url from settings and redirect if we found one.

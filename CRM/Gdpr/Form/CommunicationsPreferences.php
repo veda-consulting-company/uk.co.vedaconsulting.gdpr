@@ -17,28 +17,28 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
   protected $groupContainerNames = array();
 
   public function buildQuickForm() {
-    CRM_Utils_System::setTitle(ts('Communications Preferences'));
+    CRM_Utils_System::setTitle(E::ts('Communications Preferences'));
     $channels = U::getChannelOptions();
     $text_area_attributes = array('cols' => 60, 'rows' => 5);
     $this->add(
       'text',
       'page_title',
-      ts('Page title'),
+      E::ts('Page title'),
       array('size' => 40)
     );
     $this->add(
       'textarea',
       'page_intro',
-      ts('Introduction'),
+      E::ts('Introduction'),
       $text_area_attributes
     );
     $this->add(
       'select',
       'profile',
-      ts('Include Profile'),
+      E::ts('Include Profile'),
       U::getProfileOptions()
     );
-    $descriptions['profile'] = ts('Include a profile so the user can identify and check their details are up-to-date. It should  include a primary email address field.');
+    $descriptions['profile'] = E::ts('Include a profile so the user can identify and check their details are up-to-date. It should  include a primary email address field.');
 
     // Let the template know about elements in this section.
     $page_elements = array(
@@ -51,7 +51,7 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
     $this->add(
       'advcheckbox',
       'enable_channels',
-      ts('Enable Channels'),
+      E::ts('Enable Channels'),
       '',
       false,
       array(
@@ -62,13 +62,13 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
     $this->add(
       'textarea',
       'channels_intro',
-      ts('Introduction'),
+      E::ts('Introduction'),
       $text_area_attributes
     );
     $channel_group = $this->add(
       'group',
       'channels',
-      ts('Users can opt-in to these channels')
+      E::ts('Users can opt-in to these channels')
     );
     foreach ($channels as $channel => $label) {
       $elem = HTML_QuickForm::createElement(
@@ -89,7 +89,7 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
     $this->add(
       'checkbox',
       'enable_groups',
-      ts('Allow users to opt-in to mailing groups.'),
+      E::ts('Allow users to opt-in to mailing groups.'),
       '',
       false,
       array(
@@ -100,13 +100,13 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
     $this->add(
       'text',
       'groups_heading',
-      ts('Heading for the groups section'),
+      E::ts('Heading for the groups section'),
       array('size' => 40)
     );
     $this->add(
       'textarea',
       'groups_intro',
-      ts('Introduction or description for this section.'),
+      E::ts('Introduction or description for this section.'),
       $text_area_attributes
     );
     $groups = $this->getGroups();
@@ -154,23 +154,23 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
     }
     $this->addRadio(
       'completion_redirect',
-      'On completion',
-      array(1 => 'Redirect to another page', 0 => 'Display a message on the form page.')
+      E::ts('On completion'),
+      array(1 => E::ts('Redirect to another page'), 0 => E::ts('Display a message on the form page.'))
     );
     $this->add(
       'text',
       'completion_url',
-      ts('Completion page'),
+      E::ts('Completion page'),
       array('size' => 50)
     );
-    $descriptions['completion_url'] = ts('Add the a URL for a page to redirect the user after they complete the form. The page should already exist. The URL may be absolute (http://example.com/thank-you) or relative (thank-you), with no leading forward slash. Leave blank to redirect to the front page.');
+    $descriptions['completion_url'] = E::ts('Add the a URL for a page to redirect the user after they complete the form. The page should already exist. The URL may be absolute (http://example.com/thank-you) or relative (thank-you), with no leading forward slash. Leave blank to redirect to the front page.');
     $this->add(
       'textarea',
       'completion_message',
-      ts('Completion message'),
+      E::ts('Completion message'),
       $text_area_attributes
     );
-    $descriptions['completion_message'] = ts('A message to display to the user after the form is submitted. ');
+    $descriptions['completion_message'] = E::ts('A message to display to the user after the form is submitted. ');
     // Let the template know about which fields belong in the groups section.
     $groups_elements = array(
       'groups_heading',
@@ -183,7 +183,7 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
     $this->addButtons(array(
       array(
         'type' => 'submit',
-        'name' => ts('Save'),
+        'name' => E::ts('Save'),
         'isDefault' => TRUE,
       ),
     ));
@@ -280,7 +280,7 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
 
         // We have been unable to construct a URL.
         if (!$full_url) {
-          $errors['completion_url'] = ts('Invalid URL.');
+          $errors['completion_url'] = E::ts('Invalid URL.');
         }
         elseif (function_exists('curl_init')) {
           // Test if the url exists.
@@ -296,7 +296,7 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
           $code = trim($code);
           curl_close($ch);
           if ($code[0] != '2') {
-            $errors['completion_url'] = ts('The completion URL does not belong to a valid page. Please check that an anonymous in user can access it.');
+            $errors['completion_url'] = E::ts('The completion URL does not belong to a valid page. Please check that an anonymous in user can access it.');
           }
         }
       }

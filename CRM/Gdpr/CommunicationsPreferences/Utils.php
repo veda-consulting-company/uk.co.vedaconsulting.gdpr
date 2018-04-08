@@ -1,4 +1,5 @@
 <?php
+use CRM_Gdpr_ExtensionUtil as E;
 
 class CRM_Gdpr_CommunicationsPreferences_Utils {
 
@@ -13,10 +14,10 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
 
   public static function getSettingsDefaults() {
     $settings[self::SETTING_NAME] = array(
-      'page_title' => ts('Communication Preferences'),
-      'page_intro' => ts('We want to ensure we are only sending you information that is of interest to you, in a way you are happy to receive.'),
+      'page_title' => E::ts('Communication Preferences'),
+      'page_intro' => E::ts('We want to ensure we are only sending you information that is of interest to you, in a way you are happy to receive.'),
       'enable_channels' => 1,
-      'channels_intro' => ts('Please tell us how you would like us to keep in touch.'),
+      'channels_intro' => E::ts('Please tell us how you would like us to keep in touch.'),
       'channels' => array(
         'enable_email' => 1,
         'enable_phone' => 1,
@@ -24,9 +25,9 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
         'enable_sms' => 0,
       ),
       'enable_groups' => 0,
-      'groups_heading' => ts('Interest groups'),
-      'groups_intro' => ts('We want to continue to keep you informed about our work. Opt-in to the groups that interest you.'),
-      'completion_message' => ts('Your communications preferences have been updated. Thank you.')
+      'groups_heading' => E::ts('Interest groups'),
+      'groups_intro' => E::ts('We want to continue to keep you informed about our work. Opt-in to the groups that interest you.'),
+      'completion_message' => E::ts('Your communications preferences have been updated. Thank you.')
     );
 
     foreach (self::getGroups() as $group) {
@@ -164,10 +165,10 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
    */
   public static function getChannelOptions() {
     return $channels = array(
-      'email' => ts('Email'),
-      'phone' => ts('Phone'),
-      'post' => ts('Post'),
-      'sms' => ts('SMS'),
+      'email' => E::ts('Email'),
+      'phone' => E::ts('Phone'),
+      'post' => E::ts('Post'),
+      'sms' => E::ts('SMS'),
     );
   }
 

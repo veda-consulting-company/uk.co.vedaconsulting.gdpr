@@ -1,3 +1,4 @@
+{crmScope extensionKey='uk.co.vedaconsulting.gdpr'}
 <!-- To DO - check permission before displaying the button -->
 <div class="action-link">
   {capture assign=forgetMeURL}{crmURL p="civicrm/gdpr/forgetme" q="reset=1&cid=`$contactId`"}{/capture}
@@ -5,7 +6,7 @@
   <br/><br/>
 </div>
 
-<h3>Summary</h3>
+<h3>{ts}Summary{/ts}</h3>
 
 <div class="crm-block crm-form-block">
     <div>
@@ -31,7 +32,7 @@
 </div>
 {if $groupSubscriptions}
 
-<h3>Group Subscription Log</h3>
+<h3>{ts}Group Subscription Log{/ts}</h3>
 
 <div class="crm-block crm-form-block crm-grouo-subscription-list-form-block">
     <div>
@@ -74,3 +75,4 @@ cj(document).ready( function() {
 </div>
 
 {/if}
+{/crmScope}

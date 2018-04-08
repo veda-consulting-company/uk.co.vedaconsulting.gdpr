@@ -1,8 +1,9 @@
+{crmScope extensionKey='uk.co.vedaconsulting.gdpr'}
 {* Template for the Communications Preferences Settings form. *}
 
 <div>
    <div class="help">
-   Configure the display of the <a href="/civicrm/gdpr/comms-prefs/update" target="blank">Communications Preferences page</a>.
+   {ts}Configure the display of the <a href="/civicrm/gdpr/comms-prefs/update" target="blank">Communications Preferences page</a>.{/ts}
    </div>
   <div class="crm-block crm-form-block crm-gdpr-comms-prefs-form-block">
   {foreach from=$page_elements item=elementName}
@@ -17,9 +18,9 @@
     </div>
   {/foreach}
   </div>{* end page block *}
-  <h3> Channels </h3>
+  <h3> {ts}Channels{/ts} </h3>
    <div class="help">
-   Configure which channels to show on the page.
+   {ts}Configure which channels to show on the page.{/ts}
    </div>
   {* Channels block *}
   <div class="crm-block crm-form-block crm-gdpr-comms-prefs-form-block">
@@ -39,9 +40,9 @@
   {/foreach}
    </fieldset>
   </div>{* end Channels block *}
-  <h3> Subscriptions to Groups </h3>
+  <h3> {ts}Subscriptions to Groups{/ts} </h3>
    <div class="help">
-   Configure which public groups the user can join on the page. You can optionally alter the group title and description. (For example to add more details on the content, message frequency etc.). 
+   {ts}Configure which public groups the user can join on the page. You can optionally alter the group title and description. (For example to add more details on the content, message frequency etc.).{/ts}
    </div>
   {* Groups block *}
   <div class="crm-block crm-form-block crm-gdpr-comms-prefs-form-block">
@@ -61,7 +62,7 @@
   {if $group_containers}
    <table>
    <tr>
-   <th>Group</th><th>Add</th><th>Title</th><th>Description</th><th>Channel</th>
+   <th>{ts}Group{/ts}</th><th>{ts}Add{/ts}</th><th>{ts}Title{/ts}</th><th>{ts}Description{/ts}</th><th>{ts}Channel{/ts}</th>
    </tr>
    {foreach from=$group_containers item=containerName}
      <tr>
@@ -93,7 +94,7 @@
    {/if}
    </fieldset>
   </div>{* end Groups block *}
-  <h3> Completion </h3> 
+  <h3> {ts}Completion{/ts} </h3>
   <div class="crm-block crm-form-block crm-gdpr-comms-prefs-form-block">
     <div class="crm-section">
       <div class="label">{$form.completion_redirect.label}</div>
@@ -177,3 +178,4 @@
 }(cj));
 </script>
 {/literal}
+{/crmScope}
