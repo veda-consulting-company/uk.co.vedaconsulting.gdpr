@@ -27,14 +27,14 @@
     <path>civicrm/gdpr/settings</path>
     <page_callback>CRM_Gdpr_Form_Settings</page_callback>
     <title>GDPR Settings</title>
-    <access_arguments>administer CiviCRM;administer GDPR</access_arguments>
+    <access_arguments>administer GDPR</access_arguments>
   </item>
   <item>
     <path>civicrm/gdpr/forgetme</path>
     <path_arguments>cid=%%cid%%</path_arguments>
     <page_callback>CRM_Gdpr_Form_Forgetme</page_callback>
     <title>Forgetme</title>
-    <access_arguments>administer CiviCRM;administer GDPR</access_arguments>
+    <access_arguments>forget contact</access_arguments>
   </item>
   <item>
     <path>civicrm/terms/accept</path>
@@ -52,7 +52,7 @@
     <path>civicrm/gdpr/comms-prefs/settings</path>
     <page_callback>CRM_Gdpr_Form_CommunicationsPreferences</page_callback>
     <title>CommunicationsPreferences</title>
-    <access_arguments>administer CiviCRM;administer GDPR</access_arguments>
+    <access_arguments>administer GDPR</access_arguments>
   </item>
   <item>
     <path>civicrm/gdpr/comms-prefs/update</path>
