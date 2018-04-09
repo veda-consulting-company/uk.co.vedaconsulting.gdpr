@@ -400,7 +400,7 @@ function gdpr_civicrm_navigationMenu( &$params ) {
         'label'      => 'GDPR Dashboard',
         'name'       => 'GDPR Dashboard',
         'url'        => 'civicrm/gdpr/dashboard?reset=1',
-        'permission' => 'access CiviCRM',
+        'permission' => 'access GDPR',
         'operator'   => NULL,
         'separator'  => FALSE,
         'parentID'   => $contactsMenuId,
@@ -447,3 +447,32 @@ function gdpr_civicrm_summaryActions( &$actions, $contactID ) {
     'href' => CRM_Gdpr_CommunicationsPreferences_Utils::getCommPreferenceURLForContact($contactID, TRUE),
   );  
 }
+
+function gdpr_civicrm_permission(&$permissions) {
+  $prefix = E::ts('GDPR') . ': ';
+  $version = CRM_Utils_System::version();
+  if (version_compare($version, '4.6.1') >= 0) {
+    $permissions += array(
+      'access GDPR' => array(
+        $prefix . E::ts('access GDPR'),
+        E::ts('View GDPR related information'),
+      ),
+      'forget contact' => array(
+        $prefix . E::ts('forget contact'),
+        E::ts('Anonymize contacts'),
+      ),
+      'administer GDPR' => array(
+        $prefix . E::ts('administer GDPR'),
+        E::ts('Manage GDPR settings'),
+      ),
+    );
+  }
+  else {
+    $permissions += array(
+      'access GDPR' => $prefix . E::ts('access GDPR'),
+      'forget contact' => $prefix . E::ts('forget contact'),
+      'administer GDPR' => $prefix . E::ts('administer GDPR'),
+    );
+  }
+}
+
