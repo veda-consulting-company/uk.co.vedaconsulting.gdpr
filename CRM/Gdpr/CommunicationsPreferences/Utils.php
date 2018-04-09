@@ -59,7 +59,9 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
         $settings[$setting_name] = $serialized ? unserialize($serialized) : array();
       }
     }
-    $settings[self::GROUP_SETTING_NAME] = self::pruneGroupSettings($settings[self::GROUP_SETTING_NAME]);
+    if (!empty($settings[self::GROUP_SETTING_NAME])) {
+      $settings[self::GROUP_SETTING_NAME] = self::pruneGroupSettings($settings[self::GROUP_SETTING_NAME]);
+    }
     return $settings;
   }
 
