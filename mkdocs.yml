@@ -17,6 +17,7 @@ pages:
 - Introduction: index.md
 - Overview: overview.md
 - Installation: installation.md
+- Configuration: configuration.md
 - Identifying Inactive Contacts: identifying-inactive-contacts.md
 - Communication Preferences: communication-preferences.md
 - Data Policy: data-policy.md
