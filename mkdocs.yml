@@ -14,5 +14,21 @@ markdown_extensions:
   - pymdownx.mark
   - pymdownx.magiclink
 pages:
-- Introduction: index.md
+1. Introduction: index.md
+*  What is GDPR
+*  Why this extension is needed
+1. Overview
+*  What does the extension introduce
+1. Installation
+*  New permissions introduced
+*  General Settings
+*  Comms Prefs settings
+1. Identifying Inactive Contacts
+*  How to
+*  What can you do with them
+1. Communication Preferences
+1. Data Policy
+1. Membership Terms and Conditions
+1. Events Terms and Conditions
+
 
