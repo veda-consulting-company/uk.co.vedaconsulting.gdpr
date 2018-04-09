@@ -152,7 +152,7 @@ WHERE s.contact_id = %1 ORDER BY s.date DESC";
       CRM_Gdpr_Constants::GDPR_SETTING_NAME
     );
 
-    return unserialize($settingsStr);
+    return $settingsStr ? unserialize($settingsStr) : array();
   }
 
   /**

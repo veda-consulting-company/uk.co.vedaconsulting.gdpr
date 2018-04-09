@@ -325,7 +325,7 @@ function _gdpr_addTermsConditionsTab(&$tabs, $entityType, $id) {
   $tabs['terms_conditions'] = array(
     'title' => ts('Terms &amp; Conditions'),
     'url' => $url,
-    'active' => NULL,
+    'active' => TRUE,
     'class' => 'ajaxForm',
   );
 }
