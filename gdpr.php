@@ -97,6 +97,7 @@ function gdpr_civicrm_managed(&$entities) {
       'value' => 'ContributionPage',
       'option_group_id' => 'cg_extend_objects',
       'is_active' => 1,
+      'version' => 3,
     ],
   ];
 }
