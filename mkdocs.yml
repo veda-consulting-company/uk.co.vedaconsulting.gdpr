@@ -15,12 +15,11 @@ markdown_extensions:
   - pymdownx.magiclink
 pages:
 - Introduction: index.md
-- Overview: Overview.md
-- Installation: Installation.md
-- Identifying Inactive Contacts: Identifying Inactive Contacts.md
-- Communication Preferences: Communication Preferences.md
-- Data Policy: Data Policy.md
-- Membership Terms and Conditions: Membership Terms and Conditions.md
-- Events Terms and Conditions: Events Terms and Conditions.md
-
+- Overview: overview.md
+- Installation: installation.md
+- Identifying Inactive Contacts: identifying-inactive-contacts.md
+- Communication Preferences: communication-preferences.md
+- Data Policy: data-policy.md
+- Membership Terms and Conditions: membership-terms-and-conditions.md
+- Events Terms and Conditions: events-terms-and-conditions.md
 
