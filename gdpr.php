@@ -228,10 +228,37 @@ function gdpr_civicrm_buildForm($formName, $form) {
   }
   if ($formName == 'CRM_Event_Form_Registration_Register') {
    CRM_Core_Resources::singleton()->addStyleFile('uk.co.vedaconsulting.gdpr', 'css/gdpr.css');
-    // Add Terms and Conditions checkbox.
-    _gdpr_add_event_form_terms_conditions($form);
+    $tc = new CRM_Gdpr_SLA_Event($form->_eventId);
+    if ($tc->isEnabled(TRUE)) {
+      $tc->addField($form);
+    }
+  }
+  if ($formName == 'CRM_Contribute_Form_Contribution_Main') {
+    CRM_Core_Resources::singleton()->addStyleFile('uk.co.vedaconsulting.gdpr', 'css/gdpr.css');
+    $tc = new CRM_Gdpr_SLA_ContributionPage($form->_id);
+    if ($tc->isEnabled(TRUE)) {
+      $tc->addField($form);
+    }
   }
 }
+
+/**
+ * Implements hook_civicrm_postProcess().
+ */
+function gdpr_civicrm_postProcess($formName, $form) {
+  if ($formName == 'CRM_Contribute_Form_Contribution_Confirm') {
+    $contact_id = $form->_contactID;
+    $contribution_page_id = $form->_id;
+    if ($contact_id && $contribution_page_id) {
+      $tc = new CRM_Gdpr_SLA_ContributionPage($contribution_page_id);
+      if ($tc->isEnabled(TRUE)) {
+        $tc->recordAcceptance($contact_id);
+        CRM_Gdpr_SLA_Utils::recordSLAAcceptance($contact_id);
+      }
+    }
+  }
+}
+
 
 /**
  * Implements hook_civicrm_post().
@@ -240,73 +267,16 @@ function gdpr_civicrm_post($op, $objectName, $objectId, &$objectRef) {
   // Create activity for event Terms and Conditions.
   if ($op == 'create' && $objectName == 'Participant') {
     if (!empty($objectRef->event_id) && !empty($objectRef->contact_id)) {
+      // Acceptance not made on behalf of another.
       if (empty($objectRef->registered_by_id)) {
         $tc = new CRM_Gdpr_SLA_Event($objectRef->event_id);
         $isRegisterForm = 'civicrm/event/register' == CRM_Utils_System::getUrlPath();
-        if ($tc->isEnabled() && $isRegisterForm) {
-          CRM_Gdpr_SLA_Utils:: recordSLAAcceptance($objectRef->contact_id);
+        if ($isRegisterForm && $tc->isEnabled(TRUE)) {
+          CRM_Gdpr_SLA_Utils::recordSLAAcceptance($objectRef->contact_id);
           $tc->recordAcceptance($objectRef->contact_id);
         }
       }
     }
-  }
-}
-
-/**
- * Adds terms and conditions field to event registration form.
- */
-function _gdpr_add_event_form_terms_conditions($form) {
-  $settings = CRM_Gdpr_Utils::getGDPRSettings();
-  $tc = new CRM_Gdpr_SLA_Event($form->_eventId);
-  // Event specific terms and conditions.
-  if ($tc->isEnabled()) {
-    $intro = $tc->getIntroduction();
-    $links = $tc->getLinks();
-    $position = $tc->getCheckboxPosition();
-    $text = $tc->getCheckboxText();
-  }
-  elseif (!empty($settings['event_tc_enable']) && !empty($settings['entity_tc'])) {
-    // Use sitewide defaults for terms and conditions.
-    $intro = $settings['entity_tc_intro'];
-    $position = $settings['entity_tc_position'];
-    $links = $tc->getLinks();
-    $links['event']['label'] = $settings['entity_tc_link_label'];
-    $links['event']['url'] = $settings['entity_tc'];
-    $text = $settings['entity_tc_checkbox_text'];
-  }
-  if (!empty($links['event'])) {
-    $form->add(
-      'checkbox',
-      'accept_event_tc',
-      'Event Terms & Conditions',
-      $text,
-      TRUE,
-      array('required' => TRUE)
-    );
-  }
-  if (!empty($links['global'])) {
-    $text = CRM_Gdpr_SLA_Utils::getCheckboxText();
-    $form->add(
-      'checkbox',
-      'accept_tc',
-      'Terms & Conditions',
-      $text,
-      TRUE,
-      array('required' => TRUE)
-    );
-  }
-  if (!empty($links)) {
-    $tc_vars = array(
-      'element' => 'accept_tc',
-      'links' => $links,
-      'intro' => $intro,
-      'position' => $position,
-    );
-    $form->assign('terms_conditions', $tc_vars);
-    $template_path = realpath(dirname(__FILE__) . '/templates/CRM/Gdpr');
-    CRM_Core_Region::instance('page-body')->add(array(
-      'template' => "CRM/Gdpr/TermsConditionsField.tpl"
-    ));
   }
 }
 

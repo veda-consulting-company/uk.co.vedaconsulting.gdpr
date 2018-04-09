@@ -142,7 +142,7 @@ EOT;
     $params = array(
       'source_contact_id' => $contactId,
       'target_id' => $contactId,
-      'subject' => 'Terms and Conditions accepted',
+      'subject' => 'Data Policy accepted',
       'status_id' => 'Completed',
       'activity_type_id' => self::$activityTypeName,
       'custom_' . $termsConditionsField['id'] => $termsConditionsUrl,
