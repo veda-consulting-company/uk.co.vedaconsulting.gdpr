@@ -129,7 +129,7 @@
 	    		var mismatchedChannelTxt = mismatchedChannels.join(', ');
           CRM.confirm({
             title: ts('Group Channels'),
-            message: ts('%1 has to be enabled for this group communication',  {1: '<em>' + mismatchedChannelTxt + '</em>'})
+            message: ts('We may communicate with you by %1 since this is used by a group you have selected.',  {1: '<em>' + mismatchedChannelTxt + '</em>'})
           })
           .on('crmConfirm:yes', function() {
             $(mismatchedChannels).each(function(index, value){

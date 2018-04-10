@@ -61,7 +61,7 @@
   {if $group_containers}
    <table>
    <tr>
-   <th>Group</th><th>Add</th><th>Title</th><th>Description</th><th>Channel</th>
+   <th>Group</th><th>Add</th><th>Title</th><th>Weight</th><th>Description</th><th>Channel</th>
    </tr>
    {foreach from=$group_containers item=containerName}
      <tr>
@@ -75,6 +75,9 @@
       </td>
       <td>
        {$form.$containerName.group_title.html}
+      </td>
+      <td>
+       {$form.$containerName.group_weight.html}
       </td>
       <td>
        {$form.$containerName.group_description.html}
