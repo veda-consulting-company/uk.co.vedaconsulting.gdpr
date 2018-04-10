@@ -1,12 +1,61 @@
-# Installation
+# Communication Prefrences
 
-## Steps
+## Consent {:#Consent}
+One of the biggest talking points around GDPR has been the tightening up of the definition of consent. This now reads:
 
-Use the following steps to install CiviVolunteer.
+> any freely given, specific, informed and unambiguous indication of the Data Subject's wishes by which he or she, by a statement or a clear affirmative action, signifies agreement.....
 
-1. **Administer > System Settings > Extensions**
-1. **Add New**
-1. Sort by name
+GDPR also says that in any statement the request for consent must be
+
+> presented in a manner which is clearly distinguishable from other matters....using clear and plain language
+
+So no automatic opting in during competitions or incentives and no longer implicitly gaining consent. Consent must now be granular.
+
+Another clarficiation is any processing which is based on consent must be backed up by the ability of the processor to prove you have consent. There is no guidance yet on what this means, but as a minimum one might suppose that you would need to keep a record of when and how (e.g. by ticking a box) people consented and what the have consented to (ideally by reference to the full statement on the data capture form, for example).
+
+## Communication Preferences configuration {:#Configuration}
+
+In order to help organisations adhere to the regulations, the CiviCRM GDPR extension provides a combined communication page.
+
+The following features are provided by the extension
+
+* Configurable Communication Preference Page
+* Activity generated when a user submits
+* Combine groups and opt out into a single form
+* Data Policy agreement tick box and Activity
+
+In order to configure the communication preferences settings carry out the following;
+
+1. **Contacts > GDPR Dashboard**
+1. **Click the communication preferences link**
+
+### General {:##Configuration}
+
+Once clicked, you'll be presented with the communications preferences configuration page.
+
+![Communication Preferences Main](/images/communication-preferences-main)
+
+* **Page title** The page title and form title to be displayed when a supporter visits the communication preferences page
+* **Introduction** Text to be displayed at the top of the communication preferences page
+* **Include Profile** Data to be verified when the supporter is presented with the communication preferences page.
+
+For example, the following settings
+
+![Communication Preferences Main](/images/communication-preferences-main-example)
+
+Would result in the Communications Preferences page displaying as follows
+
+![Supporter Communication Preferences](/images/communication-preferences-page-example-1)
+
+### Communicatin Channels
+
+### Group Subscription
+
+### Thank You Page
+
+
+
+1. **Click the communication preferences link**
 1. Find, download, and install *both* of these extensions:
     * **CiviVolunteer**
     * **Angular Profiles**
