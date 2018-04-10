@@ -166,6 +166,19 @@ class CRM_Gdpr_Upgrader extends CRM_Gdpr_Upgrader_Base {
   }
 
   /**
+   * Perform upgrade to version 1.2.0.3
+   *
+   * @return TRUE on success
+   * @throws Exception
+   */
+  public function upgrade_1203() {
+    $this->ctx->log->info('Applying update 1.2.0.3');
+    $this->executeCustomDataFile('xml/CustomGroupData.xml');
+    return TRUE;
+  }
+
+
+  /**
    * Example: Run an external SQL script when the module is uninstalled.
    */
   private function createGDPRCancelledMembershipStatus() {

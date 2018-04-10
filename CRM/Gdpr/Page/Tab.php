@@ -16,6 +16,10 @@ class CRM_Gdpr_Page_Tab extends CRM_Core_Page {
     $summary['data_policy'] = $this->getDataPolicyDetails($contactId);
     $this->assign('summary', $summary);
 
+    // Is current user an admin?
+    $isGdprAdmin = CRM_Core_Permission::check('administer GDPR');
+    $this->assign('isGdprAdmin', $isGdprAdmin);
+
 
     parent::run();
   }
