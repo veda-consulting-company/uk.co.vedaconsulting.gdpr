@@ -74,7 +74,7 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
         $this->assign('channels_intro', $channelIntro);
       }
 
-      $commPrefOpGroup = CRM_Core_DAO::
+      $commPrefOpGroup = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_OptionGroup', U::COMM_PREF_OPTIONS, 'id', 'name');
       $commPrefOptions = array('' => E::ts('--Select--')) + CRM_Core_BAO_OptionValue::getOptionValuesAssocArray($commPrefOpGroup);
 
       foreach ($this->commPrefSettings['channels'] as $key => $value) {
