@@ -26,14 +26,14 @@
     </div> {* end .crm-section *}
   <div class="clear"></div>
       {/if}
-      {if $terms_conditions.links.event}
-      {assign var="link" value=$terms_conditions.links.event}
+      {if $terms_conditions.links.entity}
+      {assign var="link" value=$terms_conditions.links.entity}
     <div class="crm-section">
     <div class="label"><label></label></div>
       <div class="content terms-conditions-item">
           <a href="{$link.url}" class="terms-conditions-link" target="blank">{$link.label}</a>
         <div class="terms-conditions-checkbox">
-          {$form.accept_event_tc.html}
+          {$form.accept_entity_tc.html}
         </div>
       </div>
       {/if}
@@ -50,9 +50,9 @@
     {if $terms_conditions.position == 'formTop'}
     $('form .crm-section:first').prepend(field);
     {elseif $terms_conditions.position == 'customPre'}
-    $('form .custom_pre-section:first').after(field);
+    $('form .custom_pre-section:first, form .custom_pre_profile-group:first').after(field);
     {elseif $terms_conditions.position ==  'customPost'}
-    $('form .custom_post-section:first').after(field);
+    $('form .custom_post-section:first,form .custom_post_profile-group:first').after(field);
     {else}
     $('form #crm-submit-buttons:last').before(field);
     {/if}
