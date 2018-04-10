@@ -123,7 +123,7 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
       $group_elems[] = HTML_QuickForm::createElement(
         'advcheckbox',
         'group_enable',
-        'Enable',
+        ts('Enable'),
         '',
         array(
          'data-group-id' => $group['id'],
@@ -135,11 +135,23 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
         $group['title'],
         array('size' => 30)
       );
+      $weight_opts = range(0, 50);
+      $weight_opts = array_combine($weight_opts, $weight_opts);
+
+      $group_elems[] = HTML_QuickForm::createElement(
+        'select',
+        'group_weight',
+        ts('Weight'),
+        $weight_opts
+      );
       $group_elems[] = HTML_QuickForm::createElement(
         'textarea',
         'group_description',
         'Description',
-         array('cols' => 40, 'rows' => 6)
+        array(
+          'cols' => 30, 
+          'rows' => 6
+          )
       );
       foreach ($channels as $key => $label) {
         $group_elems[] = HTML_Quickform::createElement(
@@ -195,10 +207,13 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
    * Gets public groups.
    */
   function getGroups() {
-
-    // Just a wrapper for the Utility function.
     if (!$this->groups) {
-      $this->groups = U::getGroups();
+      $groups = U::getGroups();
+      $this->groups = U::sortGroups($groups, array(
+        'group_enable' => 'desc',
+        'group_weight' => 'asc',
+        'group_title' => 'asc',
+      ));
     }
     return $this->groups;
   }
@@ -236,16 +251,46 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
     $key = U::SETTING_NAME;
     $group_key = U::GROUP_SETTING_NAME;
     $form_defaults = array();
+    $group_settings = $settings[$group_key] ? $settings[$group_key] : array();
+    $groups = $this->getGroups();
+    $map = array(
+      'group_title' => 'title',
+      'group_description' => 'description',
+    );
+    foreach($groups as $id => $grp) {
+      if (!empty($group_settings['group_' . $id])) {
+        $item = $group_settings['group_' . $id];
+      }
+      else {
+        $item = array();
+      }
+      // If value is missing in the setting, take the corresponding value from the
+      // group.
+      foreach($map as $setting_key => $group_key) {
+        if (empty($item[$setting_key]) && !empty($grp[$group_key])) {
+          $item[$setting_key] = $grp[$group_key];
+        }
+      }
+      // Set default weight.
+      if (empty($item['group_weight'])) {
+        $item['group_weight'] = 0;
+      }
+      // Add id  as fallback sort value.
+      $item['id'] = $id;
+      $group_settings['group_' . $id] = $item;
+    }
     // Flatten to fit the form structure.
-    if (isset($settings[$key]) && isset($settings[$group_key])) {
-      $form_defaults = array_merge($settings[$key], $settings[$group_key]);
+    if (isset($settings[$key]) && isset($group_settings)) {
+      $form_defaults = array_merge($settings[$key], $group_settings);
     }
     return $form_defaults;
   }
 
+
   protected function getProfileOptions() {
 
   }
+
   public function addRules() {
     $this->addFormRule(array('CRM_Gdpr_Form_CommunicationsPreferences', 'validateRedirectUrl'));
   }
