@@ -105,6 +105,7 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
 
       //all for all groups and disable checkbox is group_enabled from settings
       $groups = U::getGroups();
+      $groups = U::sortGroups($groups, array('group_weight' => 'asc'));
       foreach ($groups as $group) {
         $container_name = 'group_' . $group['id'];
         if (!empty($this->commPrefGroupsetting[$container_name]['group_enable'])) {

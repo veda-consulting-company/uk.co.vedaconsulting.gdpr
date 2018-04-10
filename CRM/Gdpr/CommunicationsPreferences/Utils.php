@@ -137,6 +137,56 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
     }
     return self::$groups;
   }
+
+  /**
+   * Sorts an array of groups according to their user-assigned weight.
+   *
+   * @param array $groups
+   *  Group data from the api, keyed by id.
+   *
+   * @param array $sortBySettings
+   *  Array keyed by a Communcations Preferences group setting, value can be
+   *  either 'asc' or 'desc'.
+   */
+  public static function sortGroups($groups, $sortBySettings = array('group_weight' => 'asc')) {
+    $settings = self::getSettings(FALSE);
+    $group_settings = $settings[self::GROUP_SETTING_NAME];
+    $defaults = array(
+      'group_weight' => 0,
+      'group_enable' => 0,
+      'group_title' => '',
+    );
+    // Filter out arguments that we do not support.
+    $sortKeys = array_intersect_key($sortBySettings, $defaults);
+    foreach ($groups as $id => $grp) {
+      if (!empty($group_settings['group_' . $id])) {
+        $item = $group_settings['group_' . $id];
+      }
+      else {
+        $item = $defaults;
+      }
+      $groups[$id]['group_weight'] = $item['group_weight'];
+      $groups[$id]['group_enable'] = $item['group_enable'];
+      $groups[$id]['group_title'] = $item['group_title'];
+    }
+    uasort($groups, function($a, $b) use ($sortKeys) {
+      foreach ($sortKeys as $key => $order) {
+        if (is_numeric($a[$key]) && is_numeric($b[$key])) {
+          $diff = $order == 'asc' ? $a[$key] - $b[$key] : $b[$key] - $a[$key];
+        }
+        elseif (is_string($a[$key]) && is_string($b[$key])) {
+          $diff = $order == 'asc' ? strcmp($a[$key], $b[$key]) : strcmp($b[$key], $a[$key]);
+        }
+        if ($diff != 0) {
+          return $diff;
+        }
+      }
+      return $diff;
+    });
+    return $groups;
+  }
+
+
   /**
    * Gets details of the last time a contact updated their communications
    * preferences.
