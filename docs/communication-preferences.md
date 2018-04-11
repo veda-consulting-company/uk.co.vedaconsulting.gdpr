@@ -72,6 +72,9 @@ On enabling the **Allow users to opt-in to mailing groups.** checkbox, all group
 
 ![Supporter Communication Preferences](/images/communication-preferences-groups.png)
 
+!!! note
+    The **Email** channel is a reflection of the no bulk emails setting in CiviCRM. Therefore if a supporter opts out of email their **No Bulk Emails** communication preference will be activated. The reason for this approach is that transactional emails, such as event registration confirmation or donation receipts, will still be sent, it is only mass communications that the supporter is opting out of.
+
 Each group has the following options
 
 * **Group** The internal CiviCRM group name
@@ -120,5 +123,13 @@ Finally the GDPR tab against the supporter will also reflect all the changes, in
 
 ![Supporter Communication Preferences](/images/communication-preferences-gdpr-tab.png)
 
+### Tokens
+
+Two new tokens have been introduced, to allow you to request updates from supporters. The tokens will automatically add the checksum to the links supporters receive, so that they do not need to login in order to update their communication preferences. We would expect most users of the GDPR extension to replace the traditional opt out and unsubscribe links with this single communication preferences page.
+
+![Supporter Communication Preferences](/images/communication-preferences-tokens.png)
+
+* **Communicaion Preferences Link** This token creates a clickable link the in template, with the description takens from the settings, including the checksum of the contact being communicated with. 
+* **Communicaion Preferences URL** This token creates a plain URL templateincluding the checksum of the contact being communicated with. For example this token could then be used for clickable images within outbound communications.
 
 
