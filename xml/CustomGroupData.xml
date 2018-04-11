@@ -506,6 +506,16 @@
       <option_group_name>activity_type</option_group_name>
     </OptionValue>
     <OptionValue>
+      <label>GDPR Forget me</label>
+      <name>GDPR_FORGET_ME</name>
+      <is_default>0</is_default>
+      <weight>1</weight>
+      <is_optgroup>0</is_optgroup>
+      <is_reserved>0</is_reserved>
+      <is_active>1</is_active>
+      <option_group_name>activity_type</option_group_name>
+    </OptionValue>
+    <OptionValue>
       <label>Yes</label>
       <value>YES</value>
       <name>Yes</name>

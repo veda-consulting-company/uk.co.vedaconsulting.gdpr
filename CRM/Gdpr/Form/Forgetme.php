@@ -142,10 +142,42 @@ class CRM_Gdpr_Form_Forgetme extends CRM_Core_Form {
 
     if ($updateResult && !empty($updateResult['values'])) {
       CRM_Core_Session::setStatus(E::ts("Contact has been made anonymous."), E::ts('Forget successful'), 'success');
+
+      //MV:#7040, if successfully anonymized then record activity.
+      self::createForgetMeActivity($this->_contactID);
+
     } else {
       CRM_Core_Session::setStatus(E::ts("Records has not been cleared."), E::ts('Record not Deleted cleanly. Please contact admin!'), 'error');
     }
 
   }
 
+  public static function createForgetMeActivity($contactID) {
+    if (empty($contactID)) {
+      return FALSE;
+    }
+
+    $activityTypeIds = array_flip(CRM_Core_PseudoConstant::activityType(TRUE, FALSE, FALSE, 'name'));
+    //check Activity type exits before fire an API.
+    if (!empty($activityTypeIds[CRM_Gdpr_Constants::FORGET_ME_ACTIVITY_TYPE_NAME])) {
+      
+      $activityTypeId = $activityTypeIds[CRM_Gdpr_Constants::FORGET_ME_ACTIVITY_TYPE_NAME];
+      //Make logged in user record as source contact record
+      $sourceContactID = $contactID;
+      if ($loggedinUser = CRM_Core_Session::singleton()->getLoggedInContactID()) {
+        $sourceContactID = $loggedinUser;
+      }
+      $subject = ts('GDPR - Contact has been made anonymous');
+      $params = array(
+        'activity_type_id'  => $activityTypeId,
+        'source_contact_id' => $sourceContactID,
+        'target_id'         => $contactID,
+        'activity_date_time'=> date('Y-m-d H:i:s'),
+        'subject'           => $subject,
+        'status_id'         => 2, //COMPLETED
+      );
+
+      CRM_Gdpr_Utils::CiviCRMAPIWrapper('Activity', 'create', $params);
+    }
+  } //End function
 }
