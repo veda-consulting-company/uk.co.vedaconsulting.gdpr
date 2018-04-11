@@ -323,7 +323,7 @@ function _gdpr_addTermsConditionsTab(&$tabs, $entityType, $id) {
 
   $url = CRM_Utils_System::url($urlParams['path'], $urlParams['qs']);
   $tabs['terms_conditions'] = array(
-    'title' => ts('Terms &amp; Conditions'),
+    'title' => E::ts('Terms &amp; Conditions'),
     'url' => $url,
     'active' => TRUE,
     'class' => 'ajaxForm',
@@ -346,7 +346,7 @@ function _gdpr_addGDPRTab(&$tabs, $contactID) {
   $url = CRM_Utils_System::url('civicrm/gdpr/view/tab', "reset=1&cid={$contactID}");
   $tabs[] = array( 'id'    => 'gdprTab',
     'url'   => $url,
-    'title' => ts('GDPR'),
+    'title' => E::ts('GDPR'),
     'weight' => 300,
     'class'  => 'livePage',
   );
@@ -393,8 +393,8 @@ function gdpr_civicrm_navigationMenu( &$params ) {
  */
 function gdpr_civicrm_tokens( &$tokens ){
   $tokens['contact'] = array(
-    'contact.comm_pref_supporter_url' => ts("Communication Preferences URL"),
-    'contact.comm_pref_supporter_link' => ts("Communication Preferences Link"),
+    'contact.comm_pref_supporter_url' => E::ts("Communication Preferences URL"),
+    'contact.comm_pref_supporter_link' => E::ts("Communication Preferences Link"),
   );
 }
 
@@ -405,7 +405,7 @@ function gdpr_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = array(
   if (!empty($tokens['contact'])) {
     foreach ($cids as $cid) {
       $commPrefURL = CRM_Gdpr_CommunicationsPreferences_Utils::getCommPreferenceURLForContact($cid);
-      $link = sprintf("<a href='%s' target='_blank'>%s</a>",$commPrefURL, ts('Communication Preferences'));
+      $link = sprintf("<a href='%s' target='_blank'>%s</a>",$commPrefURL, E::ts('Communication Preferences'));
       $values[$cid]['contact.comm_pref_supporter_url'] = $commPrefURL;
       $values[$cid]['contact.comm_pref_supporter_link'] = html_entity_decode($link);
     }
@@ -426,29 +426,29 @@ function gdpr_civicrm_summaryActions( &$actions, $contactID ) {
 }
 
 function gdpr_civicrm_permission(&$permissions) {
-  $prefix = ts('GDPR') . ': ';
+  $prefix = E::ts('GDPR') . ': ';
   $version = CRM_Utils_System::version();
   if (version_compare($version, '4.6.1') >= 0) {
     $permissions += array(
       'access GDPR' => array(
-        $prefix . ts('access GDPR'),
-        ts('View GDPR related information'),
+        $prefix . E::ts('access GDPR'),
+        E::ts('View GDPR related information'),
       ),
       'forget contact' => array(
-        $prefix . ts('forget contact'),
-        ts('Anonymize contacts'),
+        $prefix . E::ts('forget contact'),
+        E::ts('Anonymize contacts'),
       ),
       'administer GDPR' => array(
-        $prefix . ts('administer GDPR'),
-        ts('Manage GDPR settings'),
+        $prefix . E::ts('administer GDPR'),
+        E::ts('Manage GDPR settings'),
       ),
     );
   }
   else {
     $permissions += array(
-      'access GDPR' => $prefix . ts('access GDPR'),
-      'forget contact' => $prefix . ts('forget contact'),
-      'administer GDPR' => $prefix . ts('administer GDPR'),
+      'access GDPR' => $prefix . E::ts('access GDPR'),
+      'forget contact' => $prefix . E::ts('forget contact'),
+      'administer GDPR' => $prefix . E::ts('administer GDPR'),
     );
   }
 }

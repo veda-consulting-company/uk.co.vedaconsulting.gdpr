@@ -1,8 +1,9 @@
+{crmScope extensionKey='uk.co.vedaconsulting.gdpr'}
 {* HEADER *}
 
 <div>
 
-<h3>Data Protection Officer</h3>
+<h3>{ts}Data Protection Officer{/ts}</h3>
 
 <div class="crm-block crm-form-block crm-gdpr-settings-form-block">
 
@@ -22,7 +23,7 @@
 
 </div>
 
-<h3>Activity types</h3>
+<h3>{ts}Activity types{/ts}</h3>
 
 <div class="crm-block crm-form-block crm-gdpr-settings-form-block">
 
@@ -61,7 +62,7 @@
 </div>
 
 <!-- Forget Me settings -->
-<h3>Forget me</h3>
+<h3>{ts}Forget me{/ts}</h3>
 
 <div class="crm-block crm-form-block crm-gdpr-settings-form-block">
 	<div id="help">
@@ -81,7 +82,7 @@
 <!-- /Forget me settings -->
 
 <!--  Acceptance settings-->
-<h3>Data Policy</h3>
+<h3>{ts}Data Policy{/ts}</h3>
 
 <div class="crm-block crm-form-block crm-gdpr-settings-form-block">
 	<div id="help">
@@ -204,3 +205,4 @@
   }(cj));
 {/literal}
 </script>
+{/crmScope}
