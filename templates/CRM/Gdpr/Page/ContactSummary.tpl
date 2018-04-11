@@ -1,19 +1,15 @@
 <div id="last_acceptance_date" class="crm-summary-row">
-  <div class="crm-label">{ts}Gdpr Status{/ts}</div>
+  <div class="crm-label">{ts}GDPR Status{/ts}</div>
   <div class="crm-content crm-contact-gdpr_status">
 		{if $lastAcceptanceDate} 
-			Own preferences submitted on {$lastAcceptanceDate}
-		{else}
-			{ts} Not Updated {/ts}
+			Communication preferences submitted on {$lastAcceptanceDate}
 		{/if}
 	</div>
 </div>
 {literal}
 <script type="text/javascript">
 	CRM.$(function($){
-		$('#last_acceptance_date').insertAfter(
-			$('#crm-communication-pref-content').find('.crm-contact-privacy_values').parent('.crm-summary-row')
-		);
+		$('#last_acceptance_date').prependTo('#crm-communication-pref-content .crm-inline-block-content');
 	});
 </script>
 {/literal}
