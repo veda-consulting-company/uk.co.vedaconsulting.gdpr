@@ -1,33 +1,16 @@
-# Data Policy
+# Erasure (“Right to be forgotten”)
 
-## Transparency
+Under the GDPR regulations the Data Subject (supporter) can tell you to erase their information and you must do so unless you have a good reason (from among the options set out in GDPR) to retain it.
 
-It has always been a key element of Data Protection that people should know enough about what is being done with their data. **'Enough' is now much broader under GDPR**. The implication of the changes are that the key points, which you should determine with your GDPR consultant, have to be presented to supporters on the data capture form or verbally, while the full details are put in an accessible and understandable privacy policy or statement.
+Some of the examples include financial history including any tax related information.
 
-In order to record the acceptance of the data policy, including a copy of the policy at the time of acceptance, the GDPR extension includes a set of functions.
+In order to allow a contact to be forgotten within CiviCRM, without comprising key meta data around the supporter, we have introduced a new button under the GDPR tab on each contact.
 
-## Settings
+![Communication Preferences Main](/images/forget-me-button-gdpr-tab.png)
 
-Under the general settings within the GDPR extension there is a section dedicated to your organisations **Data Policy**
+On pressing the button for a contact, the following actions will take place
 
-![Data Policy Settings](/images/data-policy-settings.png)
-
-* **Acceptance period (months)** The period of time that the system will allow before a reconfirmation is requested from the supporter.
-* **Data Policy file** The Data Policy statement for your organisation. A version history is kept if updated versions of the document are uploaded.
-* **Link Label** The label to be shown on supporter facing pages for the link to the actual document
-* **Checkbox text** The text to be shown alongside the acceptance checkbox
-* **Page title** The Title of the data policy page if used standalone
-* **Introductory text** Text on the page if used stand alone
-
-An example of the settings can be seen on the communication preference page, as below
-
-![Data Policy Settings](/images/data-policy-example.png)
-
-On submission an Activity is recorded against the supporter with a link to a copy of the data policy at the time of acceptance.
-
-On subsequent visits to the communications preferences page the supporter will not be prompted to accept the data policy, unless
-
-* The validity period set in the extension has been exceed
-* A new version of the data policy has been uploaded and the **This is a new version of the document.** checkbox was ticked, indicating a change to the terms which require acceptance from the supporter.
-
+* Anonymize contact **Last Name** will be amended to the name set in the GDPR settings
+* Remove the contact's email/address/phone/IM/website
+* Cancel all active memberships and update to 'GDPR Cancelled' status using staus override.
 
