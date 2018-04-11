@@ -1,4 +1,5 @@
-<h3>Contacts who have not had any activity for {$settings.activity_period} days</h3>
+{crmScope extensionKey='uk.co.vedaconsulting.gdpr'}
+<h3>{ts 1=$settings.activity_period}Contacts who have not had any activity for %1 days{/ts}</h3>
 <div class="crm-block crm-form-block crm-gdpr-dashboard-activities-list-form-block">
     <div>
       <table class="selector row-highlight" id="ContactSummaryListTable">
@@ -24,7 +25,7 @@
           </td>
         </tr>
         <tr>
-          <td>Click-throughs
+          <td>{ts}Click-throughs{/ts}
           <br />
           <span class="description"><i>{ts}(Contacts who have not had any activity, but clicked through links in emails){/ts}</i></span>
           </td>
@@ -36,7 +37,7 @@
 </div>
 
 {if $gsCsDetails}
-<h3>Search</h3>
+<h3>{ts}Search{/ts}</h3>
 <div class="crm-block crm-form-block crm-gdpr-dashboard-search-form-block">
 {capture assign=customSearchUrl}{crmURL p="civicrm/contact/search/custom" q="reset=1&csid=`$gsCsDetails.id`"}{/capture}
     <a href="{$customSearchUrl}">{$gsCsDetails.label}</a>
@@ -44,15 +45,18 @@
 {/if}
 
 {if call_user_func(array('CRM_Core_Permission','check'), 'administer CiviCRM')}
-<h3>GDPR Settings</h3>
+<h3>{ts}GDPR Settings{/ts}</h3>
 <div class="crm-block crm-form-block crm-gdpr-dashboard-settings-form-block">
     <div>
         <div id="help">
           <ul>
-           <li>Click <a href="{crmURL p="civicrm/gdpr/settings" q="reset=1"}">here</a> to update GDPR settings.</li>
-           <li>Click <a href="{crmURL p="civicrm/gdpr/comms-prefs/settings" q="reset=1"}">here</a> to update Communications Preferences settings.</li>
+           {capture assign=GDPRSettingsUrl}{crmURL p="civicrm/gdpr/settings" q="reset=1"}{/capture}
+           <li>{ts 1=$GDPRSettingsUrl}Click <a href="%1">here</a> to update GDPR settings.{/ts}</li>
+           {capture assign=CommPrefSettingsUrl}{crmURL p="civicrm/gdpr/comms-prefs/settings" q="reset=1"}{/capture}
+           <li>{ts 1=$CommPrefSettingsUrl}Click <a href="%1">here</a> to update Communications Preferences settings.{/ts}</li>
           </ul>
         </div>
     </div>
 </div>
 {/if}
+{/crmScope}

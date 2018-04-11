@@ -1,3 +1,4 @@
+{crmScope extensionKey='uk.co.vedaconsulting.gdpr'}
 <div class="crm-communications-preferences-form-block crm-public">
 	<div class="comm-pref-block channel-block">
 		<!-- Page Intro Text from Settings -->
@@ -128,8 +129,8 @@
 	    	if (mismatchedChannels.length !== 0) {
 	    		var mismatchedChannelTxt = mismatchedChannels.join(', ');
           CRM.confirm({
-            title: ts('Group Channels'),
-            message: ts('We may communicate with you by %1 since this is used by a group you have selected.',  {1: '<em>' + mismatchedChannelTxt + '</em>'})
+            title: E::ts('Group Channels'),
+            message: E::ts('We may communicate with you by %1 since this is used by a group you have selected.',  {1: '<em>' + mismatchedChannelTxt + '</em>'})
           })
           .on('crmConfirm:yes', function() {
             $(mismatchedChannels).each(function(index, value){
@@ -142,3 +143,4 @@
 	});
 </script>
 {/literal}
+{/crmScope}

@@ -1,3 +1,4 @@
+{crmScope extensionKey='uk.co.vedaconsulting.gdpr'}
 {if $crmPermissions->check('forget contact')}
 <div class="action-link">
   {if $isGdprAdmin }
@@ -8,7 +9,7 @@
 </div>
 {/if}
 
-<h3>Summary</h3>
+<h3>{ts}Summary{/ts}</h3>
 
 <div class="crm-block crm-form-block">
     <div>
@@ -34,7 +35,7 @@
 </div>
 {if $groupSubscriptions}
 
-<h3>Group Subscription Log</h3>
+<h3>{ts}Group Subscription Log{/ts}</h3>
 
 <div class="crm-block crm-form-block crm-grouo-subscription-list-form-block">
     <div>
@@ -77,3 +78,4 @@ cj(document).ready( function() {
 </div>
 
 {/if}
+{/crmScope}

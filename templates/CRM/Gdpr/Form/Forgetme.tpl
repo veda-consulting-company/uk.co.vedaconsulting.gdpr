@@ -1,3 +1,4 @@
+{crmScope extensionKey='uk.co.vedaconsulting.gdpr'}
 <div class="messages status no-popup">
   <div class="icon inform-icon"></div>&nbsp;
   <span class="font-red bold">{ts}WARNING: 'Forget me' process will make the contact record totally unidentified by removing any related data and entity links.{/ts} {ts}This action cannot be undone.{/ts}</span>
@@ -9,4 +10,4 @@
 <div class="crm-submit-buttons">
 {include file="CRM/common/formButtons.tpl" location="bottom"}
 </div>
-
+{/crmScope}

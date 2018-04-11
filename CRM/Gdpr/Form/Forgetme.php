@@ -1,5 +1,7 @@
 <?php
 
+use CRM_Gdpr_ExtensionUtil as E;
+
 /**
  * Form controller class
  *
@@ -31,13 +33,13 @@ class CRM_Gdpr_Form_Forgetme extends CRM_Core_Form {
     $this->addButtons(array(
       array(
         'type' => 'next',
-        'name' => ts('Forget me'),
+        'name' => E::ts('Forget me'),
         'spacing' => '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
         'isDefault' => TRUE,
       ),
       array(
         'type' => 'cancel',
-        'name' => ts('Cancel'),
+        'name' => E::ts('Cancel'),
       ),
     ));
 
@@ -47,7 +49,7 @@ class CRM_Gdpr_Form_Forgetme extends CRM_Core_Form {
   public function postProcess() {
 
     if (!$this->_contactID) {
-      CRM_Core_Error::fatal(ts("Something went wrong. Please contact Admin."));
+      CRM_Core_Error::fatal(E::ts("Something went wrong. Please contact Admin."));
     }
 
     // Remove all the linked relationship records of this contact
@@ -105,7 +107,7 @@ class CRM_Gdpr_Form_Forgetme extends CRM_Core_Form {
 
     // return, if entity or params are not passed
     if (!$entity || empty($params)) {
-      CRM_Core_Session::setStatus(ts("{$entity} records has not been deleted."), ts('Record not Deleted cleanly'), 'error');
+      CRM_Core_Session::setStatus(E::ts("{$entity} records has not been deleted."), E::ts('Record not Deleted cleanly'), 'error');
       return;
     }
 
@@ -132,20 +134,20 @@ class CRM_Gdpr_Form_Forgetme extends CRM_Core_Form {
 
   private function makeContactAnonymous() {
     if (!$this->_contactID) {
-      CRM_Core_Error::fatal(ts("Something went wrong. Please contact Admin."));
+      CRM_Core_Error::fatal(E::ts("Something went wrong. Please contact Admin."));
     }
     $params = array('id' => $this->_contactID);
     // Update contact Record
     $updateResult = CRM_Gdpr_Utils::CiviCRMAPIWrapper('Contact', 'anonymize', $params);
 
     if ($updateResult && !empty($updateResult['values'])) {
-      CRM_Core_Session::setStatus(ts("Contact has been made anonymous."), ts('Forget successful'), 'success');
+      CRM_Core_Session::setStatus(E::ts("Contact has been made anonymous."), E::ts('Forget successful'), 'success');
 
       //MV:#7040, if successfully anonymized then record activity.
       self::createForgetMeActivity($this->_contactID);
 
     } else {
-      CRM_Core_Session::setStatus(ts("Records has not been cleared."), ts('Record not Deleted cleanly. Please contact admin!'), 'error');
+      CRM_Core_Session::setStatus(E::ts("Records has not been cleared."), E::ts('Record not Deleted cleanly. Please contact admin!'), 'error');
     }
 
   }

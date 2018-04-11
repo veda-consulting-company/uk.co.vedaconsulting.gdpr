@@ -1,5 +1,6 @@
 <?php
 
+use CRM_Gdpr_ExtensionUtil as E;
 require_once 'CRM/Core/Form.php';
 
 /**
@@ -9,9 +10,9 @@ require_once 'CRM/Core/Form.php';
  */
 class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
   function buildQuickForm() {
-    CRM_Utils_System::setTitle(ts('GDPR - Settings'));
+    CRM_Utils_System::setTitle(E::ts('GDPR - Settings'));
 
-    $this->addEntityRef('data_officer', ts('Data Protection Officer (DPO)'), array(
+    $this->addEntityRef('data_officer', E::ts('Data Protection Officer (DPO)'), array(
         'create' => TRUE,
         'api' => array('extra' => array('email')),
       ), TRUE);
@@ -23,8 +24,8 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
     $this->add(
       'select',
       'activity_type',
-      ts('Activity Types'),
-      array('' => ts('- select -')) + $actTypes, // list of options
+      E::ts('Activity Types'),
+      array('' => E::ts('- select -')) + $actTypes, // list of options
       TRUE,
       array('class' => 'crm-select2 huge', 'multiple' => 'multiple',)
     );
@@ -34,19 +35,19 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
     $this->add(
       'select',
       'contact_type',
-      ts('Contact Types'),
-      array('' => ts('- select -')) + $contactTypes, // list of options
+      E::ts('Contact Types'),
+      array('' => E::ts('- select -')) + $contactTypes, // list of options
       TRUE,
       array('class' => 'crm-select2 huge', 'multiple' => 'multiple',)
     );
 
     // Forget me action
-    $this->add('text', 'forgetme_name', ts('Forgetme contact name'));
+    $this->add('text', 'forgetme_name', E::ts('Forgetme contact name'));
 
     $this->add(
       'text',
       'activity_period',
-      ts('Period'),
+      E::ts('Period'),
       array('size' => 4),
       TRUE
     );
@@ -57,25 +58,25 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
     $this->add(
       'text',
       'sla_page_title',
-      ts('Page title')
+      E::ts('Page title')
     );
     $this->add(
       'select',
       'sla_period',
-      ts('Acceptance period (months)'),
-      array('' => ts('- select -')) + $slaPeriodOptions, // list of options
+      E::ts('Acceptance period (months)'),
+      array('' => E::ts('- select -')) + $slaPeriodOptions, // list of options
       TRUE,
       array('class' => 'crm-select2')
     );
     $this->add(
       'file',
       'sla_tc_upload',
-      ts('Data Policy file')
+      E::ts('Data Policy file')
     );
     $this->add(
       'checkbox',
       'sla_tc_new_version',
-      ts('This is a new version of the document.')
+      E::ts('This is a new version of the document.')
     );
     $this->add(
       'hidden',
@@ -84,7 +85,7 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
     $this->add(
       'text',
       'sla_link_label',
-      ts('Link Label')
+      E::ts('Link Label')
     );
     $this->add(
       'hidden',
@@ -93,12 +94,12 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
     $this->add(
       'text',
       'sla_checkbox_text',
-      ts('Checkbox text')
+      E::ts('Checkbox text')
     );
     $this->add(
       'textarea',
       'sla_agreement_text',
-      ts('Introductory text'),
+      E::ts('Introductory text'),
       array('cols' => 50)
     );
     // Entity (Event/Contribution) terms and conditions.
@@ -162,14 +163,14 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
     $this->addButtons(array(
       array(
         'type' => 'submit',
-        'name' => ts('Save'),
+        'name' => E::ts('Save'),
         'isDefault' => TRUE,
       ),
     ));
 
     $bare_defaults = array(
-      'sla_link_label' => ts('Data Policy'),
-      'sla_checkbox_text' => ts('I accept the Data Policy.'),
+      'sla_link_label' => E::ts('Data Policy'),
+      'sla_checkbox_text' => E::ts('I accept the Data Policy.'),
       'sla_tc_new_version' => FALSE,
       'entity_tc_link_label' => ts('Terms &amp; Conditions'),
       'entity_tc_checkbox_text' => ts('I accept the Terms &amp; Conditions for this event.'),

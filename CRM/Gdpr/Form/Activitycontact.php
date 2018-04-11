@@ -1,5 +1,5 @@
 <?php
-
+use CRM_Gdpr_ExtensionUtil as E;
 require_once 'CRM/Core/Form.php';
 
 /**
@@ -18,7 +18,7 @@ class CRM_Gdpr_Form_Activitycontact extends CRM_Core_Form {
     // Get GDPR settings
     $settings = CRM_Gdpr_Utils::getGDPRSettings();
 
-    $this->add('text', 'contact_name', ts('Contact Name'),
+    $this->add('text', 'contact_name', E::ts('Contact Name'),
       CRM_Core_DAO::getAttribute('CRM_Batch_DAO_Batch', 'title')
     );
 
@@ -26,7 +26,7 @@ class CRM_Gdpr_Form_Activitycontact extends CRM_Core_Form {
       array(
         array(
           'type' => 'refresh',
-          'name' => ts('Search'),
+          'name' => E::ts('Search'),
           'isDefault' => TRUE,
         ),
       )
