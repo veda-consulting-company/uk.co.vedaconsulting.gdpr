@@ -44,7 +44,6 @@ class CRM_Gdpr_SLA_Entity {
     $typeEnabled = FALSE;
     if ($useDefault && $this->enabledSetting) {
       $typeEnabled = $this->getSetting($this->enabledSetting);
-      dpm('type enabled ' . $typeEnabled);
     }
     return $entityEnabled || $typeEnabled;
   }
