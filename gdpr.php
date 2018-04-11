@@ -452,3 +452,23 @@ function gdpr_civicrm_permission(&$permissions) {
     );
   }
 }
+
+
+function gdpr_civicrm_pageRun( &$page ) {
+  $pageName = $page->getVar('_name');
+  if($pageName == 'CRM_Contact_Page_View_Summary') {
+    $cid = $page->getVar('_contactId');
+    $templatePath = realpath(dirname(__FILE__).'/templates');
+    CRM_Core_Region::instance('page-body')->add(
+      array(
+        'template' => "{$templatePath}/CRM/Gdpr/Page/ContactSummary.tpl"
+      )
+    );
+    $accept_activity = CRM_Gdpr_SLA_utils::getContactLastAcceptance($cid);
+    $accept_date = NULL;
+    if (!empty($accept_activity['activity_date_time'])) {
+      $accept_date = date('d/m/Y', strtotime($accept_activity['activity_date_time']));
+      $page->assign('lastAcceptanceDate', $accept_date);
+    }
+  }
+}
