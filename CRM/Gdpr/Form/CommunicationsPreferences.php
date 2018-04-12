@@ -298,7 +298,7 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
   /**
    * Validation callback for completion redirect url.
    */
-  public function validateRedirectUrl($values) {
+  public static function validateRedirectUrl($values) {
     $errors = array();
     if (!empty($values['completion_redirect'])) {
       if (empty($values['completion_url'])) {

@@ -205,7 +205,7 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
     $result = civicrm_api3('Activity', 'get', array(
       'sequential' => 1,
       'activity_type_id' => "Update_Communication_Preferences",
-      'contact_id' => $cid,
+      'source_contact_id' => $cid,
       'options' => array('sort' => "id desc"),
     ));
     return !empty($result['values']) ? $result['values'][0] : $return;
