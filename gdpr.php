@@ -464,7 +464,7 @@ function gdpr_civicrm_pageRun( &$page ) {
         'template' => "{$templatePath}/CRM/Gdpr/Page/ContactSummary.tpl"
       )
     );
-    $accept_activity = CRM_Gdpr_SLA_utils::getContactLastAcceptance($cid);
+    $accept_activity = CRM_Gdpr_SLA_Utils::getContactLastAcceptance($cid);
     $accept_date = NULL;
     if (!empty($accept_activity['activity_date_time'])) {
       $accept_date = date('d/m/Y', strtotime($accept_activity['activity_date_time']));
