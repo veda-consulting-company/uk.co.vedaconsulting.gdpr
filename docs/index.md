@@ -8,7 +8,7 @@ The [GDPR extension](https://github.com/veda-consulting/uk.co.vedaconsulting.gdp
 * [GitHub repository]
 * [Release downloads](https://civicrm.org/extensions/gdpr) (within CiviCRM.org's extensions directory)
 * [GitHub Issue Queue] (in GitHub)
-* TO DO [Q&A on StackExchange](http://civicrm.stackexchange.com/questions/tagged/civivolunteer) (with the `civivolunteer` tag)
+* [Q&A on StackExchange](http://civicrm.stackexchange.com/questions/tagged/gdpr) (with the `gdpr` tag)
 
 ## Requirements
 
