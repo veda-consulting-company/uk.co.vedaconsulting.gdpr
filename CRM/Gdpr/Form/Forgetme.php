@@ -146,6 +146,9 @@ class CRM_Gdpr_Form_Forgetme extends CRM_Core_Form {
       //MV:#7040, if successfully anonymized then record activity.
       self::createForgetMeActivity($this->_contactID);
 
+      //MV:#7020, send email notification to DPO based on settings.
+      self::sendEmailNotificationToDPO($this->_contactID);
+
     } else {
       CRM_Core_Session::setStatus(E::ts("Records has not been cleared."), E::ts('Record not Deleted cleanly. Please contact admin!'), 'error');
     }
@@ -180,4 +183,53 @@ class CRM_Gdpr_Form_Forgetme extends CRM_Core_Form {
       CRM_Gdpr_Utils::CiviCRMAPIWrapper('Activity', 'create', $params);
     }
   } //End function
+
+  public function sendEmailNotificationToDPO($contactID) {
+    if (empty($contactID)) {
+      return FALSE;
+    }
+
+    //Get GDPR settings and make sure the setting email notification to DPO has been enabled ?
+    $emailToDPO = $dpoContactEmail = $dpoContactId = FALSE;
+    $settings = CRM_Gdpr_Utils::getGDPRSettings();
+    if (!empty($settings['email_to_dpo'])) {
+      $emailToDPO = $settings['email_to_dpo'];
+      $dpoContactId = $settings['data_officer'];
+    }
+
+    //Get Data protection Officer email address
+    if ($dpoContactId) {
+      $apiParams = array(
+        'contact_id' => $dpoContactId,
+        'is_primary' => 1,
+        'sequential' => 1,
+      );
+      $apiResult = CRM_Gdpr_Utils::CiviCRMAPIWrapper('Email', 'get', $apiParams);
+      $emailDetails = $apiResult['values'][0];
+      $dpoContactEmail = !empty($emailDetails['email']) ? $emailDetails['email'] : FALSE;
+    }
+
+    //Now we have all details to send email notification to Data protection officer 
+    if ($emailToDPO && $dpoContactEmail) {
+
+      $defaultSubject = ts("{$contactID} has been anonymized");
+      $msg = ts("Contact ID : {$contactID} has been anonymized.");
+
+      //get the default domain email address.
+      list($domainEmailName, $domainEmailAddress) = CRM_Core_BAO_Domain::getNameAndEmail();
+
+      $subject = !empty($settings['email_dpo_subject']) ? $settings['email_dpo_subject'] : $defaultSubject;
+      $mailParams = array(
+        'subject' => $subject,
+        'text'    => NULL,
+        'html'    => $msg,
+        'toName'  => CRM_Core_DAO::getFieldValue('CRM_Contact_DAO_Contact', $dpoContactId, 'display_name'),
+        'toEmail' => $dpoContactEmail,
+        'from' => "\"{$domainEmailName}\" <{$domainEmailAddress}>",
+      );
+
+      $sent = CRM_Utils_Mail::send($mailParams);
+    }
+    return FALSE;
+  }
 }
