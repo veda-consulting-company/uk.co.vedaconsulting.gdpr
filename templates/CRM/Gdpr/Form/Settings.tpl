@@ -78,6 +78,24 @@
 		</div>
 		<div class="clear"></div>
 	</div>
+	<div class="crm-section">
+		<div class="label">{$form.email_to_dpo.label}</div>
+		<div class="content">
+			{$form.email_to_dpo.html}
+			<br />
+	        <span class="description"><i>{ts}Send Email notification to Data protection officer{/ts}</i></span>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div class="crm-section" id="email_dpo_subject_div">
+		<div class="label">{$form.email_dpo_subject.label}</div>
+		<div class="content">
+			{$form.email_dpo_subject.html}
+			<br />
+	        <span class="description"><i>{ts}Optionally, you can specify the Email subject here. Default subject is '%Contact Id% has been Anonmized'{/ts}</i></span>
+		</div>
+		<div class="clear"></div>
+	</div>
 </div>
 <!-- /Forget me settings -->
 
@@ -202,6 +220,16 @@
   $('#sla_tc_upload').on('change', function(){
       versionChk.show();
     });
+
+  $('#email_dpo_subject_div').hide();
+  $('#email_to_dpo').click(function(){
+		if ($(this).prop('checked')) {
+			$('#email_dpo_subject_div').show();
+		}
+		else{
+			$('#email_dpo_subject_div').hide();
+		}
+  });
   }(cj));
 {/literal}
 </script>
