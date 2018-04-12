@@ -217,7 +217,7 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
     $settings['activity_period'] = $values['activity_period'];
     $settings['contact_type'] = $values['contact_type'];
     $settings['forgetme_name'] = $values['forgetme_name'];
-    $settings['email_to_dpo'] = $values['email_to_dpo'];
+    $settings['email_to_dpo'] = isset($values['email_to_dpo']) ? $values['email_to_dpo'] : 0;
     $settings['email_dpo_subject'] = $values['email_dpo_subject'];
     $settings['sla_period'] = $values['sla_period'];
     $settings['sla_prompt'] = !empty($values['sla_prompt']) ? 1 : 0;
