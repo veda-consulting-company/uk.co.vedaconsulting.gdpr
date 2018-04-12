@@ -34,3 +34,8 @@ form#EventInfo .custom-group-Event_terms_and_conditions {
 	display: unset;
 }	
 /* END */
+
+
+.crm-gdpr-dashboard-settings-form-block div#help ul li {
+	background-image: unset;
+}

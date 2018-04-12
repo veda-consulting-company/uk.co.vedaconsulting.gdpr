@@ -14,6 +14,7 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
   protected $commPrefGroupsetting;
   protected $channelEleNames;
   protected $groupEleNames;
+  protected $_fields = array();
 
   public $containerPrefix = 'enable_';
 
@@ -92,7 +93,7 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
     $this->assign('containerPrefix', $this->containerPrefix);
 
     //Communication preference Group settings enabled ?
-    $isGroupSettingEnabled = $this->commPrefSettings['enable_groups'];
+    $isGroupSettingEnabled = !empty($this->commPrefSettings['enable_groups']) ? $this->commPrefSettings['enable_groups'] : NULL;
     if ($isGroupSettingEnabled) {
       
       if ($groupsHeading = $this->commPrefSettings['groups_heading']) {
@@ -164,7 +165,9 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
 
     //add form rule 
     $this->addFormRule(array('CRM_Gdpr_Form_UpdatePreference', 'formRule'), $this);
-    $this->addFormRule(array('CRM_Profile_Form', 'formRule'), $this);
+    if (!empty($this->commPrefSettings['profile'])) {
+      $this->addFormRule(array('CRM_Profile_Form', 'formRule'), $this);
+    }
 
     parent::buildQuickForm();
   }
@@ -242,23 +245,25 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
   public static function formRule($fields, $files, $self){
     $errors = array();
 
-    foreach ($self->groupEleNames as $groupName => $groupEleName) {
-      //get the channel array and group channel array
-      foreach ($self->channelEleNames as $channel) {
-        $groupChannel = str_replace($self->containerPrefix, '', $channel);
-        $channelSettingValue = $self->commPrefGroupsetting[$groupEleName][$groupChannel];
-        
-        if (!is_null($channelSettingValue) && $channelSettingValue != '') {
-          $channelArray[$groupChannel] = ($fields[$channel] == 'YES') ? 1 : 0;
-          $groupChannelAray[$groupChannel] = empty($self->commPrefGroupsetting[$groupEleName][$groupChannel]) ? 0 : 1;
+    if (!empty($self->groupEleNames)) {
+      foreach ($self->groupEleNames as $groupName => $groupEleName) {
+        //get the channel array and group channel array
+        foreach ($self->channelEleNames as $channel) {
+          $groupChannel = str_replace($self->containerPrefix, '', $channel);
+          $channelSettingValue = $self->commPrefGroupsetting[$groupEleName][$groupChannel];
+          
+          if (!is_null($channelSettingValue) && $channelSettingValue != '') {
+            $channelArray[$groupChannel] = ($fields[$channel] == 'YES') ? 1 : 0;
+            $groupChannelAray[$groupChannel] = empty($self->commPrefGroupsetting[$groupEleName][$groupChannel]) ? 0 : 1;
+          }
         }
-      }
 
-      //check any difference then return as error
-      if(!empty($fields[$groupEleName]) && ($diff = array_diff_assoc($groupChannelAray, $channelArray))){
-        //do something here.
-        $diff = implode(', ', array_keys($diff));
-        $errors[$groupEleName] = E::ts("Communication Preferences {$diff} has to be selected for this group");
+        //check any difference then return as error
+        if(!empty($fields[$groupEleName]) && ($diff = array_diff_assoc($groupChannelAray, $channelArray))){
+          //do something here.
+          $diff = implode(', ', array_keys($diff));
+          $errors[$groupEleName] = E::ts("Communication Preferences {$diff} has to be selected for this group");
+        }
       }
     }
 
