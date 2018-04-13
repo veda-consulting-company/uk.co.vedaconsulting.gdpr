@@ -12,7 +12,7 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
   function buildQuickForm() {
     CRM_Utils_System::setTitle(E::ts('GDPR - Settings'));
 
-    $this->addEntityRef('data_officer', E::ts('Data Protection Officer (DPO)'), array(
+    $this->addEntityRef('data_officer', E::ts('Point of Contact'), array(
         'create' => TRUE,
         'api' => array('extra' => array('email')),
       ), TRUE);
@@ -44,8 +44,8 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
     // Forget me action
     $this->add('text', 'forgetme_name', E::ts('Forgetme contact name'));
 
-    //Email to Data protection officer when someone access forget me.
-    $this->add('checkbox', 'email_to_dpo', ts('Email to Data Protection Officer?'));
+    //Email to Point of Contact/DPO when someone access forget me.
+    $this->add('checkbox', 'email_to_dpo', ts('Email the Point of Contact / DPO?'));
     $this->add('text', 'email_dpo_subject', ts('Email Subject'));
 
     $this->add(

@@ -12,7 +12,7 @@ More details about GDPR and CiviCRM can be found at our [GDPR Site]
 
 The current version (2.1) of this extension does the following;
 
-* Allow you to record the data protection officer for your organisation
+* Allows you to record the data protection officer or person responsible for data protection compliance in your organisation.
 * A new tab 'GDPR' in contact summary will display group subscription log for the contact
 * Custom search 'Search Group Subscription by Date Range' which can be access from GDPR Dashboard
 * Access list of contacts who have not had any activity for a set period of days from GDPR Dashboard

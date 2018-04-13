@@ -254,7 +254,7 @@ msgid "GDPR - Settings"
 msgstr ""
 
 #: CRM/Gdpr/Form/Settings.php
-msgid "Data Protection Officer (DPO)"
+msgid "Point of Contact"
 msgstr ""
 
 #: CRM/Gdpr/Form/Settings.php templates/CRM/Gdpr/Page/Dashboard.tpl
@@ -502,15 +502,15 @@ msgid "Search results listings."
 msgstr ""
 
 #: templates/CRM/Gdpr/Form/Settings.tpl
-msgid "Data Protection Officer"
+msgid "Point of Contact"
 msgstr ""
 
 #: templates/CRM/Gdpr/Form/Settings.tpl
-msgid "Set your organisation's data protection officer."
+msgid "Set your organisation's point of contact."
 msgstr ""
 
 #: templates/CRM/Gdpr/Form/Settings.tpl
-msgid "Under the GDPR, you must appoint a data protection officer (DPO)."
+msgid "Add your organisation's point of contact, such as an appointed data protection officer (DPO)."
 msgstr ""
 
 #: templates/CRM/Gdpr/Form/Settings.tpl
