@@ -1,42 +1,45 @@
-# Installation
+# Membership Terms & Conditions
 
-## Steps
+Under GDPR, there are specific terms which must be included in contracts which govern data processing. 
 
-Use the following steps to install CiviVolunteer.
+Data controllers must ensure that contracts set out:
 
-1. **Administer > System Settings > Extensions**
-1. **Add New**
-1. Sort by name
-1. Find, download, and install *both* of these extensions:
-    * **CiviVolunteer**
-    * **Angular Profiles**
+- the subject matter and duration of processing;
+- the nature and purpose of the processing;
+- the type of data processed and categories of data subject;
+- the obligations and rights of the data controller.
 
-        !!! caution ""
-            CiviVolunteer requires this additional extension, Angular Profiles, in order to function properly.
+Not only this, but contracts must also obligate the data processor to:
 
-1. If necessary, click Enable after the extension has been downloaded and installed. When the extension is enabled:
+- process personal data only on documented instructions from the data controller;
+- impose confidentiality obligations on persons authorised to process the personal data;
+- ensure the security of the personal data;
+- comply with additional rules restricting the appointment of sub-processors;
+- assist the data controller to comply with data subjects’ rights;
+- assist the data controller to comply with data security requirements;
+- return or destroy the personal data at the end of the processing arrangement;
+- provide the controller with all information necessary for the data controller to demonstrate compliance; and
+- notify the data controller immediately if it believes that any instructions from the data controller are illegal.
 
-    * CiviVolunteer should show up as green-highlighted.
-    * The option to **Disable** it will be present.
+Data controllers transferring data to processors will need to ensure that all contracts contain all of the information above, whether it be on their standard terms or on any agreement negotiated with a third party.
+
+Even if the other party has provided the agreement, it will be the data controller’s responsibility to ensure that the provisions listed above are included. This applies not only where an agreement is agreed solely or mainly for the purpose of data processing, but to any arrangement where a data controller will be passing personal data to a third party for processing.
+
+# Membership terms & conditions configuration
+
+- Navigate to Manage Contribution pages and select your membership contribution page
+![GDPR Manage Contribution screenshot](/images/managecontribution.png)
+- Go to the Configuration settings for your contribution page
+![GDPR Membership Config screenshot](/images/membershipconfig.png)
+- Under the contribution page configuration, there is now a Terms & conditions tab
+![GDPR Membership t&C screenshot](/images/membershipt&c.png)
+- Complete the settings for where you want the t&c's checkbox located and complete the title you wouldlike to appear with a description if any 
+- Under the Contribution links tab, click the live link to navigate to that contribution page
+![GDPR Manage Contribution screenshot](images/membershipt&cmembershiplivelink.png)
+- The live contribution page now displays the membership terms & conditions
+- ![GDPR Membership Page screenshot](images/membershipt&cpage.png)
 
 
-## Discovering features after installing {:#discovery}
-
-After installing, CiviVolunteer's features can be found in the following places:
-
-* A 'Volunteers' menu item
-* A 'Volunteers' tab within the configuration for each event
-* A 'Volunteer Report' report template
 
 
-## Permissions {:#permissions}
-
-CiviVolunteer adds a handful of new permissions which should be configured within your CMS before using.
-
-## Removing
-
-If you no longer wish to use CiviVolunteer, you may disable it, or uninstall it.
-
-* **Disable** - will turn off CiviVolunteer's features, but preserve any data that you have created with it. If you re-enable CiviVolunteer later, you'll be back where you left off. 
-* **Uninstall** - can be done after disabling, and will completely remove all traces of CiviVolunteer, including the data created with it. If you re-install CiviVolunteer later, you'll be back to square one, before you ever installed it.
 
