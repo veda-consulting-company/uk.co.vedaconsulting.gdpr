@@ -75,6 +75,8 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
     $result = civicrm_api3('UFGroup', 'get', array(
       'sequential' => 1,
       'group_type' => "Individual,Contact",
+      //To List out the active profiles. Because we are using CIVI core methods to build a profile in public Interface which might break if the profile is inactive.
+      'is_active'  => 1,
     ));
     $options = array(0 => '-- Please select --');
     if (!empty($result['values'])) {
@@ -289,6 +291,6 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
     if ($skipContactIdInURL) {
       unset($urlParams['cid']);
     }
-    return CRM_Utils_System::url('civicrm/gdpr/comms-prefs/update', $urlParams, TRUE);
+    return CRM_Utils_System::url('civicrm/gdpr/comms-prefs/update', $urlParams, TRUE, NULL, TRUE, TRUE);
   }
 }
