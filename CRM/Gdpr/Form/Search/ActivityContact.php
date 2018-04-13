@@ -1,4 +1,5 @@
 <?php
+
 use CRM_Gdpr_ExtensionUtil as E;
 
 /**

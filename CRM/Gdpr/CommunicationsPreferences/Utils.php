@@ -1,4 +1,5 @@
 <?php
+use CRM_Gdpr_ExtensionUtil as E;
 
 class CRM_Gdpr_CommunicationsPreferences_Utils {
 
@@ -13,10 +14,10 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
 
   public static function getSettingsDefaults() {
     $settings[self::SETTING_NAME] = array(
-      'page_title' => ts('Communication Preferences'),
-      'page_intro' => ts('We want to ensure we are only sending you information that is of interest to you, in a way you are happy to receive.'),
+      'page_title' => E::ts('Communication Preferences'),
+      'page_intro' => E::ts('We want to ensure we are only sending you information that is of interest to you, in a way you are happy to receive.'),
       'enable_channels' => 1,
-      'channels_intro' => ts('Please tell us how you would like us to keep in touch.'),
+      'channels_intro' => E::ts('Please tell us how you would like us to keep in touch.'),
       'channels' => array(
         'enable_email' => 1,
         'enable_phone' => 1,
@@ -24,9 +25,9 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
         'enable_sms' => 0,
       ),
       'enable_groups' => 0,
-      'groups_heading' => ts('Interest groups'),
-      'groups_intro' => ts('We want to continue to keep you informed about our work. Opt-in to the groups that interest you.'),
-      'completion_message' => ts('Your communications preferences have been updated. Thank you.')
+      'groups_heading' => E::ts('Interest groups'),
+      'groups_intro' => E::ts('We want to continue to keep you informed about our work. Opt-in to the groups that interest you.'),
+      'completion_message' => E::ts('Your communications preferences have been updated. Thank you.')
     );
 
     foreach (self::getGroups() as $group) {
@@ -59,7 +60,9 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
         $settings[$setting_name] = $serialized ? unserialize($serialized) : array();
       }
     }
-    $settings[self::GROUP_SETTING_NAME] = self::pruneGroupSettings($settings[self::GROUP_SETTING_NAME]);
+    if (!empty($settings[self::GROUP_SETTING_NAME])) {
+      $settings[self::GROUP_SETTING_NAME] = self::pruneGroupSettings($settings[self::GROUP_SETTING_NAME]);
+    }
     return $settings;
   }
 
@@ -72,6 +75,8 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
     $result = civicrm_api3('UFGroup', 'get', array(
       'sequential' => 1,
       'group_type' => "Individual,Contact",
+      //To List out the active profiles. Because we are using CIVI core methods to build a profile in public Interface which might break if the profile is inactive.
+      'is_active'  => 1,
     ));
     $options = array(0 => '-- Please select --');
     if (!empty($result['values'])) {
@@ -134,6 +139,56 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
     }
     return self::$groups;
   }
+
+  /**
+   * Sorts an array of groups according to their user-assigned weight.
+   *
+   * @param array $groups
+   *  Group data from the api, keyed by id.
+   *
+   * @param array $sortBySettings
+   *  Array keyed by a Communcations Preferences group setting, value can be
+   *  either 'asc' or 'desc'.
+   */
+  public static function sortGroups($groups, $sortBySettings = array('group_weight' => 'asc')) {
+    $settings = self::getSettings(FALSE);
+    $group_settings = $settings[self::GROUP_SETTING_NAME];
+    $defaults = array(
+      'group_weight' => 0,
+      'group_enable' => 0,
+      'group_title' => '',
+    );
+    // Filter out arguments that we do not support.
+    $sortKeys = array_intersect_key($sortBySettings, $defaults);
+    foreach ($groups as $id => $grp) {
+      if (!empty($group_settings['group_' . $id])) {
+        $item = $group_settings['group_' . $id];
+      }
+      else {
+        $item = $defaults;
+      }
+      $groups[$id]['group_weight'] = $item['group_weight'];
+      $groups[$id]['group_enable'] = $item['group_enable'];
+      $groups[$id]['group_title'] = $item['group_title'];
+    }
+    uasort($groups, function($a, $b) use ($sortKeys) {
+      foreach ($sortKeys as $key => $order) {
+        if (is_numeric($a[$key]) && is_numeric($b[$key])) {
+          $diff = $order == 'asc' ? $a[$key] - $b[$key] : $b[$key] - $a[$key];
+        }
+        elseif (is_string($a[$key]) && is_string($b[$key])) {
+          $diff = $order == 'asc' ? strcmp($a[$key], $b[$key]) : strcmp($b[$key], $a[$key]);
+        }
+        if ($diff != 0) {
+          return $diff;
+        }
+      }
+      return $diff;
+    });
+    return $groups;
+  }
+
+
   /**
    * Gets details of the last time a contact updated their communications
    * preferences.
@@ -152,7 +207,7 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
     $result = civicrm_api3('Activity', 'get', array(
       'sequential' => 1,
       'activity_type_id' => "Update_Communication_Preferences",
-      'contact_id' => $cid,
+      'source_contact_id' => $cid,
       'options' => array('sort' => "id desc"),
     ));
     return !empty($result['values']) ? $result['values'][0] : $return;
@@ -164,10 +219,10 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
    */
   public static function getChannelOptions() {
     return $channels = array(
-      'email' => ts('Email'),
-      'phone' => ts('Phone'),
-      'post' => ts('Post'),
-      'sms' => ts('SMS'),
+      'email' => E::ts('Email'),
+      'phone' => E::ts('Phone'),
+      'post' => E::ts('Post'),
+      'sms' => E::ts('SMS'),
     );
   }
 
@@ -236,6 +291,6 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
     if ($skipContactIdInURL) {
       unset($urlParams['cid']);
     }
-    return CRM_Utils_System::url('civicrm/gdpr/comms-prefs/update', $urlParams, TRUE);
+    return CRM_Utils_System::url('civicrm/gdpr/comms-prefs/update', $urlParams, TRUE, NULL, TRUE, TRUE);
   }
 }

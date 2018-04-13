@@ -1,6 +1,8 @@
 <?php
 
+use CRM_Gdpr_ExtensionUtil as E;
 //require_once 'CRM/Gdpr/Utils.php';
+
 class CRM_Gdpr_Page_Tab extends CRM_Core_Page {
 
   public function run() {
@@ -16,14 +18,18 @@ class CRM_Gdpr_Page_Tab extends CRM_Core_Page {
     $summary['data_policy'] = $this->getDataPolicyDetails($contactId);
     $this->assign('summary', $summary);
 
+    // Is current user an admin?
+    $isGdprAdmin = CRM_Core_Permission::check('administer GDPR');
+    $this->assign('isGdprAdmin', $isGdprAdmin);
+
 
     parent::run();
   }
 
   public function getDataPolicyDetails($contactId) {
     $details = array(
-      'title' => ts('Data Policy acceptance.'),
-      'details' => ts('Not yet accepted by the contact.'),
+      'title' => E::ts('Data Policy acceptance.'),
+      'details' => E::ts('Not yet accepted by the contact.'),
     );
     $activity = CRM_Gdpr_SLA_Utils::getContactLastAcceptance($contactId);
     $isDue = CRM_Gdpr_SLA_Utils::isContactDueAcceptance($contactId);
@@ -47,8 +53,8 @@ class CRM_Gdpr_Page_Tab extends CRM_Core_Page {
 
   public function getCommunicationsPreferencesDetails($contactId) {
     $details = array(
-      'title' => ts('Communications Preferences'),
-      'details' => ts('Not yet updated by the contact.'),
+      'title' => E::ts('Communications Preferences'),
+      'details' => E::ts('Not yet updated by the contact.'),
     );
     $activity = CRM_Gdpr_CommunicationsPreferences_Utils::getLastUpdatedForContact($contactId);
     if ($activity) {

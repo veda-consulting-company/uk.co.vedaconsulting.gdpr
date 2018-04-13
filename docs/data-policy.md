@@ -1,42 +1,33 @@
-# Installation
+# Data Policy
 
-## Steps
+## Transparency
 
-Use the following steps to install CiviVolunteer.
+It has always been a key element of Data Protection that people should know enough about what is being done with their data. **'Enough' is now much broader under GDPR**. The implication of the changes are that the key points, which you should determine with your GDPR consultant, have to be presented to supporters on the data capture form or verbally, while the full details are put in an accessible and understandable privacy policy or statement.
 
-1. **Administer > System Settings > Extensions**
-1. **Add New**
-1. Sort by name
-1. Find, download, and install *both* of these extensions:
-    * **CiviVolunteer**
-    * **Angular Profiles**
+In order to record the acceptance of the data policy, including a copy of the policy at the time of acceptance, the GDPR extension includes a set of functions.
 
-        !!! caution ""
-            CiviVolunteer requires this additional extension, Angular Profiles, in order to function properly.
+## Settings
 
-1. If necessary, click Enable after the extension has been downloaded and installed. When the extension is enabled:
+Under the general settings within the GDPR extension there is a section dedicated to your organisations **Data Policy**
 
-    * CiviVolunteer should show up as green-highlighted.
-    * The option to **Disable** it will be present.
+![Data Policy Settings](/images/data-policy-settings.png)
 
+* **Acceptance period (months)** The period of time that the system will allow before a reconfirmation is requested from the supporter.
+* **Data Policy file** The Data Policy statement for your organisation. A version history is kept if updated versions of the document are uploaded.
+* **Link Label** The label to be shown on supporter facing pages for the link to the actual document
+* **Checkbox text** The text to be shown alongside the acceptance checkbox
+* **Page title** The Title of the data policy page if used standalone
+* **Introductory text** Text on the page if used stand alone
 
-## Discovering features after installing {:#discovery}
+An example of the settings can be seen on the communication preference page, as below
 
-After installing, CiviVolunteer's features can be found in the following places:
+![Data Policy Settings](/images/data-policy-example.png)
 
-* A 'Volunteers' menu item
-* A 'Volunteers' tab within the configuration for each event
-* A 'Volunteer Report' report template
+On submission an Activity is recorded against the supporter with a link to a copy of the data policy at the time of acceptance.
 
+On subsequent visits to the communications preferences page the supporter will not be prompted to accept the data policy, unless
 
-## Permissions {:#permissions}
+* The validity period set in the extension has been exceed
+* A new version of the data policy has been uploaded and the **This is a new version of the document.** checkbox was ticked, indicating a change to the terms which require acceptance from the supporter.
 
-CiviVolunteer adds a handful of new permissions which should be configured within your CMS before using.
-
-## Removing
-
-If you no longer wish to use CiviVolunteer, you may disable it, or uninstall it.
-
-* **Disable** - will turn off CiviVolunteer's features, but preserve any data that you have created with it. If you re-enable CiviVolunteer later, you'll be back where you left off. 
-* **Uninstall** - can be done after disabling, and will completely remove all traces of CiviVolunteer, including the data created with it. If you re-install CiviVolunteer later, you'll be back to square one, before you ever installed it.
 

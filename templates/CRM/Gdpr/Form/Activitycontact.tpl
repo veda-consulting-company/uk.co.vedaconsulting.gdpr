@@ -1,3 +1,4 @@
+{crmScope extensionKey='uk.co.vedaconsulting.gdpr'}
 {*
  +--------------------------------------------------------------------+
  | CiviCRM version 4.7                                                |
@@ -131,3 +132,4 @@ CRM.$(function($) {
 
 </script>
 {/literal}
+{/crmScope}

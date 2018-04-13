@@ -1,11 +1,15 @@
-<!-- To DO - check permission before displaying the button -->
+{crmScope extensionKey='uk.co.vedaconsulting.gdpr'}
+{if $crmPermissions->check('forget contact')}
 <div class="action-link">
-  {capture assign=forgetMeURL}{crmURL p="civicrm/gdpr/forgetme" q="reset=1&cid=`$contactId`"}{/capture}
+  {if $isGdprAdmin }
+    {capture assign=forgetMeURL}{crmURL p="civicrm/gdpr/forgetme" q="reset=1&cid=`$contactId`"}{/capture}
   <a href="{$forgetMeURL}" class="button small-popup"><span><i class="crm-i fa-chain-broken"></i> {ts}Forget Me{/ts}</span></a>
+  {/if}
   <br/><br/>
 </div>
+{/if}
 
-<h3>Summary</h3>
+<h3>{ts}Summary{/ts}</h3>
 
 <div class="crm-block crm-form-block">
     <div>
@@ -31,7 +35,7 @@
 </div>
 {if $groupSubscriptions}
 
-<h3>Group Subscription Log</h3>
+<h3>{ts}Group Subscription Log{/ts}</h3>
 
 <div class="crm-block crm-form-block crm-grouo-subscription-list-form-block">
     <div>
@@ -74,3 +78,4 @@ cj(document).ready( function() {
 </div>
 
 {/if}
+{/crmScope}

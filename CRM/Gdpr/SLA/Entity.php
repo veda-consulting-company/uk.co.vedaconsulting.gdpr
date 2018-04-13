@@ -18,15 +18,36 @@ class CRM_Gdpr_SLA_Entity {
   protected $activityType = '';
 
   protected $activityCustomGroup = '';
+  
+  /**
+   * Name in the settings to look up whether Terms & Conditions
+   * behaviour is globally enabled for this type.
+   */
+  protected $enabledSetting = '';
+  protected $urlSetting = '';
+  
+  /**
+   * Default values are provided in the GDPR settings.
+   */
+  protected $settings = array();
 
 
   /**
    * Determines if this entity has terms and conditions enabled.
+   *
+   * @param bool $useDefault
+   *  If true, will include defaults for the entity type from the gdpr settings, otherwise will
+   *  only use the settings for this particular entity.
    */
-  public function isEnabled() {
-     return $this->getValue('Enable_terms_and_Conditions_Acceptance');
+  public function isEnabled($useDefault = FALSE) {
+    $entityEnabled = $this->getValue('Enable_terms_and_Conditions_Acceptance');
+    $typeEnabled = FALSE;
+    if ($useDefault && $this->enabledSetting) {
+      $typeEnabled = $this->getSetting($this->enabledSetting);
+    }
+    return $entityEnabled || $typeEnabled;
   }
-
+  
   public function getCheckboxPosition() {
     return $this->getValue('Checkbox_Position');
   }
@@ -39,8 +60,12 @@ class CRM_Gdpr_SLA_Entity {
     return $this->getValue('Introduction');
   }
 
-  public function getUrl() {
-    return $this->getValue('Terms_and_Conditions_File');
+  public function getUrl($useDefault = FALSE) {
+     $url = $this->getValue('Terms_and_Conditions_File');
+     if (!$useDefault) {
+       return $url;
+     }
+     return $this->getSetting('entity_tc');
   }
 
   public function getLinks() {
@@ -48,7 +73,7 @@ class CRM_Gdpr_SLA_Entity {
     $url = $this->getUrl();
     $label = $this->getValue('Link_Label');
     if ($url) {
-      $links['event'] = array(
+      $links['entity'] = array(
         'url' => $url,
         'label' => $label,
       );
@@ -100,6 +125,7 @@ class CRM_Gdpr_SLA_Entity {
   function __construct($id, $type) {
     $this->id = $id;
     $this->type = $type;
+    $this->settings = CRM_Gdpr_Utils::getGDPRSettings();
   }
 
   public function getEntity() {
@@ -116,10 +142,82 @@ class CRM_Gdpr_SLA_Entity {
     return $this->entity;
   }
 
+  /**
+   * Adds Terms & Conditions checkboxes to a form.
+   *
+   * @param CRM_Core_Form $form
+   */
+  public function addField($form) {
+    $type = strtolower($this->type);
+    $settings = $this->settings;
+    // Enabled just for this entity.
+    if ($this->isEnabled()) {
+      $intro = $this->getIntroduction();
+      $links = $this->getLinks();
+      $position = $this->getCheckboxPosition();
+      $text = $this->getCheckboxText();
+    }
+    elseif (!empty($settings['entity_tc'])) {
+      // If enabled for the type, use the defaults.
+      if ($this->isEnabled(TRUE)) {
+        // Use sitewide defaults for terms and conditions.
+        $intro = $settings['entity_tc_intro'];
+        $position = $settings['entity_tc_position'];
+        $links = $this->getLinks();
+        $links['entity']['label'] = $settings['entity_tc_link_label'];
+        $links['entity']['url'] = $settings['entity_tc'];
+        $text = $settings['entity_tc_checkbox_text'];
+      }
+    }
+    if (!empty($links['entity'])) {
+      $form->add(
+        'checkbox',
+        'accept_entity_tc',
+        'Terms & Conditions',
+        $text,
+        TRUE,
+        array('required' => TRUE)
+      );
+    }
+    if (!empty($links['global'])) {
+      $text = CRM_Gdpr_SLA_Utils::getCheckboxText();
+      $form->add(
+        'checkbox',
+        'accept_tc',
+        'Terms & Conditions',
+        $text,
+        TRUE,
+        array('required' => TRUE)
+      );
+    }
+    if (!empty($links)) {
+      $tc_vars = array(
+        'element' => 'accept_tc',
+        'links' => $links,
+        'intro' => $intro,
+        'position' => $position,
+      );
+      $form->assign('terms_conditions', $tc_vars);
+      $template_path = realpath(dirname(__FILE__) . '/templates/CRM/Gdpr');
+      CRM_Core_Region::instance('page-body')->add(array(
+        'template' => "CRM/Gdpr/TermsConditionsField.tpl"
+      ));
+    }
+  }
+  
+  /**
+   * Get a value from the GDPR settings.
+   */
+  private function getSetting($settingName) {
+    if (isset($this->settings[$settingName])) {
+      return $this->settings[$settingName];
+    }
+  }
+
   public function recordAcceptance($contactId = NULL) {
     $contactId = $contactId ? $contactId : CRM_Core_Session::singleton()->getLoggedInContactID();
     $fields = $this->getCustomFields($this->activityCustomGroup);
-    $url = $this->getUrl();
+    $url = $this->getUrl(TRUE);
     $entity = $this->getEntity();
     $source = $this->type . ': ' .  $entity['title'] . ' (' . $entity['id'] . ')';
     $params = array(

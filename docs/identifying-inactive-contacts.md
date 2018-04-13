@@ -1,42 +1,25 @@
-# Installation
+# Inactive Contacts
 
-## Steps
+As part of any regular housekeeping and ensuring that data is not kept beyond its agreed periods, old inactive supporters should be removed. This reduces the likelyhood of the organisation contacting someone against their preferences or their best interests.
 
-Use the following steps to install CiviVolunteer.
+## Custom Search
 
-1. **Administer > System Settings > Extensions**
-1. **Add New**
-1. Sort by name
-1. Find, download, and install *both* of these extensions:
-    * **CiviVolunteer**
-    * **Angular Profiles**
+Part of the GDPR extension introduces a custom search, which identifies supporters who have not had specific activities for a period of time.
 
-        !!! caution ""
-            CiviVolunteer requires this additional extension, Angular Profiles, in order to function properly.
+These settings can be controlled within the GDPR setup
 
-1. If necessary, click Enable after the extension has been downloaded and installed. When the extension is enabled:
+![Communication Preferences Main](/images/inactive-settings.png)
 
-    * CiviVolunteer should show up as green-highlighted.
-    * The option to **Disable** it will be present.
+* **Contact Types** - The contact types that should be included in the search, for example it may not be necessary to identify organisations without activity. 
+* **Activity Types** - A list of the activities that the organisation deems to be engagement and therefore exclude any contacts who have had the activity recorded on their record. 
+* **Period** - Period of time to check i.e. setting of 500 would expect the custom search to check anyone who has not had any of the above activities within the last 500 days. In this way we can search back any number of years, identifying the most toxic data first before moving to more recent contacts.
 
+## Actions
 
-## Discovering features after installing {:#discovery}
+The GDPR dashboard will show the contacts who meet the criteria that have been configured.
 
-After installing, CiviVolunteer's features can be found in the following places:
+![Communication Preferences Main](/images/inactive-dashboard.png)
 
-* A 'Volunteers' menu item
-* A 'Volunteers' tab within the configuration for each event
-* A 'Volunteer Report' report template
+Clicking on the number will then present the contacts who have been identified, from the results you can perform an action, for example add to a group for a final communication or delete the contacts if they are invalid.
 
-
-## Permissions {:#permissions}
-
-CiviVolunteer adds a handful of new permissions which should be configured within your CMS before using.
-
-## Removing
-
-If you no longer wish to use CiviVolunteer, you may disable it, or uninstall it.
-
-* **Disable** - will turn off CiviVolunteer's features, but preserve any data that you have created with it. If you re-enable CiviVolunteer later, you'll be back where you left off. 
-* **Uninstall** - can be done after disabling, and will completely remove all traces of CiviVolunteer, including the data created with it. If you re-install CiviVolunteer later, you'll be back to square one, before you ever installed it.
-
+![Communication Preferences Main](/images/inactive-actions.png)

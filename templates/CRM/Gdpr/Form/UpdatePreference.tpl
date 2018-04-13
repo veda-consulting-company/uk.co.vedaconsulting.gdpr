@@ -1,3 +1,4 @@
+{crmScope extensionKey='uk.co.vedaconsulting.gdpr'}
 <div class="crm-communications-preferences-form-block crm-public">
 	<div class="comm-pref-block channel-block">
 		<!-- Page Intro Text from Settings -->
@@ -71,6 +72,9 @@
     <fieldset class="data-policy-fieldset">
 		{if $isContactDueAcceptance}
       <div class="crm-section data-policy">
+        <div class="label">
+          <label><span class="crm-marker" title="This field is required.">*</span></label>
+        </div>
         <div class="content">
           {$form.$tcFieldName.html}
           <label for="{$tcFieldName}">{$tcFieldlabel}</label>
@@ -126,7 +130,7 @@
 	    		var mismatchedChannelTxt = mismatchedChannels.join(', ');
           CRM.confirm({
             title: ts('Group Channels'),
-            message: ts('%1 has to be enabled for this group communication',  {1: '<em>' + mismatchedChannelTxt + '</em>'})
+            message: ts('We may communicate with you by %1 since this is used by a group you have selected.',  {1: '<em>' + mismatchedChannelTxt + '</em>'})
           })
           .on('crmConfirm:yes', function() {
             $(mismatchedChannels).each(function(index, value){
@@ -139,3 +143,4 @@
 	});
 </script>
 {/literal}
+{/crmScope}

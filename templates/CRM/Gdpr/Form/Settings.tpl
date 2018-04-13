@@ -1,8 +1,9 @@
+{crmScope extensionKey='uk.co.vedaconsulting.gdpr'}
 {* HEADER *}
 
 <div>
 
-<h3>Data Protection Officer</h3>
+<h3>{ts}Data Protection Officer{/ts}</h3>
 
 <div class="crm-block crm-form-block crm-gdpr-settings-form-block">
 
@@ -22,7 +23,7 @@
 
 </div>
 
-<h3>Activity types</h3>
+<h3>{ts}Activity types{/ts}</h3>
 
 <div class="crm-block crm-form-block crm-gdpr-settings-form-block">
 
@@ -61,7 +62,7 @@
 </div>
 
 <!-- Forget Me settings -->
-<h3>Forget me</h3>
+<h3>{ts}Forget me{/ts}</h3>
 
 <div class="crm-block crm-form-block crm-gdpr-settings-form-block">
 	<div id="help">
@@ -77,11 +78,29 @@
 		</div>
 		<div class="clear"></div>
 	</div>
+	<div class="crm-section">
+		<div class="label">{$form.email_to_dpo.label}</div>
+		<div class="content">
+			{$form.email_to_dpo.html}
+			<br />
+	        <span class="description"><i>{ts}Send Email notification to Data protection officer{/ts}</i></span>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div class="crm-section" id="email_dpo_subject_div">
+		<div class="label">{$form.email_dpo_subject.label}</div>
+		<div class="content">
+			{$form.email_dpo_subject.html}
+			<br />
+	        <span class="description"><i>{ts}Optionally, you can specify the Email subject here. Default subject is '%Contact Id% has been Anonmized'{/ts}</i></span>
+		</div>
+		<div class="clear"></div>
+	</div>
 </div>
 <!-- /Forget me settings -->
 
 <!--  Acceptance settings-->
-<h3>Data Policy</h3>
+<h3>{ts}Data Policy{/ts}</h3>
 
 <div class="crm-block crm-form-block crm-gdpr-settings-form-block">
 	<div id="help">
@@ -156,7 +175,37 @@
     </div>
 	</div>
 </div>
-<!-- /SLA Acceptance -->
+</div>
+{* Terms and conditions for Events and Contribution Pages *}
+<h3>{ts}Terms &amp; Conditions: Events and Contribution Pages{/ts}</h3>
+<div class="crm-block crm-form-block crm-gdpr-settings-form-block">
+  <div class="help">{ts}Set defaults for Terms &amp Conditions. You can override these in the settings for individual Events and Contribution Pages.{/ts}
+  </div>{* end .help *}
+ {foreach from="$entity_tc_elements" item="elem"}
+  <div class="crm-section">
+    <div class="label">{$form.$elem.label}</div>
+    <div class="content">{$form.$elem.html}
+      <br /><span class="description"><i></i></span>
+    </div>{* end .content *}
+  </div>{* end .section *}
+  <div class="clear"></div>
+  {/foreach}
+	<div class="crm-section">
+    <div class="label">
+      {$form.entity_tc_upload.label}
+    </div>
+    <div class="content">
+			{$form.entity_tc_upload.html}
+
+    {if $entity_tc_current} 
+      <div class="clear current-file">
+      <div class="">Current:</div>
+      <div class=""><a href="{$entity_tc_current.url}" target="blank">{$entity_tc_current.name}</a><br /></div>
+    {/if}
+     <div class="description">A default terms and conditions file for use in Event registrations etc. This can be overridden on the settings for the particular event.</div>
+    </div>
+  </div>
+</div>
 {* FOOTER *}
 <div class="crm-submit-buttons">
 {include file="CRM/common/formButtons.tpl" location="bottom"}
@@ -171,6 +220,17 @@
   $('#sla_tc_upload').on('change', function(){
       versionChk.show();
     });
+
+  $('#email_dpo_subject_div').hide();
+  $('#email_to_dpo').click(function(){
+		if ($(this).prop('checked')) {
+			$('#email_dpo_subject_div').show();
+		}
+		else{
+			$('#email_dpo_subject_div').hide();
+		}
+  });
   }(cj));
 {/literal}
 </script>
+{/crmScope}

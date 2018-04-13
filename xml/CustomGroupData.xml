@@ -3,24 +3,6 @@
 <CustomData>
   <CustomGroups>
     <CustomGroup>
-      <name>SLA_Acceptance</name>
-      <title>Data Policy Acceptance</title>
-      <extends>Activity</extends>
-      <extends_entity_column_value_option_group>activity_type</extends_entity_column_value_option_group>
-      <extends_entity_column_value>SLA Acceptance</extends_entity_column_value>
-      <style>Inline</style>
-      <collapse_display>1</collapse_display>
-      <help_pre></help_pre>
-      <help_post></help_post>
-      <weight>2</weight>
-      <is_active>1</is_active>
-      <table_name>civicrm_value_sla_acceptance_4</table_name>
-      <is_multiple>0</is_multiple>
-      <collapse_adv_display>0</collapse_adv_display>
-      <is_reserved>0</is_reserved>
-      <is_public>1</is_public>
-    </CustomGroup>
-    <CustomGroup>
       <name>Event_terms_and_conditions</name>
       <title>Event terms and conditions</title>
       <extends>Event</extends>
@@ -56,26 +38,44 @@
       <is_reserved>0</is_reserved>
       <is_public>1</is_public>
     </CustomGroup>
+    <CustomGroup>
+      <name>Contribution_Page_terms_and_conditions</name>
+      <title>Contribution Page terms and conditions</title>
+      <extends>ContributionPage</extends>
+      <style>Inline</style>
+      <collapse_display>1</collapse_display>
+      <help_pre></help_pre>
+      <help_post></help_post>
+      <weight>8</weight>
+      <is_active>1</is_active>
+      <table_name>civicrm_value_contribution_page_terms_and_conditions_7</table_name>
+      <is_multiple>0</is_multiple>
+      <collapse_adv_display>0</collapse_adv_display>
+      <created_date>2018-04-06 17:21:10</created_date>
+      <is_reserved>0</is_reserved>
+      <is_public>0</is_public>
+    </CustomGroup>
+    <CustomGroup>
+      <name>Contribution_terms_and_conditions_acceptance</name>
+      <title>Contribution terms and conditions acceptance</title>
+      <extends>Activity</extends>
+      <extends_entity_column_value_option_group>activity_type</extends_entity_column_value_option_group>
+      <extends_entity_column_value>Contribution Terms and Conditions Acceptance</extends_entity_column_value>
+      <style>Inline</style>
+      <collapse_display>1</collapse_display>
+      <help_pre></help_pre>
+      <help_post></help_post>
+      <weight>9</weight>
+      <is_active>1</is_active>
+      <table_name>civicrm_value_contribution_terms_and_conditions_acceptan_8</table_name>
+      <is_multiple>0</is_multiple>
+      <collapse_adv_display>1</collapse_adv_display>
+      <created_date>2018-04-08 21:10:50</created_date>
+      <is_reserved>0</is_reserved>
+      <is_public>1</is_public>
+    </CustomGroup>
   </CustomGroups>
   <CustomFields>
-    <CustomField>
-      <name>Terms_Conditions</name>
-      <label>Terms &amp; Conditions</label>
-      <data_type>Link</data_type>
-      <html_type>Link</html_type>
-      <is_required>0</is_required>
-      <is_searchable>0</is_searchable>
-      <is_search_range>0</is_search_range>
-      <weight>2</weight>
-      <is_active>1</is_active>
-      <is_view>1</is_view>
-      <text_length>255</text_length>
-      <note_columns>60</note_columns>
-      <note_rows>4</note_rows>
-      <column_name>terms_conditions_8</column_name>
-      <in_selector>0</in_selector>
-      <custom_group_name>SLA_Acceptance</custom_group_name>
-    </CustomField>
     <CustomField>
       <name>Enable_terms_and_Conditions_Acceptance</name>
       <label>Enable terms and Conditions Acceptance</label>
@@ -229,6 +229,137 @@
       <in_selector>0</in_selector>
       <custom_group_name>Event_terms_and_conditions_acceptance</custom_group_name>
     </CustomField>
+    <CustomField>
+      <name>Enable_terms_and_Conditions_Acceptance</name>
+      <label>Enable terms and Conditions Acceptance</label>
+      <data_type>Boolean</data_type>
+      <html_type>Radio</html_type>
+      <is_required>0</is_required>
+      <is_searchable>0</is_searchable>
+      <is_search_range>0</is_search_range>
+      <weight>2</weight>
+      <help_pre>Enabling this will make it mandatory when making Contributions to accept the global site Terms and Conditions / Data Policy as well as the Terms and Conditions specified here.</help_pre>
+      <is_active>1</is_active>
+      <is_view>0</is_view>
+      <text_length>255</text_length>
+      <note_columns>60</note_columns>
+      <note_rows>4</note_rows>
+      <column_name>enable_terms_and_conditions_acce_13</column_name>
+      <in_selector>0</in_selector>
+      <custom_group_name>Contribution_Page_terms_and_conditions</custom_group_name>
+    </CustomField>
+    <CustomField>
+      <name>Checkbox_Position</name>
+      <label>Checkbox Position</label>
+      <data_type>String</data_type>
+      <html_type>Radio</html_type>
+      <default_value>customPre</default_value>
+      <is_required>0</is_required>
+      <is_searchable>0</is_searchable>
+      <is_search_range>0</is_search_range>
+      <weight>1</weight>
+      <is_active>1</is_active>
+      <is_view>0</is_view>
+      <text_length>255</text_length>
+      <note_columns>60</note_columns>
+      <note_rows>4</note_rows>
+      <column_name>checkbox_position_14</column_name>
+      <in_selector>0</in_selector>
+      <option_group_name>checkbox_position_20180311180849</option_group_name>
+      <custom_group_name>Contribution_Page_terms_and_conditions</custom_group_name>
+    </CustomField>
+    <CustomField>
+      <name>Checkbox_text</name>
+      <label>Checkbox text</label>
+      <data_type>String</data_type>
+      <html_type>Text</html_type>
+      <default_value>I accept the Terms &amp;amp; Conditions</default_value>
+      <is_required>1</is_required>
+      <is_searchable>0</is_searchable>
+      <is_search_range>0</is_search_range>
+      <weight>3</weight>
+      <is_active>1</is_active>
+      <is_view>0</is_view>
+      <text_length>255</text_length>
+      <note_columns>60</note_columns>
+      <note_rows>4</note_rows>
+      <column_name>checkbox_text_15</column_name>
+      <in_selector>0</in_selector>
+      <custom_group_name>Contribution_Page_terms_and_conditions</custom_group_name>
+    </CustomField>
+    <CustomField>
+      <name>Terms_and_Conditions_File</name>
+      <label>Terms and Conditions File</label>
+      <data_type>Link</data_type>
+      <html_type>Link</html_type>
+      <is_required>0</is_required>
+      <is_searchable>0</is_searchable>
+      <is_search_range>0</is_search_range>
+      <weight>4</weight>
+      <is_active>1</is_active>
+      <is_view>0</is_view>
+      <text_length>255</text_length>
+      <note_columns>60</note_columns>
+      <note_rows>4</note_rows>
+      <column_name>terms_and_conditions_file_16</column_name>
+      <in_selector>0</in_selector>
+      <custom_group_name>Contribution_Page_terms_and_conditions</custom_group_name>
+    </CustomField>
+    <CustomField>
+      <name>Link_Label</name>
+      <label>Link Label</label>
+      <data_type>String</data_type>
+      <html_type>Text</html_type>
+      <default_value>Terms &amp;amp; Conditions</default_value>
+      <is_required>1</is_required>
+      <is_searchable>0</is_searchable>
+      <is_search_range>0</is_search_range>
+      <weight>5</weight>
+      <is_active>1</is_active>
+      <is_view>0</is_view>
+      <text_length>255</text_length>
+      <note_columns>60</note_columns>
+      <note_rows>4</note_rows>
+      <column_name>link_label_17</column_name>
+      <in_selector>0</in_selector>
+      <custom_group_name>Contribution_Page_terms_and_conditions</custom_group_name>
+    </CustomField>
+    <CustomField>
+      <name>Terms_Conditions</name>
+      <label>Terms &amp; Conditions</label>
+      <data_type>Link</data_type>
+      <html_type>Link</html_type>
+      <is_required>0</is_required>
+      <is_searchable>0</is_searchable>
+      <is_search_range>0</is_search_range>
+      <weight>1</weight>
+      <is_active>1</is_active>
+      <is_view>1</is_view>
+      <text_length>255</text_length>
+      <note_columns>60</note_columns>
+      <note_rows>4</note_rows>
+      <column_name>terms_conditions_21</column_name>
+      <in_selector>0</in_selector>
+      <custom_group_name>Contribution_terms_and_conditions_acceptance</custom_group_name>
+    </CustomField>
+    <CustomField>
+      <name>Source</name>
+      <label>Source</label>
+      <data_type>String</data_type>
+      <html_type>Text</html_type>
+      <is_required>0</is_required>
+      <is_searchable>0</is_searchable>
+      <is_search_range>0</is_search_range>
+      <weight>2</weight>
+      <is_active>1</is_active>
+      <is_view>1</is_view>
+      <text_length>255</text_length>
+      <note_columns>60</note_columns>
+      <note_rows>4</note_rows>
+      <column_name>source_22</column_name>
+      <in_selector>0</in_selector>
+      <custom_group_name>Contribution_terms_and_conditions_acceptance</custom_group_name>
+    </CustomField>
   </CustomFields>
   <OptionGroups>
     <OptionGroup>
@@ -301,6 +432,36 @@
     <OptionValue>
       <label>Update Communication Preferences</label>
       <name>Update_Communication_Preferences</name>
+      <is_default>0</is_default>
+      <weight>1</weight>
+      <is_optgroup>0</is_optgroup>
+      <is_reserved>0</is_reserved>
+      <is_active>1</is_active>
+      <option_group_name>activity_type</option_group_name>
+    </OptionValue>
+    <OptionValue>
+      <label>Event Terms and Conditions Acceptance</label>
+      <name>Event Terms and Conditions Acceptance</name>
+      <is_default>0</is_default>
+      <weight>1</weight>
+      <is_optgroup>0</is_optgroup>
+      <is_reserved>0</is_reserved>
+      <is_active>1</is_active>
+      <option_group_name>activity_type</option_group_name>
+    </OptionValue>
+    <OptionValue>
+      <label>Contribution Terms and Conditions Acceptance</label>
+      <name>Contribution Terms and Conditions Acceptance</name>
+      <is_default>0</is_default>
+      <weight>1</weight>
+      <is_optgroup>0</is_optgroup>
+      <is_reserved>0</is_reserved>
+      <is_active>1</is_active>
+      <option_group_name>activity_type</option_group_name>
+    </OptionValue>
+    <OptionValue>
+      <label>GDPR Forget me</label>
+      <name>GDPR_FORGET_ME</name>
       <is_default>0</is_default>
       <weight>1</weight>
       <is_optgroup>0</is_optgroup>

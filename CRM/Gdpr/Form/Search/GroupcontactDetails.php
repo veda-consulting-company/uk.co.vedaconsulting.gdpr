@@ -1,5 +1,7 @@
 <?php
 
+use CRM_Gdpr_ExtensionUtil as E;
+
 /**
  * A custom contact search
  */
@@ -15,20 +17,20 @@ class CRM_Gdpr_Form_Search_GroupcontactDetails extends CRM_Contact_Form_Search_C
    * @return void
    */
   function buildForm(&$form) {
-    CRM_Utils_System::setTitle(ts('Search Group Subscription by Date Range'));
+    CRM_Utils_System::setTitle(E::ts('Search Group Subscription by Date Range'));
 
     //Name or Email
     $form->addElement(
       'text',
       'sort_name',
-      ts('Name'),
+      E::ts('Name'),
       CRM_Core_DAO::getAttribute('CRM_Contact_DAO_Contact', 'sort_name')
     );
 
     //Contact Field
-    $contactTypes = array('' => ts('- any contact type -')) + CRM_Contact_BAO_ContactType::getSelectElements();
+    $contactTypes = array('' => E::ts('- any contact type -')) + CRM_Contact_BAO_ContactType::getSelectElements();
     $form->add('select', 'contact_type',
-      ts('is...'),
+      E::ts('is...'),
       $contactTypes,
       FALSE,
       array('class' => 'crm-select2')
@@ -38,10 +40,10 @@ class CRM_Gdpr_Form_Search_GroupcontactDetails extends CRM_Contact_Form_Search_C
     // Arrange groups into hierarchical listing (child groups follow their parents and have indentation spacing in title)
     $allGroups = CRM_Core_PseudoConstant::group();
     $groupHierarchy = CRM_Contact_BAO_Group::getGroupsHierarchy($allGroups, NULL, '&nbsp;&nbsp;', TRUE);
-    $groupSelect = array('' => ts('- select group -')) + $groupHierarchy;
+    $groupSelect = array('' => E::ts('- select group -')) + $groupHierarchy;
 
     $form->add('select', 'group_id',
-      ts('in...'),
+      E::ts('in...'),
       $groupSelect,
       TRUE,
       array('class' => 'crm-select2')
@@ -55,10 +57,10 @@ class CRM_Gdpr_Form_Search_GroupcontactDetails extends CRM_Contact_Form_Search_C
       }
     }
     $form->addGroup($group_contact_status,
-      'group_contact_status', ts('Group Status')
+      'group_contact_status', E::ts('Group Status')
     );    
 
-    CRM_Core_Form_Date::buildDateRange($form, 'subscription_date', 1, '_low', '_high', ts('From'), FALSE);
+    CRM_Core_Form_Date::buildDateRange($form, 'subscription_date', 1, '_low', '_high', E::ts('From'), FALSE);
     $form->addElement('hidden', 'subscription_date_range_error');
 
     /**
@@ -91,11 +93,11 @@ class CRM_Gdpr_Form_Search_GroupcontactDetails extends CRM_Contact_Form_Search_C
   function &columns() {
     // return by reference
     $columns = array(
-      ts('Contact Id') => 'contact_id',
-      ts('Contact Type') => 'contact_type',
-      ts('Name') => 'sort_name',
-      ts('Status') => 'group_contact_status',
-      ts('Subscription Date') => 'subscription_date',
+      E::ts('Contact Id') => 'contact_id',
+      E::ts('Contact Type') => 'contact_type',
+      E::ts('Name') => 'sort_name',
+      E::ts('Status') => 'group_contact_status',
+      E::ts('Subscription Date') => 'subscription_date',
     );
     return $columns;
   }

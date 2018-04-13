@@ -1,5 +1,7 @@
 <?php
 
+use CRM_Gdpr_ExtensionUtil as E;
+
 /**
  * Form controller class
  *
@@ -31,23 +33,26 @@ class CRM_Gdpr_Form_Forgetme extends CRM_Core_Form {
     $this->addButtons(array(
       array(
         'type' => 'next',
-        'name' => ts('Forget me'),
+        'name' => E::ts('Forget me'),
         'spacing' => '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
         'isDefault' => TRUE,
       ),
       array(
         'type' => 'cancel',
-        'name' => ts('Cancel'),
+        'name' => E::ts('Cancel'),
       ),
     ));
-
+    $currentVer = CRM_Core_BAO_Domain::version(TRUE);
+    if (version_compare($currentVer, '4.7') < 0) {
+      $this->assign('lowerVersion', TRUE);
+    }
     parent::buildQuickForm();
   }
 
   public function postProcess() {
 
     if (!$this->_contactID) {
-      CRM_Core_Error::fatal(ts("Something went wrong. Please contact Admin."));
+      CRM_Core_Error::fatal(E::ts("Something went wrong. Please contact Admin."));
     }
 
     // Remove all the linked relationship records of this contact
@@ -88,11 +93,18 @@ class CRM_Gdpr_Form_Forgetme extends CRM_Core_Form {
     self::removeEntityRecords('Website', $params);
 
     // Remove all the IM records of this contact
-    $params = array(
-      'sequential' => 1,
-      'contact_id' => $this->_contactID,
-    );
-    self::removeEntityRecords('Im', $params);
+    // On Civi 4.6, 
+    // api IM get breaks and returning 500 error, because IM get api trying to check api/v3/IM.php instead of api/v3/Im.php. 
+    // on civi 4.7 IM get is working fine.n Need more investigation on this issue.
+    // check civi Version if its below than 4.7 then skip executing IM API.
+    $currentVer = CRM_Core_BAO_Domain::version(TRUE);
+    if (version_compare($currentVer, '4.7') >= 0) {
+      $params = array(
+        'sequential' => 1,
+        'contact_id' => $this->_contactID,
+      );
+      self::removeEntityRecords('Im', $params);
+    }
 
     // Finally make contact as anonymous
     self::makeContactAnonymous();
@@ -105,7 +117,7 @@ class CRM_Gdpr_Form_Forgetme extends CRM_Core_Form {
 
     // return, if entity or params are not passed
     if (!$entity || empty($params)) {
-      CRM_Core_Session::setStatus(ts("{$entity} records has not been deleted."), ts('Record not Deleted cleanly'), 'error');
+      CRM_Core_Session::setStatus(E::ts("{$entity} records has not been deleted."), E::ts('Record not Deleted cleanly'), 'error');
       return;
     }
 
@@ -132,18 +144,102 @@ class CRM_Gdpr_Form_Forgetme extends CRM_Core_Form {
 
   private function makeContactAnonymous() {
     if (!$this->_contactID) {
-      CRM_Core_Error::fatal(ts("Something went wrong. Please contact Admin."));
+      CRM_Core_Error::fatal(E::ts("Something went wrong. Please contact Admin."));
     }
     $params = array('id' => $this->_contactID);
     // Update contact Record
     $updateResult = CRM_Gdpr_Utils::CiviCRMAPIWrapper('Contact', 'anonymize', $params);
 
     if ($updateResult && !empty($updateResult['values'])) {
-      CRM_Core_Session::setStatus(ts("Contact has been made anonymous."), ts('Forget successful'), 'success');
+      CRM_Core_Session::setStatus(E::ts("Contact has been made anonymous."), E::ts('Forget successful'), 'success');
+
+      //MV:#7040, if successfully anonymized then record activity.
+      self::createForgetMeActivity($this->_contactID);
+
+      //MV:#7020, send email notification to DPO based on settings.
+      self::sendEmailNotificationToDPO($this->_contactID);
+
     } else {
-      CRM_Core_Session::setStatus(ts("Records has not been cleared."), ts('Record not Deleted cleanly. Please contact admin!'), 'error');
+      CRM_Core_Session::setStatus(E::ts("Records has not been cleared."), E::ts('Record not Deleted cleanly. Please contact admin!'), 'error');
     }
 
   }
 
+  public static function createForgetMeActivity($contactID) {
+    if (empty($contactID)) {
+      return FALSE;
+    }
+
+    $activityTypeIds = array_flip(CRM_Core_PseudoConstant::activityType(TRUE, FALSE, FALSE, 'name'));
+    //check Activity type exits before fire an API.
+    if (!empty($activityTypeIds[CRM_Gdpr_Constants::FORGET_ME_ACTIVITY_TYPE_NAME])) {
+      
+      $activityTypeId = $activityTypeIds[CRM_Gdpr_Constants::FORGET_ME_ACTIVITY_TYPE_NAME];
+      //Make logged in user record as source contact record
+      $sourceContactID = $contactID;
+      if ($loggedinUser = CRM_Core_Session::singleton()->getLoggedInContactID()) {
+        $sourceContactID = $loggedinUser;
+      }
+      $subject = ts('GDPR - Contact has been made anonymous');
+      $params = array(
+        'activity_type_id'  => $activityTypeId,
+        'source_contact_id' => $sourceContactID,
+        'target_id'         => $contactID,
+        'activity_date_time'=> date('Y-m-d H:i:s'),
+        'subject'           => $subject,
+        'status_id'         => 2, //COMPLETED
+      );
+
+      CRM_Gdpr_Utils::CiviCRMAPIWrapper('Activity', 'create', $params);
+    }
+  } //End function
+
+  public function sendEmailNotificationToDPO($contactID) {
+    if (empty($contactID)) {
+      return FALSE;
+    }
+
+    //Get GDPR settings and make sure the setting email notification to DPO has been enabled ?
+    $emailToDPO = $dpoContactEmail = $dpoContactId = FALSE;
+    $settings = CRM_Gdpr_Utils::getGDPRSettings();
+    if (!empty($settings['email_to_dpo'])) {
+      $emailToDPO = $settings['email_to_dpo'];
+      $dpoContactId = $settings['data_officer'];
+    }
+
+    //Get Data protection Officer email address
+    if ($dpoContactId) {
+      $apiParams = array(
+        'contact_id' => $dpoContactId,
+        'is_primary' => 1,
+        'sequential' => 1,
+      );
+      $apiResult = CRM_Gdpr_Utils::CiviCRMAPIWrapper('Email', 'get', $apiParams);
+      $emailDetails = $apiResult['values'][0];
+      $dpoContactEmail = !empty($emailDetails['email']) ? $emailDetails['email'] : FALSE;
+    }
+
+    //Now we have all details to send email notification to Data protection officer 
+    if ($emailToDPO && $dpoContactEmail) {
+
+      $defaultSubject = ts("{$contactID} has been anonymized");
+      $msg = ts("Contact ID : {$contactID} has been anonymized.");
+
+      //get the default domain email address.
+      list($domainEmailName, $domainEmailAddress) = CRM_Core_BAO_Domain::getNameAndEmail();
+
+      $subject = !empty($settings['email_dpo_subject']) ? $settings['email_dpo_subject'] : $defaultSubject;
+      $mailParams = array(
+        'subject' => $subject,
+        'text'    => NULL,
+        'html'    => $msg,
+        'toName'  => CRM_Core_DAO::getFieldValue('CRM_Contact_DAO_Contact', $dpoContactId, 'display_name'),
+        'toEmail' => $dpoContactEmail,
+        'from' => "\"{$domainEmailName}\" <{$domainEmailAddress}>",
+      );
+
+      $sent = CRM_Utils_Mail::send($mailParams);
+    }
+    return FALSE;
+  }
 }

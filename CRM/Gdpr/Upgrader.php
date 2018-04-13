@@ -27,15 +27,11 @@ class CRM_Gdpr_Upgrader extends CRM_Gdpr_Upgrader_Base {
    * created during the installation (e.g., a setting or a managed entity), do
    * so here to avoid order of operation problems.
    *
+   **/
   public function postInstall() {
-    $customFieldId = civicrm_api3('CustomField', 'getvalue', array(
-      'return' => array("id"),
-      'name' => "customFieldCreatedViaManagedHook",
-    ));
-    civicrm_api3('Setting', 'create', array(
-      'myWeirdFieldSetting' => array('id' => $customFieldId, 'weirdness' => 1),
-    ));
-  }*/
+    $this->executeCustomDataFile('xml/CustomData_v1.xml');
+    $this->executeCustomDataFile('xml/CustomGroupData.xml');
+  }
 
   /**
    * Example: Run an external SQL script when the module is uninstalled.
@@ -147,6 +143,7 @@ class CRM_Gdpr_Upgrader extends CRM_Gdpr_Upgrader_Base {
    */
   public function upgrade_1201() {
     $this->ctx->log->info('Applying update 1.2.0.1');
+    CRM_Core_ManagedEntities::singleton(TRUE)->reconcileEnabledModules();
     $this->executeCustomDataFile('xml/CustomGroupData.xml');
     return TRUE;
   }
@@ -164,6 +161,33 @@ class CRM_Gdpr_Upgrader extends CRM_Gdpr_Upgrader_Base {
     $this->executeSqlFile($sql_file);
     return TRUE;
   }
+
+  /**
+   * Perform upgrade to version 1.2.0.3
+   *
+   * @return TRUE on success
+   * @throws Exception
+   */
+  public function upgrade_1203() {
+    $this->ctx->log->info('Applying update 1.2.0.3');
+    // Reconcile managed entity for upgrade v2.0 -> v2.2.1
+    CRM_Core_ManagedEntities::singleton(TRUE)->reconcileEnabledModules();
+    $this->executeCustomDataFile('xml/CustomGroupData.xml');
+    return TRUE;
+  }
+
+  /**
+   * Perform upgrade to version 1.2.0.4
+   *
+   * @return TRUE on success
+   * @throws Exception
+   */
+  public function upgrade_1204() {
+    $this->ctx->log->info('Applying update 1.2.0.4, to create activity type forget me');
+    $this->executeCustomDataFile('xml/CustomGroupData.xml');
+    return TRUE;
+  }
+
 
   /**
    * Example: Run an external SQL script when the module is uninstalled.

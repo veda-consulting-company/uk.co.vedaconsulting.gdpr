@@ -14,6 +14,9 @@ form#EventInfo .custom-group-Event_terms_and_conditions {
 	margin-left: 15px;
 	margin-bottom: 15px;
 }
+.group-channel-div label {
+  font-weight: bold;
+}
 .group-description {
 	display: inline-block;
 	margin: 1em 1em 1em 2.3em;
@@ -31,3 +34,8 @@ form#EventInfo .custom-group-Event_terms_and_conditions {
 	display: unset;
 }	
 /* END */
+
+
+.crm-gdpr-dashboard-settings-form-block div#help ul li {
+	background-image: unset;
+}

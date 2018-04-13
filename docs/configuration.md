@@ -20,7 +20,7 @@ This is where you can choose the title you want to give contacts that have been 
 This is where you can upload your Data Policy. These settings relate to sitewise agreements such as Data Policy or Terms and Conditions. These settings will apply in the Communications Preferences page and when Terms and Conditions are used with Events.
 ![Data policy screenshot](/images/data-policy.png)
 6. Terms & Conditions: Events and Contribution Pages
-his is where you can upload your Terms & Conditions. You can set default files for your Terms & Conditions. You can override these in the settings for individual Events and Contribution Pages.
+This is where you can upload your Terms & Conditions. You can set default files for your Terms & Conditions. You can override these in the settings for individual Events and Contribution Pages.
 ![Terms & Conditions: Events and Contribution Pages screenshot](/images/tc.png)
 
 
