@@ -22,4 +22,4 @@ The GDPR dashboard will show the contacts who meet the criteria that have been c
 
 Clicking on the number will then present the contacts who have been identified, from the results you can perform an action, for example add to a group for a final communication or delete the contacts if they are invalid.
 
-![Communication Preferences Main](/images/actions.png)
+![Communication Preferences Main](/images/inactive-actions.png)
