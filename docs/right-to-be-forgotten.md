@@ -13,4 +13,6 @@ On pressing the button for a contact, the following actions will take place
 * Anonymize contact **Last Name** will be amended to the name set in the GDPR settings
 * Remove the contact's email/address/phone/IM/website
 * Cancel all active memberships and update to 'GDPR Cancelled' status using staus override.
+* An activity will be created against the contact to show that they had been anonomised
+* Optionally an email with the contact ID will be sent to the DPO if the settings have been enabled
 
