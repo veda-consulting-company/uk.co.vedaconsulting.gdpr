@@ -2,7 +2,7 @@
 
 ## Steps
 
-Use the following steps to install CiviVolunteer.
+Use the following steps to install GDPR.
 
 1. **Administer > System Settings > Extensions**
 1. **Add New**
