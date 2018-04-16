@@ -392,9 +392,9 @@ function gdpr_civicrm_navigationMenu( &$params ) {
  * implementation of hook_civicrm_token
  */
 function gdpr_civicrm_tokens( &$tokens ){
-  $tokens['contact'] = array(
-    'contact.comm_pref_supporter_url' => E::ts("Communication Preferences URL"),
-    'contact.comm_pref_supporter_link' => E::ts("Communication Preferences Link"),
+  $tokens['CommunicationPreferences'] = array(
+    'CommunicationPreferences.comm_pref_supporter_url' => E::ts("Communication Preferences URL"),
+    'CommunicationPreferences.comm_pref_supporter_link' => E::ts("Communication Preferences Link"),
   );
 }
 
@@ -402,12 +402,12 @@ function gdpr_civicrm_tokens( &$tokens ){
  * implementation of hook_civicrm_tokenValues
  */
 function gdpr_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = array(), $context = null) {
-  if (!empty($tokens['contact'])) {
+  if (!empty($tokens['CommunicationPreferences'])) {
     foreach ($cids as $cid) {
       $commPrefURL = CRM_Gdpr_CommunicationsPreferences_Utils::getCommPreferenceURLForContact($cid);
       $link = sprintf("<a href='%s' target='_blank'>%s</a>",$commPrefURL, E::ts('Communication Preferences'));
-      $values[$cid]['contact.comm_pref_supporter_url'] = $commPrefURL;
-      $values[$cid]['contact.comm_pref_supporter_link'] = html_entity_decode($link);
+      $values[$cid]['CommunicationPreferences.comm_pref_supporter_url'] = $commPrefURL;
+      $values[$cid]['CommunicationPreferences.comm_pref_supporter_link'] = html_entity_decode($link);
     }
   }
 }
