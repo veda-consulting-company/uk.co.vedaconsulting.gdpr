@@ -9,22 +9,6 @@ Data controllers must ensure that contracts set out:
 - the type of data processed and categories of data subject;
 - the obligations and rights of the data controller.
 
-Not only this, but contracts must also obligate the data processor to:
-
-- process personal data only on documented instructions from the data controller;
-- impose confidentiality obligations on persons authorised to process the personal data;
-- ensure the security of the personal data;
-- comply with additional rules restricting the appointment of sub-processors;
-- assist the data controller to comply with data subjects’ rights;
-- assist the data controller to comply with data security requirements;
-- return or destroy the personal data at the end of the processing arrangement;
-- provide the controller with all information necessary for the data controller to demonstrate compliance; and
-- notify the data controller immediately if it believes that any instructions from the data controller are illegal.
-
-Data controllers transferring data to processors will need to ensure that all contracts contain all of the information above, whether it be on their standard terms or on any agreement negotiated with a third party.
-
-Even if the other party has provided the agreement, it will be the data controller’s responsibility to ensure that the provisions listed above are included. This applies not only where an agreement is agreed solely or mainly for the purpose of data processing, but to any arrangement where a data controller will be passing personal data to a third party for processing.
-
 # Membership terms & conditions configuration
 
 - Navigate to Manage Contribution pages and select your membership contribution page
