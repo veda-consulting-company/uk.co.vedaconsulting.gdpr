@@ -219,7 +219,7 @@ class CRM_Gdpr_Form_Forgetme extends CRM_Core_Form {
       $dpoContactEmail = !empty($emailDetails['email']) ? $emailDetails['email'] : FALSE;
     }
 
-    //Now we have all details to send email notification to Data protection officer 
+    //Now we have all details to send email notification to Point of Contact/DPO
     if ($emailToDPO && $dpoContactEmail) {
 
       $defaultSubject = ts("{$contactID} has been anonymized");

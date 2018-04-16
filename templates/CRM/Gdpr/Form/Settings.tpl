@@ -3,12 +3,12 @@
 
 <div>
 
-<h3>{ts}Data Protection Officer{/ts}</h3>
+<h3>{ts}Point of Contact{/ts}</h3>
 
 <div class="crm-block crm-form-block crm-gdpr-settings-form-block">
 
 <div id="help">
-	{ts}Set your organisation's data protection officer.{/ts}
+	{ts}Set your organisation's point of contact for data protection compliance.{/ts}
 </div>
 
 <div class="crm-section">
@@ -16,7 +16,7 @@
 	<div class="content">
 		{$form.data_officer.html}
 		<br />
-         <span class="description"><i>{ts}Under the GDPR, you must appoint a data protection officer (DPO).{/ts} <a href='https://ico.org.uk/for-organisations/data-protection-reform/overview-of-the-gdpr/accountability-and-governance/#dpo' target='_blank'>More info</a></i></span>
+         <span class="description"><i>{ts}Add the person designated to be responsible for data protection compliance, such as the data protection officer (DPO).{/ts} <a href='https://ico.org.uk/for-organisations/data-protection-reform/overview-of-the-gdpr/accountability-and-governance/#dpo' target='_blank'>More info</a></i></span>
 	</div>
 	<div class="clear"></div>
 </div>
