@@ -102,7 +102,7 @@ class CRM_Gdpr_Utils {
 civicrm_subscription_history s
 INNER JOIN civicrm_contact c ON s.contact_id = c.id
 INNER JOIN civicrm_group g ON g.id = s.group_id
-WHERE s.contact_id = %1 ORDER BY s.date DESC";
+WHERE s.contact_id = %1 AND g.is_active = 1 AND g.visibility = 'Public Pages' ORDER BY s.date DESC";
     $resource = CRM_Core_DAO::executeQuery($sql, array( 1 => array($contactId, 'Integer')));
     while ($resource->fetch()) {
       $groupSubscriptions[$resource->id] = array(
