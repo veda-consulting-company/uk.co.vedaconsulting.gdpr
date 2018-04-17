@@ -1,5 +1,19 @@
 # GDPR #
 
+### Change Log ###
+
+v2.2
+* Bulk Email Token fix
+* Documentation Updates
+* Rename DPO contact reference
+* Wordpress front end URL for comms preferences
+* Only show active profiles on the comms references confiuration page
+* CiviCRM 4.6 IM call conditioned
+
+v2.1
+* Various fixes
+* 4.6 Compatibility 
+
 ### Overview ###
 
 Extension to support General Data Protection Regulation
