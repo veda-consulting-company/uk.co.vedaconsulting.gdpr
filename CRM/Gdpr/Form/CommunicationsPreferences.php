@@ -110,6 +110,7 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
       $text_area_attributes
     );
     $groups = $this->getGroups();
+    $group_containers = array();
     foreach ($groups as $group) {
       $container_name = 'group_' . $group['id'];
       $this->groupContainerNames[] = $container_name;
