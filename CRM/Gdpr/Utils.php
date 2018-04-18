@@ -296,7 +296,7 @@ WHERE s.contact_id = %1 ORDER BY s.date DESC";
     $actTypeIdsStr = implode(',', $settings['activity_type']);
 
     $orderBy = $limit = '';
-    if ($params['context'] == 'activitycontactlist') {
+    if (!empty($params['context']) && $params['context'] == 'activitycontactlist') {
       $params['offset'] = ($params['page'] - 1) * $params['rp'];
       $params['rowCount'] = $params['rp'];
       $params['sort'] = CRM_Utils_Array::value('sortBy', $params);

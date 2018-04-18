@@ -271,7 +271,7 @@ function gdpr_civicrm_post($op, $objectName, $objectId, &$objectRef) {
       // Acceptance not made on behalf of another.
       if (empty($objectRef->registered_by_id)) {
         $tc = new CRM_Gdpr_SLA_Event($objectRef->event_id);
-        $isRegisterForm = 'civicrm/event/register' == CRM_Utils_System::getUrlPath();
+        $isRegisterForm = 'civicrm/event/register' == CRM_Utils_System::currentPath();
         if ($isRegisterForm && $tc->isEnabled(TRUE)) {
           CRM_Gdpr_SLA_Utils::recordSLAAcceptance($objectRef->contact_id);
           $tc->recordAcceptance($objectRef->contact_id);
@@ -426,6 +426,8 @@ function gdpr_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = array(
 function gdpr_civicrm_summaryActions( &$actions, $contactID ) {
   $actions['comm_pref'] = array(
     'title' => 'Communication Preferences Link',
+    //need a weight parameter here, Contact BAO looking for weight key and returning notice message. 
+    'weight' => 0, 
     'ref' => 'comm_pref',
     'key' => 'comm_pref',
     'href' => CRM_Gdpr_CommunicationsPreferences_Utils::getCommPreferenceURLForContact($contactID, TRUE),
