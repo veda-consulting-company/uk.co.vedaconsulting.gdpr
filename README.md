@@ -2,6 +2,14 @@
 
 ### Change Log ###
 
+v2.3
+* Navigation from Dashboard to settings page requires administer CiviCRM permission https://github.com/veda-consulting/uk.co.vedaconsulting.gdpr/issues/64
+* Fatal error when event registered https://github.com/veda-consulting/uk.co.vedaconsulting.gdpr/issues/62
+* Contact GDPR Tab to only display public group history https://github.com/veda-consulting/uk.co.vedaconsulting.gdpr/issues/61
+* Data policy text/label changes not reflected on the comms preferences page https://github.com/veda-consulting/uk.co.vedaconsulting.gdpr/issues/59
+* Communications Preferences Settings Preview link not working https://github.com/veda-consulting/uk.co.vedaconsulting.gdpr/issues/58
+* Actions dropdown disabled with selected record only https://github.com/veda-consulting/uk.co.vedaconsulting.gdpr/issues/56
+
 v2.2
 * Bulk Email Token fix
 * Documentation Updates
