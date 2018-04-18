@@ -271,7 +271,7 @@ function gdpr_civicrm_post($op, $objectName, $objectId, &$objectRef) {
       // Acceptance not made on behalf of another.
       if (empty($objectRef->registered_by_id)) {
         $tc = new CRM_Gdpr_SLA_Event($objectRef->event_id);
-        $isRegisterForm = 'civicrm/event/register' == CRM_Utils_System::getUrlPath();
+        $isRegisterForm = 'civicrm/event/register' == CRM_Utils_System::currentPath();
         if ($isRegisterForm && $tc->isEnabled(TRUE)) {
           CRM_Gdpr_SLA_Utils::recordSLAAcceptance($objectRef->contact_id);
           $tc->recordAcceptance($objectRef->contact_id);
