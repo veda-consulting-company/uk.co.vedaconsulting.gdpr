@@ -234,7 +234,7 @@ EOT;
    * @return string
    */
   static function getIntro() {
-    return self::getSetting('sla_agreement_text', 'Please read and accept our Data Policy');
+    return self::getSetting('sla_agreement_text', '');
   }
 
   /**
