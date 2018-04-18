@@ -5,3 +5,11 @@
 </div>
 
 {include file="CRM/Contact/Form/Search/Custom.tpl"}
+
+{literal}
+<script type="text/javascript">
+	CRM.$(function($){
+		$('form#Custom').removeClass('crm-ajax-selection-form');
+	});
+</script>
+{/literal}
