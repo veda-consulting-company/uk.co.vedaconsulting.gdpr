@@ -38,6 +38,10 @@
 <h3>{ts}Group Subscription Log{/ts}</h3>
 
 <div class="crm-block crm-form-block crm-grouo-subscription-list-form-block">
+    <div class="list_public_group_div">
+      <input type="checkbox" name="display_public_group" id="display_public_group" value="1">
+      <label for="display_public_group"> List only public groups</label>
+    </div>
     <div>
       <table class="selector row-highlight" id="GroupSubscriptionListTable">
         <thead class="sticky">
@@ -49,7 +53,7 @@
         </thead>
         <tbody>
         {foreach from=$groupSubscriptions key=id item=groupSubscription}
-        <tr>
+        <tr class="{if !$groupSubscription.is_public} display_all_groups {/if} {if !$groupSubscription.is_active} in_active_groups {/if}">
           <td>{$groupSubscription.title}</td>
           <td>{$groupSubscription.status}</td>
           <td>{$groupSubscription.date}</td>
@@ -65,6 +69,18 @@
 cj(document).ready( function() {
   cj('#GroupSubscriptionListTable').DataTable({
     "order": [[ 2, "desc" ]],
+  });
+
+  cj('#display_public_group').prop('checked', true);
+  cj('#GroupSubscriptionListTable .display_all_groups').hide();
+
+  cj('#display_public_group').click(function(){
+    if (cj(this).prop('checked')) {
+      cj('#GroupSubscriptionListTable .display_all_groups').hide();
+    }
+    else{
+      cj('#GroupSubscriptionListTable .display_all_groups').show();
+    }
   });
 });
 </script>

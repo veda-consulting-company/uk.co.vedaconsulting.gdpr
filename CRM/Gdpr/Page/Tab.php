@@ -22,6 +22,7 @@ class CRM_Gdpr_Page_Tab extends CRM_Core_Page {
     $isGdprAdmin = CRM_Core_Permission::check('administer GDPR');
     $this->assign('isGdprAdmin', $isGdprAdmin);
 
+    CRM_Core_Resources::singleton()->addStyleFile('uk.co.vedaconsulting.gdpr', 'css/gdpr.css');
 
     parent::run();
   }

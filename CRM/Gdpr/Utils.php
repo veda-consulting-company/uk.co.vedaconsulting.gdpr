@@ -98,11 +98,11 @@ class CRM_Gdpr_Utils {
     }
 
     $groupSubscriptions = array();
-    $sql = "SELECT c.sort_name, g.title, s.date, s.id, s.contact_id, s.group_id, s.status FROM
+    $sql = "SELECT c.sort_name, g.title, s.date, s.id, s.contact_id, s.group_id, s.status, g.is_active, CASE WHEN g.visibility = 'Public Pages' THEN 1 ELSE 0 END as is_public FROM
 civicrm_subscription_history s
 INNER JOIN civicrm_contact c ON s.contact_id = c.id
 INNER JOIN civicrm_group g ON g.id = s.group_id
-WHERE s.contact_id = %1 AND g.is_active = 1 AND g.visibility = 'Public Pages' ORDER BY s.date DESC";
+WHERE s.contact_id = %1 ORDER BY s.date DESC";
     $resource = CRM_Core_DAO::executeQuery($sql, array( 1 => array($contactId, 'Integer')));
     while ($resource->fetch()) {
       $groupSubscriptions[$resource->id] = array(
@@ -113,6 +113,8 @@ WHERE s.contact_id = %1 AND g.is_active = 1 AND g.visibility = 'Public Pages' OR
         'date' => $resource->date,
         'title' => $resource->title,
         'status' => $resource->status,
+        'is_active' => $resource->is_active,
+        'is_public' => $resource->is_public,
       );
     }
 

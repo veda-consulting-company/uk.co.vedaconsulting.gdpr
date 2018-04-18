@@ -39,3 +39,10 @@ form#EventInfo .custom-group-Event_terms_and_conditions {
 .crm-gdpr-dashboard-settings-form-block div#help ul li {
 	background-image: unset;
 }
+
+.crm-grouo-subscription-list-form-block .in_active_groups td{
+	color: red;
+}
+.crm-grouo-subscription-list-form-block .list_public_group_div {
+	padding: 10px 5px 10px 10px;
+}
