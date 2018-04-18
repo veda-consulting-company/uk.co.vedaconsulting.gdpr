@@ -54,7 +54,7 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
     foreach (array(self::SETTING_NAME, self::GROUP_SETTING_NAME) as $setting_name) {
       $serialized = CRM_Core_BAO_Setting::getItem(self::SETTING_GROUP, $setting_name);
       if (!$serialized && $use_defaults)  {
-        $settings[$setting_name] = $defaults[$setting_name];
+        $settings[$setting_name] = !empty($defaults[$setting_name]) ? $defaults[$setting_name] : array();
       }
       else {
         $settings[$setting_name] = $serialized ? unserialize($serialized) : array();
