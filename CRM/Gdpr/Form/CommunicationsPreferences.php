@@ -191,6 +191,12 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
     $this->assign('descriptions', $descriptions);
     $this->assign('groups_elements', $groups_elements);
     $this->assign('group_containers', $group_containers);
+    // Use the current logged in user for the preview. 
+    $current_cid = CRM_Core_Session::singleton()->getLoggedInContactID();
+    if ($current_cid) {
+      $url = CRM_Gdpr_CommunicationsPreferences_Utils::getCommPreferenceURLForContact($current_cid);
+      $this->assign('communications_preferences_page_url', $url);
+    }
 
     $this->addButtons(array(
       array(
