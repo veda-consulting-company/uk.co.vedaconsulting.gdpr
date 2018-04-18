@@ -44,7 +44,7 @@
 </div>
 {/if}
 
-{if call_user_func(array('CRM_Core_Permission','check'), 'administer CiviCRM')}
+{if call_user_func(array('CRM_Core_Permission','check'), 'administer GDPR')}
 <h3>{ts}GDPR Settings{/ts}</h3>
 <div class="crm-block crm-form-block crm-gdpr-dashboard-settings-form-block">
     <div>

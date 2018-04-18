@@ -3,7 +3,9 @@
 
 <div>
    <div class="help">
-   {ts}Configure the display of the <a href="/civicrm/gdpr/comms-prefs/update" target="blank">Communications Preferences page</a>.{/ts}
+   {if $communications_preferences_page_url }
+   {ts}Configure the display of the <a title="Your personalised GDPR page. Do not distribute this URL as it allows access to your data. Use tokens or the Contact Action link instead." href="{$communications_preferences_page_url}" target="blank">Communications Preferences page</a>.{/ts}
+   {/if}
    </div>
   <div class="crm-block crm-form-block crm-gdpr-comms-prefs-form-block">
   {foreach from=$page_elements item=elementName}
