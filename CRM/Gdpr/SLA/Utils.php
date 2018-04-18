@@ -210,12 +210,12 @@ EOT;
   }
 
   /**
-   * Gets the checkbox text Terms & Conditions agreement.
+   * Gets the checkbox text for agreement.
    *
    *  @return string
    */
   static function getCheckboxText() {
-    return self::getSetting('sla_checkbox_text', 'I accept the Terms &amp; Conditions.');
+    return self::getSetting('sla_checkbox_text', 'I accept the Data Policy.');
   }
 
   /**
@@ -225,6 +225,16 @@ EOT;
    */
   static function getPageTitle() {
     return self::getSetting('sla_page_title', 'Terms &amp; Conditions');
+  }
+
+  /**
+   * Gets the introductory text, which is optionally displayed when presenting the agreement
+   * checkbox.
+   *
+   * @return string
+   */
+  static function getIntro() {
+    return self::getSetting('sla_agreement_text', '');
   }
 
   /**

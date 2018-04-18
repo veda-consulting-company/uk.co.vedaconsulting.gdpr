@@ -71,11 +71,17 @@
 		<!-- GDPR Terms and conditions url link and checkbox -->
     <fieldset class="data-policy-fieldset">
 		{if $isContactDueAcceptance}
+      <div class="data-policy-intro section-sescription">
+          {$tcIntro}
+      </div>
       <div class="crm-section data-policy">
         <div class="label">
           <label><span class="crm-marker" title="This field is required.">*</span></label>
         </div>
         <div class="content">
+          <div class="data-policy-link">
+          {$tcLink}
+          </div>
           {$form.$tcFieldName.html}
           <label for="{$tcFieldName}">{$tcFieldlabel}</label>
         </div>

@@ -131,7 +131,10 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
       $termsConditionsField = $this->getTermsAndConditionFieldId();
       
       $tcFieldName  = 'custom_'.$termsConditionsField;
-      $tcFieldlabel = E::ts("I have read and agree to the <a href='%1' target='_blank'>%2</a>", array(1 => $gdprTermsConditionsUrl, 2 => $gdprTermsConditionslabel));
+      $tcLink = E::ts("<a href='%1' target='_blank'>%2</a>", array(1 => $gdprTermsConditionsUrl, 2 => $gdprTermsConditionslabel));
+      $this->assign('tcLink', $tcLink);
+      $this->assign('tcIntro', CRM_Gdpr_SLA_Utils::getIntro());
+      $tcFieldlabel = CRM_Gdpr_SLA_Utils::getCheckboxText();
       $this->assign('tcFieldlabel', $tcFieldlabel);
       $this->assign('tcFieldName', $tcFieldName);
       $this->assign('isContactDueAcceptance', $isContactDueAcceptance);
