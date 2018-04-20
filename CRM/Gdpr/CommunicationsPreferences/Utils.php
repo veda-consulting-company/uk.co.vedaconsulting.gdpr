@@ -72,18 +72,16 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
    * @return array keyed by profile id, with value the profile label.
    */
   public static function getProfileOptions() {
-    $result = civicrm_api3('UFGroup', 'get', array(
-      'sequential' => 1,
-      'group_type' => "Individual,Contact",
-      //To List out the active profiles. Because we are using CIVI core methods to build a profile in public Interface which might break if the profile is inactive.
-      'is_active'  => 1,
-    ));
-    $options = array(0 => '-- Please select --');
-    if (!empty($result['values'])) {
-      foreach ($result['values'] as $profile) {
-        $options[$profile['id']] = $profile['title'];
-      }
-    }
+    $types = array('Individual', 'Contact');
+    
+    //To get Profile with array of group type
+    //using core method to get the profiles, because group_type has been imploded with (,) in database civicrm_uf_group. 
+    //for eg group type can be Individual,Contact or Contact,Individual . so api didn't return all the result where profiles with group type Individual or Contact. (have to mention 'Individual,Contact')
+    //we can use core method to get all profiles which are Individual or Contact or Both
+    
+    $profiles = CRM_Core_BAO_UFGroup::getProfiles($types);
+
+    $options = array(0 => '-- Please select --') + $profiles;
     return $options;
   }
 
