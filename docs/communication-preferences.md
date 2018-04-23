@@ -125,11 +125,16 @@ Finally the GDPR tab against the supporter will also reflect all the changes, in
 
 ### Tokens
 
-Two new tokens have been introduced, to allow you to request updates from supporters. The tokens will automatically add the checksum to the links supporters receive, so that they do not need to login in order to update their communication preferences. We would expect most users of the GDPR extension to replace the traditional opt out and unsubscribe links with this single communication preferences page.
+Four new tokens have been introduced, to allow you to request updates from supporters. The tokens will automatically add the checksum to the links supporters receive, so that they do not need to login in order to update their communication preferences. We would expect most users of the GDPR extension to replace the traditional opt out and unsubscribe links with this single communication preferences page.
 
 ![Supporter Communication Preferences](/images/communication-preferences-tokens.png)
 
 * **Communicaion Preferences Link** This token creates a clickable link the in template, with the description takens from the settings, including the checksum of the contact being communicated with. 
-* **Communicaion Preferences URL** This token creates a plain URL templateincluding the checksum of the contact being communicated with. For example this token could then be used for clickable images within outbound communications.
+* **Communicaion Preferences URL** This token creates a plain URL template including the checksum of the contact being communicated with. For example this token could then be used for clickable images within outbound communications.
+
+![Supporter Communication Preferences Bulk Mailing](/images/bulkcommspref.png)
+
+* **Communicaion Preferences Link (Bulk Mailing)** This token creates a clickable link the in a Bulk Mailing template, with the description takens from the settings, including the checksum of the contact being communicated with. 
+* **Communicaion Preferences URL (Bulk Mailing)** This token creates a plain URL template including the checksum of the contact being communicated with. For example this token could then be used for clickable images within outbound communications.
 
 
