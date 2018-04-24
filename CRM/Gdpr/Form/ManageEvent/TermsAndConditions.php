@@ -73,7 +73,10 @@ class CRM_Gdpr_Form_ManageEvent_TermsAndConditions extends CRM_Event_Form_Manage
     }
     return $fields[$field_name] ? $fields[$field_name] : array();
   }
-
+  
+  /**
+   * Fetches a Custom Field definition from the API.
+   */
   private function lookupFieldById($field_id) {
     static $fields = array();
     if (!$fields) {
