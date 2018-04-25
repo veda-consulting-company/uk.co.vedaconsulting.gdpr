@@ -53,12 +53,44 @@ class CRM_Gdpr_Form_ManageEvent_TermsAndConditions extends CRM_Event_Form_Manage
       $group = reset($tree);
       if (!empty($group['fields'])) {
         foreach ($group['fields'] as $fid => $field) {
-          $fields[$field['name']] = $field;
+          if (!$field) {
+            continue;
+          }
+          if (!empty($field['name'])) {
+            $fields[$field['name']] = $field;
+          }
+          else {
+            // CiviCRM < 4.7.21 do not include name property
+            // in the tree. We need to get more data.
+            $api_field = $this->lookupFieldById($fid);
+            if (!empty($api_field['name'])) {
+              $field = array_merge($api_field, $field);
+              $fields[$field['name']] = $field;
+            }
+          }
         }
       }
     }
     return $fields[$field_name] ? $fields[$field_name] : array();
   }
+  
+  /**
+   * Fetches a Custom Field definition from the API.
+   */
+  private function lookupFieldById($field_id) {
+    static $fields = array();
+    if (!$fields) {
+      $results = civicrm_api3('CustomField', 'get', array(
+        'custom_group_id' => $this->groupId,
+        'sequential' => 0,
+      ));
+      if (!empty($results['values'])) {
+        $fields = $results['values'];
+      }
+    }
+    return isset($fields[$field_id]) ? $fields[$field_id] : array();
+  }
+
 
   /**
    * Gets the element for a custom field by the name of the field.
