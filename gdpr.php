@@ -138,6 +138,7 @@ function gdpr_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) {
   _gdpr_civix_civicrm_alterSettingsFolders($metaDataFolders);
 }
 
+
 /**
  * Implementation of hook_civicrm_alterContent
  *
@@ -462,7 +463,9 @@ function gdpr_civicrm_permission(&$permissions) {
   }
 }
 
-
+/**
+ * Implements hook_civicrm_pageRun()
+ */
 function gdpr_civicrm_pageRun( &$page ) {
   $pageName = $page->getVar('_name');
   if($pageName == 'CRM_Contact_Page_View_Summary') {
@@ -479,5 +482,8 @@ function gdpr_civicrm_pageRun( &$page ) {
       $accept_date = date('d/m/Y', strtotime($accept_activity['activity_date_time']));
       $page->assign('lastAcceptanceDate', $accept_date);
     }
+  }
+  if ($pageName == 'CRM_Event_Page_EventInfo') {
+    CRM_Core_Resources::singleton()->addStyleFile('uk.co.vedaconsulting.gdpr', 'css/gdpr.css');
   }
 }
