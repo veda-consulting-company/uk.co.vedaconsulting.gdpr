@@ -4,7 +4,7 @@
 <div>
    <div class="help">
    {if $communications_preferences_page_url }
-   {ts}Configure the display of the <a title="Your personalised GDPR page. Do not distribute this URL as it allows access to your data. Use tokens or the Contact Action link instead." href="{$communications_preferences_page_url}" target="blank">Communications Preferences page</a>.{/ts}
+   {ts}Configure the display of the <a title="Your personalised GDPR page. Do not distribute this URL as it allows access to your data. Use tokens or the Contact Action link instead." href="index.php?option=com_civicrm&task=civicrm/gdpr/comms-prefs/update" target="blank">Communications Preferences page</a>.{/ts}
    {/if}
    </div>
   <div class="crm-block crm-form-block crm-gdpr-comms-prefs-form-block">
