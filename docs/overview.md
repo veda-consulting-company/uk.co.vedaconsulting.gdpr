@@ -33,7 +33,7 @@ Future releases will include
 * Allowing all exports to be produced with passwords if produced with the MS Excel Extension.
 * Ensure Scheduled reminders have a setting to exclude those contacts who have no bulk emails set if the scheduled reminder is deemed to be marketing oriented as a posed to transactional.
 * Allow communications preference options to be controlled by the groups the contact belongs to, this will allow members to view more groups than non members as an example
-* Include a more prominent block in mass mailings for users who 
+* Include a more prominent block in mass mailings for users who have not yet updated their commmunication preferences.
 
 We'd also like to take this opportunity to thank [Paul Ticher][Paul Ticher Site] for coming on board with this project as a consultant and expert in the sector.
 

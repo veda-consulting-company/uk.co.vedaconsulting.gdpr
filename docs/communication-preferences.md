@@ -137,4 +137,6 @@ Four new tokens have been introduced, to allow you to request updates from suppo
 * **Communicaion Preferences Link (Bulk Mailing)** This token creates a clickable link the in a Bulk Mailing template, with the description takens from the settings, including the checksum of the contact being communicated with. 
 * **Communicaion Preferences URL (Bulk Mailing)** This token creates a plain URL template including the checksum of the contact being communicated with. For example this token could then be used for clickable images within outbound communications.
 
+* hello hello
+
 
