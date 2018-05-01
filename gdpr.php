@@ -229,7 +229,7 @@ function gdpr_civicrm_buildForm($formName, $form) {
     CRM_Core_Resources::singleton()->addStyleFile('uk.co.vedaconsulting.gdpr', 'css/gdpr.css');
   }
   if ($formName == 'CRM_Event_Form_Registration_Register') {
-   CRM_Core_Resources::singleton()->addStyleFile('uk.co.vedaconsulting.gdpr', 'css/gdpr.css');
+    CRM_Core_Resources::singleton()->addStyleFile('uk.co.vedaconsulting.gdpr', 'css/gdpr.css');
     $tc = new CRM_Gdpr_SLA_Event($form->_eventId);
     if ($tc->isEnabled(TRUE)) {
       $tc->addField($form);
@@ -240,6 +240,23 @@ function gdpr_civicrm_buildForm($formName, $form) {
     $tc = new CRM_Gdpr_SLA_ContributionPage($form->_id);
     if ($tc->isEnabled(TRUE)) {
       $tc->addField($form);
+    }
+  }
+  if ($formName == 'CRM_Mailing_Form_Subscribe') {
+    $settings = CRM_Gdpr_CommunicationsPreferences_Utils::getSettings();
+    $settings = $settings[CRM_Gdpr_CommunicationsPreferences_Utils::SETTING_NAME];
+    if (!empty($settings['use_as_mailing_subscribe'])) {
+      $nullRef = NULL;
+      $cs = CRM_Utils_Request::retrieve('cs', 'String', $nullRef, FALSE, NULL, 'GET');
+      $cid = CRM_Utils_Request::retrieve('cid', 'Int', $nullRef, FALSE, NULL, 'GET');
+      $urlParams = array('reset' => 1);
+      if ($cid && $cs) {
+        $urlParams['cid'] = $cid;
+        $urlParams['cs'] = $cs;
+      }
+      $path = 'civicrm/gdpr/comms-prefs/update';
+      $commsPrefsUrl = CRM_Utils_System::url($path, $urlParams, TRUE, NULL, TRUE, TRUE);
+      CRM_Utils_System::redirect($commsPrefsUrl);
     }
   }
 }

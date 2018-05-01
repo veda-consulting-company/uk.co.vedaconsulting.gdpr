@@ -39,12 +39,20 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
       U::getProfileOptions()
     );
     $descriptions['profile'] = E::ts('Include a profile so the user can identify and check their details are up-to-date. It should  include a primary email address field.');
-
+    $this->add(
+      'advcheckbox',
+      'use_as_mailing_subscribe',
+      E::ts('Use as the mailing subscribe page'),
+      '',
+      false
+    );
+    $descriptions['use_as_mailing_subscribe'] = E::ts('Check to use the Communications Preferences page instead of the default Mailing Subscribe page.');
     // Let the template know about elements in this section.
     $page_elements = array(
       'page_title',
       'page_intro',
-      'profile'
+      'profile',
+      'use_as_mailing_subscribe'
     );
     $this->assign('page_elements', $page_elements);
     // Comms prefs channels
