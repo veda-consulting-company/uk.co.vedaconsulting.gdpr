@@ -117,7 +117,7 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
       'cp_tc_enable',
       ts('Enable Terms and Conditions for every Contribution Page')
     );
-    //If T+C is enabled for both Events Contribution Pages they will share the 
+    //If T+C is enabled for both Events Contribution Pages they will share the
     //following settings.
     $this->add(
       'select',
@@ -233,7 +233,7 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
     $settings['entity_tc_intro'] = $values['entity_tc_intro'];
     // Map the upload file element to setting name.
     $upload_elems = array(
-      'sla_tc_upload' => 'sla_tc', 
+      'sla_tc_upload' => 'sla_tc',
       'entity_tc_upload' => 'entity_tc',
     );
     foreach ($upload_elems as $elem => $setting) {
@@ -269,7 +269,7 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
 
   /**
    * Save an uploaded Terms and Conditions file.
-   *  @return string 
+   *  @return string
    *    Path of the saved file.
    */
   private function saveTCFile($element_name) {
@@ -280,6 +280,8 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
     if ($fileElement && !empty($fileElement->_value['name'])) {
       $config = CRM_Core_Config::singleton();
       $publicUploadDir = $config->imageUploadDir;
+      $delim = '/';
+      $publicUploadDir = substr($publicUploadDir, -1) == $delim ? $publicUploadDir : $publicUploadDir . $delim;
       $fileInfo = $fileElement->_value;
       $pathInfo = pathinfo($fileElement->_value['name']);
       if (empty($pathInfo['filename'])) {
@@ -288,17 +290,18 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
       // If necessary add a delta to the file name to avoid writing over an existing file.
       $delta = 0;
       $fileName = '';
+
       while (!$fileName) {
         $suffix = $delta ? '-' . $delta : '';
         $testName = $pathInfo['filename'] . $suffix . '.' . $pathInfo['extension'];
-        if (!file_exists($publicUploadDir . '/' . $testName)) {
+        if (!file_exists($publicUploadDir . $testName)) {
           $fileName = $testName;
         }
         $delta++;
       }
       // Move to public uploads directory and create file record.
       // This will be referenced in Activity custom field.
-      $saved = $fileElement->moveUploadedFile($publicUploadDir,$fileName);
+      $saved = $fileElement->moveUploadedFile($publicUploadDir, $fileName);
       if ($saved) {
         return $this->getFileUrl($publicUploadDir . $fileName);
       }
