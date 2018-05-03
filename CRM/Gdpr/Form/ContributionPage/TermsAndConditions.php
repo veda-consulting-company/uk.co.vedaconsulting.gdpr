@@ -22,7 +22,20 @@ class CRM_Gdpr_Form_ContributionPage_TermsAndConditions extends CRM_Contribute_F
     $this->_subName = '';
     $this->_id = $this->id = $this->_entityId = CRM_Utils_Request::retrieve('id', 'Positive');
     $group_id = $this->getGroupId();
-    CRM_Custom_Form_CustomData::setGroupTree($this, '', $group_id, FALSE);
+    if (method_exists('CRM_Custom_Form_CustomData', 'setGroupTree')) {
+      CRM_Custom_Form_CustomData::setGroupTree($this, '', $group_id, $this->_onlySubtype);
+    }
+    else {
+      // 4.6
+      $tree = CRM_Core_BAO_CustomGroup::getTree(
+        $this->_type,
+        $this,
+        $this->_id,
+        $group_id
+      );
+      $formatted_tree = CRM_Core_BAO_CustomGroup::formatGroupTree($tree, 1, $this);
+      $this->_groupTree = $formatted_tree;
+    }
   }
   
   /**
@@ -161,6 +174,14 @@ class CRM_Gdpr_Form_ContributionPage_TermsAndConditions extends CRM_Contribute_F
     parent::buildQuickForm();
   }
 
+  /**
+   * Checks for a version.
+   *
+   * @param string $version
+   */
+  private function versionIs($version) {
+    return 0 === strpos(CRM_Utils_System::version(), $version);
+  }
   public function postProcess() {
     $this->saveValues();
     
@@ -180,12 +201,25 @@ class CRM_Gdpr_Form_ContributionPage_TermsAndConditions extends CRM_Contribute_F
     $tc_field = $this->getFieldByName('Terms_and_Conditions_File');
       $params[$tc_field['element_name']] = $file_url;
     }
-    $params['custom'] = CRM_Core_BAO_CustomField::postProcess($params,
-      $this->_id,
-      'ContributionPage'
-    );
-    CRM_Core_BAO_CustomValueTable::store($params['custom'], 'civicrm_contribution_page', $this->id);
 
+    if ($this->versionIs('4.6')) {
+      $customFields = CRM_Core_BAO_CustomField::getFields($this->_type, FALSE, FALSE);
+      $params['custom'] = CRM_Core_BAO_CustomField::postProcess(
+        $params,
+        $customFields,
+        $this->_id,
+        $this->_type
+      );
+      CRM_Core_BAO_CustomValueTable::store($params['custom'], 'civicrm_contribution_page', $this->id);
+    }
+    else {
+      // 4.7
+      $params['custom'] = CRM_Core_BAO_CustomField::postProcess($params,
+        $this->_id,
+        'ContributionPage'
+      );
+      CRM_Core_BAO_CustomValueTable::store($params['custom'], 'civicrm_contribution_page', $this->id);
+    }
   }
 
   /**

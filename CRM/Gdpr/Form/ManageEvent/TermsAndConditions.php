@@ -25,9 +25,22 @@ class CRM_Gdpr_Form_ManageEvent_TermsAndConditions extends CRM_Event_Form_Manage
     $this->_onlySubtype = FALSE;
     $this->assign('cdType', FALSE);
     $this->assign('cgCount', $this->_groupCount);
-    CRM_Custom_Form_CustomData::setGroupTree($this, '', $group_id, $this->_onlySubtype);
+    if (method_exists('CRM_Custom_Form_CustomData', 'setGroupTree')) {
+      CRM_Custom_Form_CustomData::setGroupTree($this, '', $group_id, $this->_onlySubtype);
+    }
+    else {
+      // 4.6
+      $tree = CRM_Core_BAO_CustomGroup::getTree(
+        $this->_type,
+        $this,
+        $this->_id,
+        $group_id
+      );
+      $formatted_tree = CRM_Core_BAO_CustomGroup::formatGroupTree($tree, 1, $this);
+      $this->_groupTree = $formatted_tree;
+    }
   }
-  
+
   /**
    * Get the Id of the custom group for Event terms and conditions.
    */
@@ -42,7 +55,7 @@ class CRM_Gdpr_Form_ManageEvent_TermsAndConditions extends CRM_Event_Form_Manage
     }
     return $this->groupId;
   }
-  
+
   /**
    * Gets Custom field from the group tree by name.
    */
@@ -73,7 +86,7 @@ class CRM_Gdpr_Form_ManageEvent_TermsAndConditions extends CRM_Event_Form_Manage
     }
     return $fields[$field_name] ? $fields[$field_name] : array();
   }
-  
+
   /**
    * Fetches a Custom Field definition from the API.
    */
@@ -134,6 +147,7 @@ class CRM_Gdpr_Form_ManageEvent_TermsAndConditions extends CRM_Event_Form_Manage
    */
   public function buildQuickForm() {
     CRM_Core_BAO_CustomGroup::buildQuickForm($this, $this->_groupTree);
+
     // Add a file upload element for the terms and conditions file.
     $tc_field = $this->getFieldByName('Terms_and_Conditions_File');
     if ($tc_field) {
@@ -165,6 +179,15 @@ class CRM_Gdpr_Form_ManageEvent_TermsAndConditions extends CRM_Event_Form_Manage
     parent::buildQuickForm();
   }
 
+  /**
+   * Checks for a version.
+   *
+   * @param string $version
+   */
+  private function versionIs($version) {
+    return 0 === strpos(CRM_Utils_System::version(), $version);
+  }
+
   public function postProcess() {
     $params = $this->controller->exportValues($this->_name);
     $file_url = $this->saveTCFile();
@@ -172,14 +195,30 @@ class CRM_Gdpr_Form_ManageEvent_TermsAndConditions extends CRM_Event_Form_Manage
     $tc_field = $this->getFieldByName('Terms_and_Conditions_File');
       $params[$tc_field['element_name']] = $file_url;
     }
-    $params['custom'] = CRM_Core_BAO_CustomField::postProcess($params,
-      $this->_id,
-      'Event'
-    );
-    CRM_Core_BAO_CustomValueTable::store($params['custom'], 'civicrm_event', $this->id);
+    if ($this->versionIs('4.6')) {
+      $customFields = CRM_Core_BAO_CustomField::getFields('Event', FALSE, FALSE,
+          CRM_Utils_Array::value('event_type_id', $params)
+      );
+      $params['custom'] = CRM_Core_BAO_CustomField::postProcess(
+        $params,
+        $customFields,
+        $this->_id,
+        'Event'
+      );
+      CRM_Core_BAO_CustomValueTable::store($params['custom'], 'civicrm_event', $this->id);
+    }
+    else {
+      // 4.7
+      $params['custom'] = CRM_Core_BAO_CustomField::postProcess($params,
+        $this->_id,
+        'Event'
+      );
+      CRM_Core_BAO_CustomValueTable::store($params['custom'], 'civicrm_event', $this->id);
+    }
     $this->preventAjaxSubmit();
     parent::endPostProcess();
   }
+
   /**
    * Assigns template variable descriptions with the preHelp text of the field.
    */
