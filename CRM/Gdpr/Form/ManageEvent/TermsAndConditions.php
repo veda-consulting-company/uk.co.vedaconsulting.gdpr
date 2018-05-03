@@ -265,6 +265,8 @@ class CRM_Gdpr_Form_ManageEvent_TermsAndConditions extends CRM_Event_Form_Manage
     if ($fileElement && !empty($fileElement->_value['name'])) {
       $config = CRM_Core_Config::singleton();
       $publicUploadDir = $config->imageUploadDir;
+      $delim = '/';
+      $publicUploadDir = substr($publicUploadDir, -1) == $delim ? $publicUploadDir : $publicUploadDir . $delim;
       $fileInfo = $fileElement->_value;
       $pathInfo = pathinfo($fileElement->_value['name']);
       if (empty($pathInfo['filename'])) {
@@ -276,14 +278,14 @@ class CRM_Gdpr_Form_ManageEvent_TermsAndConditions extends CRM_Event_Form_Manage
       while (!$fileName) {
         $suffix = $delta ? '-' . $delta : '';
         $testName = $pathInfo['filename'] . $suffix . '.' . $pathInfo['extension'];
-        if (!file_exists($publicUploadDir . '/' . $testName)) {
+        if (!file_exists($publicUploadDir . $testName)) {
           $fileName = $testName;
         }
         $delta++;
       }
       // Move to public uploads directory and create file record.
       // This will be referenced in Activity custom field.
-      $saved = $fileElement->moveUploadedFile($publicUploadDir,$fileName);
+      $saved = $fileElement->moveUploadedFile($publicUploadDir, $fileName);
       if ($saved) {
         return $this->getFileUrl($publicUploadDir . $fileName);
       }
