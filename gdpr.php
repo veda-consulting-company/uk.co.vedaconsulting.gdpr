@@ -425,6 +425,22 @@ function gdpr_civicrm_tokens( &$tokens ){
  */
 function gdpr_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = array(), $context = null) {
   if (!empty($tokens['contact']) OR !empty($tokens['CommunicationPreferences'])) {
+    /*
+    THIS CHANGE IS ONLY FOR ACTIONSCHEDULE (SEND EMAIL USING SCHEDULE REMINDER)
+
+    we have mentioned the contact custom tokens in token hook. so whenever replaceHookToken called its trying replace Category 'Contact' tokens. (which cause null values in template result).
+
+    This is not happening when send email via contact summary or mailing, because all other work flow to send emails are builds the contact details array before replaceHookToken fired using this function CRM_Utils_Token::getTokenDetails().
+    
+    When Action schedule send email, Contact Details get from BAO API Query which doesn't return some default contact values ex: email_greetings, postal greetings etc. So build the contact details array with all default values.
+    */
+    if ($context == 'CRM_Core_BAO_ActionSchedule') {
+      list($values) = CRM_Utils_Token::getTokenDetails($cids,
+        array(),
+        FALSE,
+        FALSE
+      );
+    }
     foreach ($cids as $cid) {
       $commPrefURL = CRM_Gdpr_CommunicationsPreferences_Utils::getCommPreferenceURLForContact($cid);
       $link = sprintf("<a href='%s' target='_blank'>%s</a>",$commPrefURL, E::ts('Communication Preferences'));
