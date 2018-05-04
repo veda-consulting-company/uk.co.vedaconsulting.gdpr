@@ -75,7 +75,16 @@ On enabling the **Allow users to opt-in to mailing groups.** checkbox, all group
 !!! note
     The **Email** channel is a reflection of the no bulk emails setting in CiviCRM. Therefore if a supporter opts out of email their **No Bulk Emails** communication preference will be activated. The reason for this approach is that transactional emails, such as event registration confirmation or donation receipts, will still be sent, it is only mass communications that the supporter is opting out of.
 
-Each group has the following options
+To check whether your groups are Publicly Accessible: 
+
+* Navigate to: Contacts > Manage Groups
+* Search for your mailing group
+* Click the settings for that group
+* Change the **Visibility** to Public Pages and save
+
+![Groups Public Pages](/images/public.png)
+
+Search Each group has the following options
 
 * **Group** The internal CiviCRM group name
 * **Add** Determines if the group should be included in the communications preferences page
