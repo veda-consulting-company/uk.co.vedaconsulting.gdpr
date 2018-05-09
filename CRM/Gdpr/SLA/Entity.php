@@ -176,7 +176,7 @@ class CRM_Gdpr_SLA_Entity {
         'Terms & Conditions',
         $text,
         TRUE,
-        array('required' => TRUE)
+        array()
       );
     }
     if (!empty($links['global'])) {
@@ -187,7 +187,7 @@ class CRM_Gdpr_SLA_Entity {
         'Terms & Conditions',
         $text,
         TRUE,
-        array('required' => TRUE)
+        array()
       );
     }
     if (!empty($links)) {
