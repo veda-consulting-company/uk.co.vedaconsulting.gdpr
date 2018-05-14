@@ -17,6 +17,439 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 
+#: CRM/Gdpr/CommunicationsPreferences/Utils.php
+#: CRM/Gdpr/Form/UpdatePreference.php
+msgid "Communication Preferences"
+msgstr "Preferencje komunikacji"
+
+# Poetycko :D
+#: CRM/Gdpr/CommunicationsPreferences/Utils.php
+msgid ""
+"We want to ensure we are only sending you information that is of interest to "
+"you, in a way you are happy to receive."
+msgstr ""
+"Chcemy mieć pewność, że przesyłamy Ci tylko te informacje, które Cię "
+"interesują, w sposób, który sprawi Tobie największą przyjemność."
+
+#: CRM/Gdpr/CommunicationsPreferences/Utils.php
+msgid "Please tell us how you would like us to keep in touch."
+msgstr "Powiedz nam, jak chcesz, abyśmy pozostali w kontakcie."
+
+#: CRM/Gdpr/CommunicationsPreferences/Utils.php
+msgid "Interest groups"
+msgstr "Grupy zainteresowań"
+
+#: CRM/Gdpr/CommunicationsPreferences/Utils.php
+msgid ""
+"We want to continue to keep you informed about our work. Opt-in to the "
+"groups that interest you."
+msgstr ""
+"Chcemy nadal informować Cię o naszej pracy. Dopisz się do grup, które Ciebie "
+"interesują."
+
+#: CRM/Gdpr/CommunicationsPreferences/Utils.php
+msgid "Your communications preferences have been updated. Thank you."
+msgstr "Twoje preferencje komunikacji zostały zaktualizowane. Dziękujemy."
+
+#: CRM/Gdpr/CommunicationsPreferences/Utils.php
+msgid "Email"
+msgstr "E-mail"
+
+#: CRM/Gdpr/CommunicationsPreferences/Utils.php
+msgid "Phone"
+msgstr "Telefon"
+
+#: CRM/Gdpr/CommunicationsPreferences/Utils.php
+msgid "Post"
+msgstr "Listownie"
+
+#: CRM/Gdpr/CommunicationsPreferences/Utils.php
+msgid "SMS"
+msgstr "SMS"
+
+#: CRM/Gdpr/Form/Activitycontact.php CRM/Gdpr/Form/Search/ActivityContact.php
+#: templates/CRM/Gdpr/Form/Activitycontact.tpl
+msgid "Contact Name"
+msgstr "Nazwa kontaktu"
+
+#: CRM/Gdpr/Form/Activitycontact.php templates/CRM/Gdpr/Page/Dashboard.tpl
+msgid "Search"
+msgstr "Szukaj"
+
+#: CRM/Gdpr/Form/CommunicationsPreferences.php CRM/Gdpr/Page/Tab.php
+msgid "Communications Preferences"
+msgstr "Preferencje komunikacji"
+
+#: CRM/Gdpr/Form/CommunicationsPreferences.php CRM/Gdpr/Form/Settings.php
+msgid "Page title"
+msgstr "Tytuł strony"
+
+#: CRM/Gdpr/Form/CommunicationsPreferences.php CRM/Gdpr/Form/Settings.php
+msgid "Introduction"
+msgstr "Wprowadzenie"
+
+#: CRM/Gdpr/Form/CommunicationsPreferences.php
+msgid "Include Profile"
+msgstr "Dołącz profil"
+
+#: CRM/Gdpr/Form/CommunicationsPreferences.php
+msgid ""
+"Include a profile so the user can identify and check their details are up-to-"
+"date. It should  include a primary email address field."
+msgstr ""
+"Dołącz profil, aby użytkownik mógł zidentyfikować i sprawdzić, czy jego dane "
+"są aktualne. Powinien zawierać główne pole adresu e-mail."
+
+#: CRM/Gdpr/Form/CommunicationsPreferences.php
+msgid "Use as the mailing subscribe page"
+msgstr "Użyj jako strony subskrypcji mailingowej"
+
+#: CRM/Gdpr/Form/CommunicationsPreferences.php
+msgid ""
+"Check to use the Communications Preferences page instead of the default "
+"Mailing Subscribe page."
+msgstr ""
+"Zaznacz, aby użyć strony Preferencje komunikacji zamiast domyślnej strony "
+"subskrypcji mailingów."
+
+#: CRM/Gdpr/Form/CommunicationsPreferences.php
+msgid "Enable Channels"
+msgstr "Włącz kanały"
+
+#: CRM/Gdpr/Form/CommunicationsPreferences.php
+msgid "Users can opt-in to these channels"
+msgstr "Użytkownicy mogą włączyć te kanały"
+
+#: CRM/Gdpr/Form/CommunicationsPreferences.php
+msgid "Allow users to opt-in to mailing groups."
+msgstr "Zezwalaj użytkownikom na włączanie grup mailingowych."
+
+#: CRM/Gdpr/Form/CommunicationsPreferences.php
+msgid "Heading for the groups section"
+msgstr "Nagłówek sekcji grup"
+
+#: CRM/Gdpr/Form/CommunicationsPreferences.php
+msgid "Introduction or description for this section."
+msgstr "Wprowadzenie lub opis tej sekcji."
+
+#: CRM/Gdpr/Form/CommunicationsPreferences.php
+msgid "Enable"
+msgstr "Włącz"
+
+#: CRM/Gdpr/Form/CommunicationsPreferences.php
+#: templates/CRM/Gdpr/Form/CommunicationsPreferences.tpl
+msgid "Weight"
+msgstr "Waga"
+
+#: CRM/Gdpr/Form/CommunicationsPreferences.php
+msgid "On completion"
+msgstr "Ukończone"
+
+#: CRM/Gdpr/Form/CommunicationsPreferences.php
+msgid "Redirect to another page"
+msgstr "Powróć do poprzedniej strony"
+
+#: CRM/Gdpr/Form/CommunicationsPreferences.php
+msgid "Display a message on the form page."
+msgstr "Wyświetla wiadomość na stronie formularza."
+
+#: CRM/Gdpr/Form/CommunicationsPreferences.php
+msgid "Completion page"
+msgstr "Strona po ukończeniu"
+
+#: CRM/Gdpr/Form/CommunicationsPreferences.php
+msgid ""
+"Add the a URL for a page to redirect the user after they complete the form. "
+"The page should already exist. The URL may be absolute (http://example.com/"
+"thank-you) or relative (thank-you), with no leading forward slash. Leave "
+"blank to redirect to the front page."
+msgstr ""
+"Dodaj adres URL strony, aby przekierować użytkownika po wypełnieniu "
+"formularza. Strona powinna już istnieć. Adres URL może być bezwzględny "
+"(http://example.com/thank-you) lub względny (thank-you), bez wiodącego "
+"ukośnika. Pozostaw puste, aby przekierować na pierwszą stronę."
+
+#: CRM/Gdpr/Form/CommunicationsPreferences.php
+msgid "Completion message"
+msgstr "Komunikat po ukończeniu"
+
+#: CRM/Gdpr/Form/CommunicationsPreferences.php
+msgid "A message to display to the user after the form is submitted. "
+msgstr ""
+"Wiadomość do wyświetlenia po wypełnieniu formularza przez użytkownika. "
+
+#: CRM/Gdpr/Form/CommunicationsPreferences.php CRM/Gdpr/Form/Settings.php
+#: CRM/Gdpr/Form/UpdatePreference.php
+msgid "Save"
+msgstr "Zapisz"
+
+#: CRM/Gdpr/Form/CommunicationsPreferences.php
+msgid "Invalid URL."
+msgstr "Nieprawidłowy URL."
+
+#: CRM/Gdpr/Form/CommunicationsPreferences.php
+msgid ""
+"The completion URL does not belong to a valid page. Please check that an "
+"anonymous in user can access it."
+msgstr ""
+"Adres URL strony po wypełnieniu formularza nie wskazuje prawidłowej strony. "
+"Sprawdź, czy anonimowy użytkownik ma do niej dostęp."
+
+#: CRM/Gdpr/Form/ContributionPage/TermsAndConditions.php
+msgid "Terms & Conditions information has been saved."
+msgstr "Informacje o Warunkach zostały zapisane."
+
+#: CRM/Gdpr/Form/ContributionPage/TermsAndConditions.php
+msgid "Saved"
+msgstr "Zapisano"
+
+#: CRM/Gdpr/Form/Forgetme.php templates/CRM/Gdpr/Form/Settings.tpl
+msgid "Forget me"
+msgstr "Zapomnij mnie"
+
+#: CRM/Gdpr/Form/Forgetme.php
+msgid "Cancel"
+msgstr "Anuluj"
+
+#: CRM/Gdpr/Form/Forgetme.php
+msgid "Something went wrong. Please contact Admin."
+msgstr "Coś poszło nie tak. Proszę abyś skontaktował się z administratorem."
+
+# Weryfikacja na produkcji.
+#: CRM/Gdpr/Form/Forgetme.php
+msgid "Record not Deleted cleanly"
+msgstr "Rekord nie został wyczyszczony"
+
+#: CRM/Gdpr/Form/Forgetme.php
+msgid "Contact has been made anonymous."
+msgstr "Kontakt został zanonimizowany."
+
+#: CRM/Gdpr/Form/Forgetme.php
+msgid "Forget successful"
+msgstr "Zapomnij mnie - przeprowadzono prawidłowo"
+
+#: CRM/Gdpr/Form/Forgetme.php
+msgid "Records has not been cleared."
+msgstr "Rekordy nie zostały wyczyszczone."
+
+#: CRM/Gdpr/Form/Forgetme.php
+msgid "Record not Deleted cleanly. Please contact admin!"
+msgstr "Rekord nie został wyczyszczony. Skontaktuj się z administratorem!"
+
+#: CRM/Gdpr/Form/Forgetme.php
+msgid "GDPR - Contact has been made anonymous"
+msgstr "Kontakt został zanonimizowany"
+
+#: CRM/Gdpr/Form/SLAAccept.php
+msgid "Submit"
+msgstr "Wyślij"
+
+#: CRM/Gdpr/Form/SLAAccept.php
+msgid "This field is required."
+msgstr "To pole jest wymagane."
+
+#: CRM/Gdpr/Form/Search/ActivityContact.php
+msgid "GDPR - Contacts without Activities"
+msgstr "GDPR - kontakty bez aktywności"
+
+#: CRM/Gdpr/Form/Search/ActivityContact.php
+#: CRM/Gdpr/Form/Search/GroupcontactDetails.php
+msgid "Contact Id"
+msgstr "ID kontaktu"
+
+#: CRM/Gdpr/Form/Search/ActivityContact.php
+#: CRM/Gdpr/Form/Search/GroupcontactDetails.php
+msgid "Contact Type"
+msgstr "Rodzaj kontaktu"
+
+#: CRM/Gdpr/Form/Search/GroupcontactDetails.php
+msgid "Search Group Subscription by Date Range"
+msgstr "Wyszukaj subskrypcję grup według zakresu dat"
+
+#: CRM/Gdpr/Form/Search/GroupcontactDetails.php
+msgid "Name"
+msgstr "Nazwa"
+
+#: CRM/Gdpr/Form/Search/GroupcontactDetails.php
+msgid "- any contact type -"
+msgstr "- każdy typ kontaktu -"
+
+#: CRM/Gdpr/Form/Search/GroupcontactDetails.php
+msgid "is..."
+msgstr "jest..."
+
+#: CRM/Gdpr/Form/Search/GroupcontactDetails.php
+msgid "- select group -"
+msgstr "- wybierz grupy -"
+
+#: CRM/Gdpr/Form/Search/GroupcontactDetails.php
+msgid "in..."
+msgstr "w..."
+
+#: CRM/Gdpr/Form/Search/GroupcontactDetails.php
+msgid "Group Status"
+msgstr "Status grupy"
+
+#: CRM/Gdpr/Form/Search/GroupcontactDetails.php
+msgid "From"
+msgstr "Od"
+
+#: CRM/Gdpr/Form/Search/GroupcontactDetails.php templates/CRM/Gdpr/Page/Tab.tpl
+msgid "Status"
+msgstr "Status"
+
+#: CRM/Gdpr/Form/Search/GroupcontactDetails.php
+msgid "Subscription Date"
+msgstr "Data subskrypcji"
+
+#: CRM/Gdpr/Form/Settings.php
+msgid "GDPR - Settings"
+msgstr "GDPR - ustawienia"
+
+#: CRM/Gdpr/Form/Settings.php templates/CRM/Gdpr/Form/Settings.tpl
+msgid "Point of Contact"
+msgstr "Punkt kontaktowy"
+
+#: CRM/Gdpr/Form/Settings.php templates/CRM/Gdpr/Page/Dashboard.tpl
+msgid "Activity Types"
+msgstr "Rodzaje aktywności"
+
+#: CRM/Gdpr/Form/Settings.php
+msgid "- select -"
+msgstr "- wybierz -"
+
+#: CRM/Gdpr/Form/Settings.php
+msgid "Contact Types"
+msgstr "Rodzaje kontaktów"
+
+#: CRM/Gdpr/Form/Settings.php
+msgid "Forgetme contact name"
+msgstr "Nazwa użytkownika - ZAPOMNIJ MNIE"
+
+#: CRM/Gdpr/Form/Settings.php
+msgid "Email the Point of Contact / DPO?"
+msgstr "E-mail do punktu kontaktowego / IODO?"
+
+#: CRM/Gdpr/Form/Settings.php
+msgid "Email Subject"
+msgstr "Temat e-mail"
+
+#: CRM/Gdpr/Form/Settings.php
+msgid "Period"
+msgstr "Okres"
+
+#: CRM/Gdpr/Form/Settings.php
+msgid "Acceptance period (months)"
+msgstr "Okres akceptacji (miesiące)"
+
+#: CRM/Gdpr/Form/Settings.php
+msgid "Data Policy file"
+msgstr "Plik polityki ochrony prywatności"
+
+#: CRM/Gdpr/Form/Settings.php
+msgid "This is a new version of the document."
+msgstr "To jest nowa wersja dokumentu."
+
+#: CRM/Gdpr/Form/Settings.php
+msgid "Link Label"
+msgstr "Etykieta linku"
+
+#: CRM/Gdpr/Form/Settings.php
+msgid "Checkbox text"
+msgstr "Tekst pola wyboru"
+
+#: CRM/Gdpr/Form/Settings.php
+msgid "Introductory text"
+msgstr "Tekst wprowadzenia"
+
+#: CRM/Gdpr/Form/Settings.php
+msgid "Enable Terms and Conditions for every event"
+msgstr "Włącz Warunki dla każdego wydarzenia"
+
+#: CRM/Gdpr/Form/Settings.php
+msgid "Enable Terms and Conditions for every Contribution Page"
+msgstr "Warunki: Wydarzenia i Strony Transakcyjne"
+
+#: CRM/Gdpr/Form/Settings.php
+msgid "Checkbox Position"
+msgstr "Pozycja pola wyboru"
+
+#: CRM/Gdpr/Form/Settings.php
+msgid "Top profile"
+msgstr "Góra profilu"
+
+#: CRM/Gdpr/Form/Settings.php
+msgid "Bottom profile"
+msgstr "Dół profilu"
+
+#: CRM/Gdpr/Form/Settings.php
+msgid "Top of form"
+msgstr "Góra formularza"
+
+#: CRM/Gdpr/Form/Settings.php
+msgid "Bottom of form"
+msgstr "Dół formularza"
+
+#: CRM/Gdpr/Form/Settings.php
+msgid "Default Terms and Conditions"
+msgstr "Domyślne Warunki"
+
+#: CRM/Gdpr/Form/Settings.php templates/CRM/Gdpr/Form/Settings.tpl
+msgid "Data Policy"
+msgstr "Polityka ochrony prywatności"
+
+#: CRM/Gdpr/Form/Settings.php
+msgid "I accept the Data Policy."
+msgstr "Akceptuję Politykę Ochrony Prywatności."
+
+#: CRM/Gdpr/Form/Settings.php
+msgid "Terms &amp; Conditions"
+msgstr "Warunki"
+
+#: CRM/Gdpr/Form/Settings.php
+msgid "I accept the Terms &amp; Conditions for this event."
+msgstr "Akceptuję Warunki dla tego wydarzenia."
+
+#: CRM/Gdpr/Form/Settings.php
+msgid "Please read and accept the Terms &amp; Conditions and Data Policy."
+msgstr ""
+"Proszę przeczytać i zaakceptować Warunki i Politykę Ochrony Prywatności."
+
+#: CRM/Gdpr/Form/UpdatePreference.php
+msgid "--Select--"
+msgstr "- wybierz -"
+
+# do weryfikacji na produkcji.
+#: CRM/Gdpr/Form/UpdatePreference.php
+#, fuzzy
+#| msgid "I have read and agree to the <a href='%1' target='_blank'>%2</a>"
+msgid "<a href='%1' target='_blank'>%2</a>"
+msgstr "Zapoznałem/am się i akceptuję<a href='%1' target='_blank'>%2</a>"
+
+#: CRM/Gdpr/Form/UpdatePreference.php
+msgid "Communication Preferences updated"
+msgstr "Preferencje komunikacyjne zaktualizowane"
+
+#: CRM/Gdpr/Page/Dashboard.php
+msgid "Please add GDPR settings"
+msgstr "Proszę zaktualizować ustawienia GDPR"
+
+#: CRM/Gdpr/Page/Tab.php
+msgid "Data Policy acceptance."
+msgstr "Akceptacja Polityki Ochrony Prywatności."
+
+#: CRM/Gdpr/Page/Tab.php
+msgid "Not yet accepted by the contact."
+msgstr "Jeszcze nie zaakceptowane przez ten kontakt."
+
+#: CRM/Gdpr/Page/Tab.php
+msgid "Not yet updated by the contact."
+msgstr "Jeszcze nie zaktualizowane przez ten kontakt."
+
+#: CRM/Gdpr/Upgrader/Base.php
+msgid "Upgrade %1 to revision %2"
+msgstr "Zaktualizuj %1 do wersji %2"
+
 #: templates/CRM/Gdpr/Form/Activitycontact.tpl
 msgid "Complete OR partial contact name."
 msgstr "Pełna lub częściowa nazwa kontaktu."
@@ -24,10 +457,6 @@ msgstr "Pełna lub częściowa nazwa kontaktu."
 #: templates/CRM/Gdpr/Form/Activitycontact.tpl
 msgid "Contact ID"
 msgstr "ID kontaktu"
-
-#: templates/CRM/Gdpr/Form/Activitycontact.tpl
-msgid "Contact Name"
-msgstr "Nazwa kontaktu"
 
 #: templates/CRM/Gdpr/Form/Activitycontact.tpl
 msgid "Last Activity Date"
@@ -122,10 +551,6 @@ msgid "Title"
 msgstr "Tytuł"
 
 #: templates/CRM/Gdpr/Form/CommunicationsPreferences.tpl
-msgid "Weight"
-msgstr "Waga"
-
-#: templates/CRM/Gdpr/Form/CommunicationsPreferences.tpl
 msgid "Description"
 msgstr "Opis"
 
@@ -179,25 +604,19 @@ msgid "Search results listings."
 msgstr "Lista wyników wyszukiwania."
 
 #: templates/CRM/Gdpr/Form/Settings.tpl
-msgid "Point of Contact"
-msgstr "Punkt kontaktowy"
-
-#: templates/CRM/Gdpr/Form/Settings.tpl
-#, fuzzy
 msgid ""
 "Set your organisation's point of contact for data protection compliance."
 msgstr ""
-"Dodaj punkt kontaktowy w swojej organizacji, najczęściej Inspektora Ochrony "
-"Danych Osobowych (IODO)."
+"Ustaw punkt kontaktowy organizacji w celu zapewnienia zgodności z ochroną "
+"danych."
 
 #: templates/CRM/Gdpr/Form/Settings.tpl
-#, fuzzy
 msgid ""
 "Add the person designated to be responsible for data protection compliance, "
 "such as the data protection officer (DPO)."
 msgstr ""
-"Dodaj punkt kontaktowy w swojej organizacji, najczęściej Inspektora Ochrony "
-"Danych Osobowych (IODO)."
+"Należy dodać osobę wyznaczoną jako odpowiedzialną za zgodność z ochroną "
+"danych, taką jak Inspektor ochrony danych (DPO)."
 
 #: templates/CRM/Gdpr/Form/Settings.tpl
 msgid "Activity types"
@@ -220,10 +639,6 @@ msgid "Check for contacts who have not had any activity of these types."
 msgstr "Sprawdź kontakty, które nie miały żadnej aktywności tego typu."
 
 #: templates/CRM/Gdpr/Form/Settings.tpl
-msgid "Forget me"
-msgstr "Zapomnij mnie"
-
-#: templates/CRM/Gdpr/Form/Settings.tpl
 msgid "Settings related to 'Forget me' process."
 msgstr "Ustawienia związane z procesem \"ZAPOMNIJ MNIE\"."
 
@@ -241,11 +656,7 @@ msgid ""
 "'%Contact Id% has been Anonmized'"
 msgstr ""
 "Opcjonalnie możesz tutaj określić temat wiadomości e-mail. Domyślnie jest to "
-"'%Contact Id% został zanonimizowany' "
-
-#: templates/CRM/Gdpr/Form/Settings.tpl
-msgid "Data Policy"
-msgstr "Polityka ochrony prywatności"
+"'%Contact Id% został zanonimizowany'"
 
 # do weryfikacji na produkcji - Warunki?!?!
 #: templates/CRM/Gdpr/Form/Settings.tpl
@@ -289,7 +700,6 @@ msgid " Text for the checkbox. An acceptance statement."
 msgstr " Tekst pola wyboru. Oświadczenie o zaakceptowaniu."
 
 #: templates/CRM/Gdpr/Form/Settings.tpl
-#, fuzzy
 msgid "The title for the user-facing page with the acceptance form."
 msgstr "Tytuł strony skierowanej do użytkownika z formularzem akceptacji."
 
@@ -306,18 +716,12 @@ msgstr ""
 "poszczególnych wydarzeń i stron transakcyjnych."
 
 #: templates/CRM/Gdpr/Page/ContactSummary.tpl
-#, fuzzy
-#| msgid "GDPR Settings"
 msgid "GDPR Status"
-msgstr "Ustawienia GDPR"
+msgstr "Status RODO"
 
 #: templates/CRM/Gdpr/Page/Dashboard.tpl
 msgid "Contacts who have not had any activity for %1 days"
 msgstr "Kontakty, które nie miały żadnej aktywności przez %1 dni"
-
-#: templates/CRM/Gdpr/Page/Dashboard.tpl
-msgid "Activity Types"
-msgstr "Rodzaje aktywności"
 
 #: templates/CRM/Gdpr/Page/Dashboard.tpl
 msgid "No. of Contacts"
@@ -338,10 +742,6 @@ msgid ""
 msgstr ""
 "(Kontakty, które nie miały żadnej aktywności, ale kliknęły linki w "
 "wiadomościach e-mail)"
-
-#: templates/CRM/Gdpr/Page/Dashboard.tpl
-msgid "Search"
-msgstr "Szukaj"
 
 #: templates/CRM/Gdpr/Page/Dashboard.tpl
 msgid "GDPR Settings"
@@ -371,10 +771,6 @@ msgid "Subject"
 msgstr "Temat"
 
 #: templates/CRM/Gdpr/Page/Tab.tpl
-msgid "Status"
-msgstr "Status"
-
-#: templates/CRM/Gdpr/Page/Tab.tpl
 msgid "Date"
 msgstr "Data"
 
@@ -386,250 +782,8 @@ msgstr "Dziennik subskrybcji grup"
 msgid "No group subscription have been recorded for this contact."
 msgstr "Kontakt nie został zapisany do żadnej z grup subskrypcji."
 
-#~ msgid "Communication Preferences"
-#~ msgstr "Preferencje komunikacji"
-
-# Poetycko :D
-#~ msgid ""
-#~ "We want to ensure we are only sending you information that is of interest "
-#~ "to you, in a way you are happy to receive."
-#~ msgstr ""
-#~ "Chcemy mieć pewność, że przesyłamy Ci tylko te informacje, które Cię "
-#~ "interesują, w sposób, który sprawi Tobie największą przyjemność."
-
-#~ msgid "Please tell us how you would like us to keep in touch."
-#~ msgstr "Powiedz nam, jak chcesz, abyśmy pozostali w kontakcie."
-
-#~ msgid "Interest groups"
-#~ msgstr "Grupy zainteresowań"
-
-#~ msgid ""
-#~ "We want to continue to keep you informed about our work. Opt-in to the "
-#~ "groups that interest you."
-#~ msgstr ""
-#~ "Chcemy nadal informować Cię o naszej pracy. Dopisz się do grup, które "
-#~ "Ciebie interesują."
-
-#~ msgid "Your communications preferences have been updated. Thank you."
-#~ msgstr "Twoje preferencje komunikacji zostały zaktualizowane. Dziękujemy."
-
-#~ msgid "Email"
-#~ msgstr "E-mail"
-
-#~ msgid "Phone"
-#~ msgstr "Telefon"
-
-#~ msgid "Post"
-#~ msgstr "Listownie"
-
-#~ msgid "SMS"
-#~ msgstr "SMS"
-
-#~ msgid "Communications Preferences"
-#~ msgstr "Preferencje komunikacji"
-
-#~ msgid "Page title"
-#~ msgstr "Tytuł strony"
-
-#~ msgid "Introduction"
-#~ msgstr "Wprowadzenie"
-
-#~ msgid "Include Profile"
-#~ msgstr "Dołącz profil"
-
-#~ msgid ""
-#~ "Include a profile so the user can identify and check their details are up-"
-#~ "to-date. It should  include a primary email address field."
-#~ msgstr ""
-#~ "Dołącz profil, aby użytkownik mógł zidentyfikować i sprawdzić, czy jego "
-#~ "dane są aktualne. Powinien zawierać główne pole adresu e-mail."
-
-#~ msgid "Enable Channels"
-#~ msgstr "Włącz kanały"
-
-#~ msgid "Users can opt-in to these channels"
-#~ msgstr "Użytkownicy mogą włączyć te kanały"
-
-#~ msgid "Allow users to opt-in to mailing groups."
-#~ msgstr "Zezwalaj użytkownikom na włączanie grup mailingowych."
-
-#~ msgid "Heading for the groups section"
-#~ msgstr "Nagłówek sekcji grup"
-
-#~ msgid "Introduction or description for this section."
-#~ msgstr "Wprowadzenie lub opis tej sekcji."
-
-#~ msgid "On completion"
-#~ msgstr "Ukończone"
-
-#~ msgid "Redirect to another page"
-#~ msgstr "Powróć do poprzedniej strony"
-
-#~ msgid "Display a message on the form page."
-#~ msgstr "Wyświetla wiadomość na stronie formularza."
-
-#~ msgid "Completion page"
-#~ msgstr "Strona po ukończeniu"
-
-#~ msgid ""
-#~ "Add the a URL for a page to redirect the user after they complete the "
-#~ "form. The page should already exist. The URL may be absolute (http://"
-#~ "example.com/thank-you) or relative (thank-you), with no leading forward "
-#~ "slash. Leave blank to redirect to the front page."
-#~ msgstr ""
-#~ "Dodaj adres URL strony, aby przekierować użytkownika po wypełnieniu "
-#~ "formularza. Strona powinna już istnieć. Adres URL może być bezwzględny "
-#~ "(http://example.com/thank-you) lub względny (thank-you), bez wiodącego "
-#~ "ukośnika. Pozostaw puste, aby przekierować na pierwszą stronę."
-
-#~ msgid "Completion message"
-#~ msgstr "Komunikat po ukończeniu"
-
-#~ msgid "A message to display to the user after the form is submitted. "
-#~ msgstr ""
-#~ "Wiadomość do wyświetlenia po wypełnieniu formularza przez użytkownika. "
-
-#~ msgid "Save"
-#~ msgstr "Zapisz"
-
-#~ msgid "Invalid URL."
-#~ msgstr "Nieprawidłowy URL."
-
-#~ msgid ""
-#~ "The completion URL does not belong to a valid page. Please check that an "
-#~ "anonymous in user can access it."
-#~ msgstr ""
-#~ "Adres URL strony po wypełnieniu formularza nie wskazuje prawidłowej "
-#~ "strony. Sprawdź, czy anonimowy użytkownik ma do niej dostęp."
-
-#~ msgid "Cancel"
-#~ msgstr "Anuluj"
-
-#~ msgid "Something went wrong. Please contact Admin."
-#~ msgstr "Coś poszło nie tak. Proszę abyś skontaktował się z administratorem."
-
-# Weryfikacja na produkcji.
-#, fuzzy
-#~ msgid "Record not Deleted cleanly"
-#~ msgstr "Rekord nie został usunięty w czysty sposób"
-
-#~ msgid "Contact has been made anonymous."
-#~ msgstr "Kontakt został zanonimizowany."
-
-#~ msgid "Forget successful"
-#~ msgstr "Zapomnij mnie - przeprowadzono prawidłowo"
-
-#~ msgid "Records has not been cleared."
-#~ msgstr "Rekordy nie zostały wyczyszczone."
-
-#~ msgid "Record not Deleted cleanly. Please contact admin!"
-#~ msgstr "Rekord nie został wyczyszczony. Skontaktuj się z administratorem!"
-
-#~ msgid "Submit"
-#~ msgstr "Wyślij"
-
-#~ msgid "This field is required."
-#~ msgstr "To pole jest wymagane."
-
-#~ msgid "GDPR - Contacts without Activities"
-#~ msgstr "GDPR - kontakty bez aktywności"
-
-#~ msgid "Contact Id"
-#~ msgstr "ID kontaktu"
-
-#~ msgid "Contact Type"
-#~ msgstr "Rodzaj kontaktu"
-
-#~ msgid "Search Group Subscription by Date Range"
-#~ msgstr "Wyszukaj subskrypcję grup według zakresu dat"
-
-#~ msgid "Name"
-#~ msgstr "Nazwa"
-
-#~ msgid "- any contact type -"
-#~ msgstr "- każdy typ kontaktu -"
-
-#~ msgid "is..."
-#~ msgstr "jest..."
-
-#~ msgid "- select group -"
-#~ msgstr "- wybierz grupy -"
-
-#~ msgid "in..."
-#~ msgstr "w..."
-
-#~ msgid "Group Status"
-#~ msgstr "Status grupy"
-
-#~ msgid "From"
-#~ msgstr "Od"
-
-#~ msgid "Subscription Date"
-#~ msgstr "Data subskrypcji"
-
-#~ msgid "GDPR - Settings"
-#~ msgstr "GDPR - ustawienia"
-
-#~ msgid "- select -"
-#~ msgstr "- wybierz -"
-
-#~ msgid "Contact Types"
-#~ msgstr "Rodzaje kontaktów"
-
-#~ msgid "Forgetme contact name"
-#~ msgstr "Nazwa użytkownika - ZAPOMNIJ MNIE"
-
-#~ msgid "Period"
-#~ msgstr "Okres"
-
-#~ msgid "Acceptance period (months)"
-#~ msgstr "Okres akceptacji (miesiące)"
-
-#~ msgid "Data Policy file"
-#~ msgstr "plik polityki ochrony prywatności"
-
-#~ msgid "This is a new version of the document."
-#~ msgstr "To jest nowa wersja dokumentu."
-
-#~ msgid "Link Label"
-#~ msgstr "Etykieta linku"
-
-#~ msgid "Checkbox text"
-#~ msgstr "Tekst pola wyboru"
-
-#~ msgid "Introductory text"
-#~ msgstr "Tekst wprowadzenia"
-
-#~ msgid "I accept the Data Policy."
-#~ msgstr "Akceptuję Politykę Ochrony Prywatności"
-
 #~ msgid "Unknown"
 #~ msgstr "Nieznany"
-
-# do weryfikacji na produkcji.
-#~ msgid "I have read and agree to the <a href='%1' target='_blank'>%2</a>"
-#~ msgstr "Zapoznałem/am się i akceptuję<a href='%1' target='_blank'>%2</a>"
-
-#~ msgid "Communication Preferences updated"
-#~ msgstr "Preferencje komunikacyjne zaktualizowane"
-
-#~ msgid "Please add GDPR settings"
-#~ msgstr "Proszę zaktualizować ustawienia GDPR"
-
-#~ msgid "Data Policy acceptance."
-#~ msgstr "Akceptacja Polityki Ochrony Prywatności"
-
-#~ msgid "Not yet accepted by the contact."
-#~ msgstr "Jeszcze nie zaakceptowane przez ten kontakt."
-
-#~ msgid "Not yet updated by the contact."
-#~ msgstr "Jeszcze nie zaktualizowane przez ten kontakt."
-
-#~ msgid "Upgrade %1 to revision %2"
-#~ msgstr "Zaktualizuj %1 do wersji %2"
-
-#~ msgid "Terms &amp; Conditions"
-#~ msgstr "Warunki"
 
 #~ msgid "GDPR"
 #~ msgstr "GDPR"
