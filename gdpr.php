@@ -412,10 +412,8 @@ function gdpr_civicrm_navigationMenu( &$params ) {
 function gdpr_civicrm_tokens( &$tokens ){
   //Keeping this token only to sustain the old tokens otherwise, 
   //the token 'CommunicationPreferences' can be used in all places  
-  $tokens['contact'] = array(
-    'contact.comm_pref_supporter_url' => E::ts("Communication Preferences URL"),
-    'contact.comm_pref_supporter_link' => E::ts("Communication Preferences Link"),
-  );
+  $tokens['contact']['contact.comm_pref_supporter_url'] = E::ts("Communication Preferences URL");
+  $tokens['contact']['contact.comm_pref_supporter_link'] = E::ts("Communication Preferences Link");
   $tokens['CommunicationPreferences'] = array(
     'CommunicationPreferences.comm_pref_supporter_url' => E::ts("Communication Preferences URL (Bulk Mailing)"),
     'CommunicationPreferences.comm_pref_supporter_link' => E::ts("Communication Preferences Link (Bulk Mailing)"),
