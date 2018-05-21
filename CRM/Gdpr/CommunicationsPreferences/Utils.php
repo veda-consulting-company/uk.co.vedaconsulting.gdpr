@@ -293,4 +293,21 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
     }
     return CRM_Utils_System::url('civicrm/gdpr/comms-prefs/update', $urlParams, TRUE, NULL, TRUE, TRUE);
   }
+
+  public static function addCommsPreferenceLinkInThankYouPage($cid, &$form, $entity = 'Event'){
+    if (empty($cid)) {
+      return;
+    }
+
+    $settings = CRM_Gdpr_CommunicationsPreferences_Utils::getSettings();
+    $settings = $settings[CRM_Gdpr_CommunicationsPreferences_Utils::SETTING_NAME];
+
+    //To display Communication Preference URL in Thank you page for event
+    if (!empty($cid) && !empty($settings['enable_comm_pref_in_thankyou'])) {
+      $commPrefURL = CRM_Gdpr_CommunicationsPreferences_Utils::getCommPreferenceURLForContact($cid);
+      $form->assign('comm_pref_url', $commPrefURL);
+      $form->assign('link_label', $settings['comm_pref_link_label']);
+      $form->assign('entity', $entity);
+    }
+  }
 }

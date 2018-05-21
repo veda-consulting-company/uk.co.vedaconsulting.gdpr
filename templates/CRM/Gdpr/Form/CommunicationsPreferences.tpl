@@ -124,6 +124,30 @@
     <div class="clear"></div>
   </div> {* end Completion block *}
  </div>{* end form *}
+  
+  <!-- MV: Settings for Communications Preference Link in event and contribution thank you page -->
+  <h3> {ts}Event & Contribution thank you page{/ts} </h3>
+  <div class="crm-block crm-form-block crm-gdpr-comms-prefs-form-block">
+    <div class="help">To display communication preference link in Event and Contribution thank you pages</div>
+    <div class="crm-section">
+      <div class="label">{$form.enable_comm_pref_in_thankyou.label}</div>
+      <div class="content">{$form.enable_comm_pref_in_thankyou.html}
+        <div class="description"> </div>
+      </div>
+    </div>
+    <div class="clear"></div>
+    <div class="crm-section">
+      <div class="label">{$form.comm_pref_link_label.label}</div>
+      <div class="content">{$form.comm_pref_link_label.html}</div>
+    </div>
+    <div class="clear"></div>
+    <div class="crm-section">
+      <div class="label">{$form.comm_pref_link_intro.label}</div>
+      <div class="content">{$form.comm_pref_link_intro.html}</div>
+    </div>
+    <div class="clear"></div>
+  </div> {* end Completion block *}
+ </div>{* end form *}
 
 {* FOOTER *}
 <div class="crm-submit-buttons">
