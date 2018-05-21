@@ -453,8 +453,11 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
     if (!empty($this->commPrefSettings['completion_redirect'])) {
       $destinationURL = !empty($this->commPrefSettings['completion_url']) ? $this->commPrefSettings['completion_url'] : NULL;
       //MV: commenting this line, We have already restriceted the setting to get only absoulte URl.
-      // $destinationURL = CRM_Utils_System::url($destinationURL, NULL, TRUE);
-      // CRM_Core_Error::debug_var('destinationURL', $destinationURL );
+      //check URL is not absolute and no leading slash then add leading slash before redirect.
+      $parseURL = parse_url($destinationURL);
+      if (empty($parseURL['host']) && (strpos($destinationURL, '/') !== 0)) {
+        $destinationURL = '/'.$destinationURL;
+      }
       CRM_Utils_System::redirect($destinationURL);
     }
     parent::postProcess();
