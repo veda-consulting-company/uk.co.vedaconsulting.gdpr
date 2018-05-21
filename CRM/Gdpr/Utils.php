@@ -139,6 +139,10 @@ WHERE s.contact_id = %1 ORDER BY s.date DESC";
       'name' => $name,
     ));
 
+    //MV: Returns lot of notice message when there is no result found.
+    if (empty($result['count'])) {
+      return array('id' => NULL, 'label' => NULL);
+    }
     return array('id' => $result['values'][0]['value'], 'label' => $result['values'][0]['description']);
   }
 
