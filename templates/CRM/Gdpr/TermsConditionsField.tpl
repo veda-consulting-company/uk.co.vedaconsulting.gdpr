@@ -11,36 +11,34 @@
        {$terms_conditions.intro}
       </div>
    </div>
-   </div>{* end crm-section *}
+  </div>{* end crm-section *}
   <div class="clear"></div>
+  {if $terms_conditions.links.global}
    <div class="crm-section">
-      {if $terms_conditions.links.global}
-      {assign var="link" value=$terms_conditions.links.global}
-    <div class="label"><label></label></div>
+    {assign var="link" value=$terms_conditions.links.global}
+      <div class="label"><label></label></div>
       <div class="content terms-conditions-item">
         <a href="{$link.url}" class="terms-conditions-link" target="blank">{$link.label}</a>
         <div class="terms-conditions-checkbox">
-        {$form.accept_tc.html}
+          {$form.accept_tc.html}
         </div>
       </div>
     </div> {* end .crm-section *}
-  <div class="clear"></div>
-      {/if}
-      {if $terms_conditions.links.entity}
-      {assign var="link" value=$terms_conditions.links.entity}
+    <div class="clear"></div>
+  {/if}
+  {if $terms_conditions.links.entity}
+    {assign var="link" value=$terms_conditions.links.entity}
     <div class="crm-section">
-    <div class="label"><label></label></div>
+      <div class="label"><label></label></div>
       <div class="content terms-conditions-item">
-          <a href="{$link.url}" class="terms-conditions-link" target="blank">{$link.label}</a>
+        <a href="{$link.url}" class="terms-conditions-link" target="blank">{$link.label}</a>
         <div class="terms-conditions-checkbox">
           {$form.accept_entity_tc.html}
         </div>
       </div>
-      {/if}
-
-    </div>{* end .content *}
-  </div>{* end .crm-section *}
-  <div class="clear"></div>
+    </div>{* end .crm-section *}
+    <div class="clear"></div>
+  {/if}
 </fieldset>
 <script type="text/javascript">
 {literal}
