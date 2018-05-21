@@ -235,11 +235,36 @@ function gdpr_civicrm_buildForm($formName, $form) {
       $tc->addField($form);
     }
   }
+  if ($formName == 'CRM_Event_Form_Registration_ThankYou') {
+    $cid = $form->_values['participant']['contact_id'];
+    if (!empty($cid)) {
+      $templatePath = realpath(dirname(__FILE__).'/templates');
+      CRM_Core_Region::instance('page-body')->add(
+        array(
+          'template' => "{$templatePath}/CRM/Gdpr/Event/ThankYou.tpl"
+        )
+      );
+      CRM_Gdpr_CommunicationsPreferences_Utils::addCommsPreferenceLinkInThankYouPage($cid, $form, 'Event');
+    }
+  }
   if ($formName == 'CRM_Contribute_Form_Contribution_Main') {
     CRM_Core_Resources::singleton()->addStyleFile('uk.co.vedaconsulting.gdpr', 'css/gdpr.css');
     $tc = new CRM_Gdpr_SLA_ContributionPage($form->_id);
     if ($tc->isEnabled(TRUE)) {
       $tc->addField($form);
+    }
+  }
+  if ($formName == 'CRM_Contribute_Form_Contribution_ThankYou') {
+    $trxnId = $form->getVar('_trxnId');
+    $cid    = CRM_Core_DAO::getFieldValue('CRM_Contribute_DAO_Contribution', $trxnId, 'contact_id', 'trxn_id');
+    if (!empty($cid)) {
+      $templatePath = realpath(dirname(__FILE__).'/templates');
+      CRM_Core_Region::instance('page-body')->add(
+        array(
+          'template' => "{$templatePath}/CRM/Gdpr/Event/ThankYou.tpl"
+        )
+      );
+      CRM_Gdpr_CommunicationsPreferences_Utils::addCommsPreferenceLinkInThankYouPage($cid, $form, 'ContributionPage');
     }
   }
   if ($formName == 'CRM_Mailing_Form_Subscribe') {
