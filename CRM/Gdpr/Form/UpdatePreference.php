@@ -49,6 +49,7 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
     //Get all Communication preference settings
     $this->getSettings();
     $this->_session = CRM_Core_Session::singleton();
+    $userID  = $this->_session->get('userID');
 
     $this->assign('commPrefGroupsetting', $this->commPrefGroupsetting);
 
@@ -153,6 +154,11 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
         , $accept_date
       );
       $this->assign('tcFieldlabel', $tcFieldlabel);
+    }
+
+    //have source field for offline comms preference, make sure we dont show this field when contact update their own preferences
+    if ($userID && $userID != $this->_cid) {
+      $this->add('text', 'activity_source', E::ts('Source of Communication Preferences'));
     }
 
     $this->addButtons(array(
@@ -412,17 +418,27 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
       }
     }
 
+    //Incase of offline communication preference update, Update logged in user as source contact,
+    $sourceContactID = $contactID;
+    $session = CRM_Core_Session::singleton();
+    if($userID = $session->get('userID')){
+      $sourceContactID = $userID;
+    }
+
     //Create Activity for communication preference updated
     $activityTypeIds = array_flip(CRM_Core_PseudoConstant::activityType(TRUE, FALSE, FALSE, 'name'));
     if (!empty($activityTypeIds[U::COMM_PREF_ACTIVITY_TYPE])) {
       $activityParams = array(
         'activity_type_id'  => $activityTypeIds[U::COMM_PREF_ACTIVITY_TYPE],
-        'source_contact_id' => $contactID,
+        'source_contact_id' => $sourceContactID,
         'target_id'         => $contactID,
         'subject'           => E::ts('Communication Preferences updated'),
         'activity_date_time'=> date('Y-m-d H:i:s'),
         'status_id'         => "Completed",
       );
+      if (!empty($submittedValues['activity_source'])) {
+        $activityParams['details'] = $submittedValues['activity_source'];
+      }
       civicrm_api3('Activity', 'Create', $activityParams);
     }
 
