@@ -20,6 +20,7 @@
   <compatibility>
     <ver>4.6</ver>
     <ver>4.7</ver>
+    <ver>5.0</ver>
   </compatibility>
   <comments>This extension is under active development, with the up and coming GDPR implementation date of the 25th of May we're expecting a lot of activity on the extension.</comments>
   <civix>
