@@ -16,7 +16,7 @@
 	<div class="content">
 		{$form.data_officer.html}
 		<br />
-         <span class="description"><i>{ts}Add the person designated to be responsible for data protection compliance, such as the data protection officer (DPO).{/ts} <a href='https://ico.org.uk/for-organisations/data-protection-reform/overview-of-the-gdpr/accountability-and-governance/#dpo' target='_blank'>More info</a></i></span>
+         <span class="description"><i>{ts}Add the person designated to be responsible for data protection compliance, such as the data protection officer (DPO).{/ts} <a href='https://ico.org.uk/for-organisations/data-protection-reform/overview-of-the-gdpr/accountability-and-governance/#dpo' target='_blank'>{ts}More info{/ts}</a></i></span>
 	</div>
 	<div class="clear"></div>
 </div>
@@ -54,7 +54,7 @@
 <div class="crm-section">
 	<div class="label">{$form.activity_period.label}</div>
 	<div class="content">
-		{$form.activity_period.html} (days)
+		{$form.activity_period.html} {ts}(days){/ts}
 	</div>
 	<div class="clear"></div>
 </div>

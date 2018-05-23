@@ -613,6 +613,10 @@ msgstr ""
 msgid "Event & Contribution thank you page"
 msgstr ""
 
+#: templates/CRM/Gdpr/Form/CommunicationsPreferences.tpl
+msgid "To display communication preference link in Event and Contribution thank you pages"
+msgstr ""
+
 #: templates/CRM/Gdpr/Form/Forgetme.tpl
 msgid ""
 "WARNING: 'Forget me' process will make the contact record totally "
@@ -734,6 +738,14 @@ msgstr ""
 
 #: templates/CRM/Gdpr/Form/Settings.tpl
 msgid "A default terms and conditions file for use in Event registrations etc. This can be overridden on the settings for the particular event."
+msgstr ""
+
+#: templates/CRM/Gdpr/Form/Settings.tpl
+msgid "(days)"
+msgstr ""
+
+#: templates/CRM/Gdpr/Form/Settings.tpl
+msgid "More info"
 msgstr ""
 
 #: templates/CRM/Gdpr/Page/ContactSummary.tpl
