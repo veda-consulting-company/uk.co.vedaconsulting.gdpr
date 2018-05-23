@@ -45,8 +45,8 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
     $this->add('text', 'forgetme_name', E::ts('Forgetme contact name'));
 
     //Email to Point of Contact/DPO when someone access forget me.
-    $this->add('checkbox', 'email_to_dpo', ts('Email the Point of Contact / DPO?'));
-    $this->add('text', 'email_dpo_subject', ts('Email Subject'));
+    $this->add('checkbox', 'email_to_dpo', E::ts('Email the Point of Contact / DPO?'));
+    $this->add('text', 'email_dpo_subject', E::ts('Email Subject'));
 
     $this->add(
       'text',
@@ -110,46 +110,46 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
     $this->add(
       'advcheckbox',
       'event_tc_enable',
-      ts('Enable Terms and Conditions for every event')
+      E::ts('Enable Terms and Conditions for every event')
     );
     $this->add(
       'advcheckbox',
       'cp_tc_enable',
-      ts('Enable Terms and Conditions for every Contribution Page')
+      E::ts('Enable Terms and Conditions for every Contribution Page')
     );
     //If T+C is enabled for both Events Contribution Pages they will share the
     //following settings.
     $this->add(
       'select',
       'entity_tc_position',
-      ts('Checkbox Position'),
+      E::ts('Checkbox Position'),
       array(
-        'customPre' => ts('Top profile'),
-        'customPost' => ts('Bottom profile'),
-        'formTop' => ts('Top of form'),
-        'formBottom' => ts('Bottom of form')
+        'customPre' => E::ts('Top profile'),
+        'customPost' => E::ts('Bottom profile'),
+        'formTop' => E::ts('Top of form'),
+        'formBottom' => E::ts('Bottom of form')
       )
     );
     $this->add(
       'text',
       'entity_tc_link_label',
-      ts('Link Label')
+      E::ts('Link Label')
     );
     $this->add(
       'text',
       'entity_tc_checkbox_text',
-      ts('Checkbox text')
+      E::ts('Checkbox text')
     );
     $this->add(
       'textarea',
       'entity_tc_intro',
-      ts('Introduction'),
+      E::ts('Introduction'),
       array('cols' => 50)
     );
     $this->add(
       'file',
       'entity_tc_upload',
-      ts('Default Terms and Conditions')
+      E::ts('Default Terms and Conditions')
     );
     $this->add(
       'hidden',
@@ -176,9 +176,9 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
       'sla_link_label' => E::ts('Data Policy'),
       'sla_checkbox_text' => E::ts('I accept the Data Policy.'),
       'sla_tc_new_version' => FALSE,
-      'entity_tc_link_label' => ts('Terms &amp; Conditions'),
-      'entity_tc_checkbox_text' => ts('I accept the Terms &amp; Conditions for this event.'),
-      'entity_tc_intro' => ts('Please read and accept the Terms &amp; Conditions and Data Policy.'),
+      'entity_tc_link_label' => E::ts('Terms &amp; Conditions'),
+      'entity_tc_checkbox_text' => E::ts('I accept the Terms &amp; Conditions for this event.'),
+      'entity_tc_intro' => E::ts('Please read and accept the Terms &amp; Conditions and Data Policy.'),
     );
 
     // Get GDPR settings, for setting defaults

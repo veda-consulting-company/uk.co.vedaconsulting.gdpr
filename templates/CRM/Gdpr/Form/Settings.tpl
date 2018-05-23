@@ -120,7 +120,7 @@
 	</div>
 	<div class="crm-section">
 		<div class="label">{$form.sla_tc_upload.label}</div>
-    {if $sla_tc_current} 
+    {if $sla_tc_current}
     <div class="clear current-file">
     <div class="label">Current:</div>
       <div class="content"> <a href="{$sla_tc_current.url}" target="blank">{$sla_tc_current.name}</a><br />
@@ -197,12 +197,12 @@
     <div class="content">
 			{$form.entity_tc_upload.html}
 
-    {if $entity_tc_current} 
+    {if $entity_tc_current}
       <div class="clear current-file">
       <div class="">Current:</div>
       <div class=""><a href="{$entity_tc_current.url}" target="blank">{$entity_tc_current.name}</a><br /></div>
     {/if}
-     <div class="description">A default terms and conditions file for use in Event registrations etc. This can be overridden on the settings for the particular event.</div>
+     <div class="description">{ts}A default terms and conditions file for use in Event registrations etc. This can be overridden on the settings for the particular event.{/ts}</div>
     </div>
   </div>
 </div>
