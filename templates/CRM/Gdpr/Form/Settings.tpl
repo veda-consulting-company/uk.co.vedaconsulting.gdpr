@@ -79,6 +79,15 @@
 		<div class="clear"></div>
 	</div>
 	<div class="crm-section">
+	<div class="label">{$form.forgetme_activity_type.label}</div>
+		<div class="content">
+			{$form.forgetme_activity_type.html}
+			<br />
+	        <span class="description"><i>{ts}Activities of these types to be deleted during 'Forget me' process, as some activity types (eg. Inbound email) allow you to easily identify the contact after it has been anonymised. Leave empty if you do not want any activities to be deleted.{/ts}</i></span>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div class="crm-section">
 		<div class="label">{$form.email_to_dpo.label}</div>
 		<div class="content">
 			{$form.email_to_dpo.html}

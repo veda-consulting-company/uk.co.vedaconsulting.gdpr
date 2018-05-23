@@ -472,7 +472,42 @@ WHERE url.time_stamp > '{$date}'";
     // Update all active memberships to 'GDPR Cancelled'
     self::cancelAllActiveMemberships($contactId);
 
+    // Delete activities based on settings
+    if (isset($settings['forgetme_activity_type']) && !empty($settings['forgetme_activity_type'])) {
+      self::deleteActivities($contactId, $settings['forgetme_activity_type']);
+    }
+
     return $updateResult;
+  }
+
+  /**
+   * Cancels all activities of the specified types of the contact
+   *
+   * @param int $contactId
+   * @param array $actTypeIds
+   *
+   */
+  static function deleteActivities($contactId, $actTypeIds) {
+    // Activity Delete API call with activity types as array is not working as expected
+    // So get activities list and then delete them individually
+    // Get API call with activity type id is giving all activities
+    foreach($actTypeIds as $actTypeId) {
+      $result = self::CiviCRMAPIWrapper('Activity', 'get', array(
+        'contact_id' => $contactId,
+        'options' => array('limit' => 0),
+      ));
+      if (!empty($result['values'])) {
+        foreach ($result['values'] as $data) {
+          // Check if the activity type needs to be deleted
+          if (in_array($data['activity_type_id'], $actTypeIds)) {
+            self::CiviCRMAPIWrapper('Activity', 'delete', array(
+              'id' => $data['id'],
+              'sequential' => 1,
+            ));
+          }
+        }
+      }
+    }
   }
 
   /**
