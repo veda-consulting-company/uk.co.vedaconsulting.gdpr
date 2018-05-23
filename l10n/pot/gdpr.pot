@@ -74,6 +74,7 @@ msgid "Page title"
 msgstr ""
 
 #: CRM/Gdpr/Form/CommunicationsPreferences.php
+#: CRM/Gdpr/Form/Settings.php
 msgid "Introduction"
 msgstr ""
 
@@ -85,6 +86,14 @@ msgstr ""
 msgid ""
 "Include a profile so the user can identify and check their details are up-to-"
 "date. It should  include a primary email address field."
+msgstr ""
+
+#: CRM/Gdpr/Form/CommunicationsPreferences.php
+msgid "Use as the mailing subscribe page"
+msgstr ""
+
+#: CRM/Gdpr/Form/CommunicationsPreferences.php
+msgid "Check to use the Communications Preferences page instead of the default Mailing Subscribe page."
 msgstr ""
 
 #: CRM/Gdpr/Form/CommunicationsPreferences.php
@@ -105,6 +114,15 @@ msgstr ""
 
 #: CRM/Gdpr/Form/CommunicationsPreferences.php
 msgid "Introduction or description for this section."
+msgstr ""
+
+#: CRM/Gdpr/Form/CommunicationsPreferences.php
+msgid "Enable"
+msgstr ""
+
+#: CRM/Gdpr/Form/CommunicationsPreferences.php
+#: templates/CRM/Gdpr/Form/CommunicationsPreferences.tpl
+msgid "Weight"
 msgstr ""
 
 #: CRM/Gdpr/Form/CommunicationsPreferences.php
@@ -139,7 +157,20 @@ msgstr ""
 msgid "A message to display to the user after the form is submitted. "
 msgstr ""
 
-#: CRM/Gdpr/Form/CommunicationsPreferences.php CRM/Gdpr/Form/Settings.php
+#: CRM/Gdpr/Form/CommunicationsPreferences.php
+msgid "Add link to the thank you page"
+msgstr ""
+
+#: CRM/Gdpr/Form/CommunicationsPreferences.php
+msgid "Link label"
+msgstr ""
+
+#: CRM/Gdpr/Form/CommunicationsPreferences.php
+msgid "Text above the link"
+msgstr ""
+
+#: CRM/Gdpr/Form/CommunicationsPreferences.php
+#: CRM/Gdpr/Form/Settings.php
 #: CRM/Gdpr/Form/UpdatePreference.php
 msgid "Save"
 msgstr ""
@@ -154,7 +185,16 @@ msgid ""
 "anonymous in user can access it."
 msgstr ""
 
-#: CRM/Gdpr/Form/Forgetme.php templates/CRM/Gdpr/Form/Settings.tpl
+#: CRM/Gdpr/Form/ContributionPage/TermsAndConditions.php
+msgid "Terms & Conditions information has been saved."
+msgstr ""
+
+#: CRM/Gdpr/Form/ContributionPage/TermsAndConditions.php
+msgid "Saved"
+msgstr ""
+
+#: CRM/Gdpr/Form/Forgetme.php
+#: templates/CRM/Gdpr/Form/Settings.tpl
 msgid "Forget me"
 msgstr ""
 
@@ -184,6 +224,10 @@ msgstr ""
 
 #: CRM/Gdpr/Form/Forgetme.php
 msgid "Record not Deleted cleanly. Please contact admin!"
+msgstr ""
+
+#: CRM/Gdpr/Form/Forgetme.php
+msgid "GDPR - Contact has been made anonymous"
 msgstr ""
 
 #: CRM/Gdpr/Form/SLAAccept.php
@@ -254,6 +298,7 @@ msgid "GDPR - Settings"
 msgstr ""
 
 #: CRM/Gdpr/Form/Settings.php
+#: templates/CRM/Gdpr/Form/Settings.tpl
 msgid "Point of Contact"
 msgstr ""
 
@@ -271,6 +316,14 @@ msgstr ""
 
 #: CRM/Gdpr/Form/Settings.php
 msgid "Forgetme contact name"
+msgstr ""
+
+#: CRM/Gdpr/Form/Settings.php
+msgid "Email the Point of Contact / DPO?"
+msgstr ""
+
+#: CRM/Gdpr/Form/Settings.php
+msgid "Email Subject"
 msgstr ""
 
 #: CRM/Gdpr/Form/Settings.php
@@ -301,7 +354,40 @@ msgstr ""
 msgid "Introductory text"
 msgstr ""
 
-#: CRM/Gdpr/Form/Settings.php templates/CRM/Gdpr/Form/Settings.tpl
+#: CRM/Gdpr/Form/Settings.php
+msgid "Enable Terms and Conditions for every event"
+msgstr ""
+
+#: CRM/Gdpr/Form/Settings.php
+msgid "Enable Terms and Conditions for every Contribution Page"
+msgstr ""
+
+#: CRM/Gdpr/Form/Settings.php
+msgid "Checkbox Position"
+msgstr ""
+
+#: CRM/Gdpr/Form/Settings.php
+msgid "Top profile"
+msgstr ""
+
+#: CRM/Gdpr/Form/Settings.php
+msgid "Bottom profile"
+msgstr ""
+
+#: CRM/Gdpr/Form/Settings.php
+msgid "Top of form"
+msgstr ""
+
+#: CRM/Gdpr/Form/Settings.php
+msgid "Bottom of form"
+msgstr ""
+
+#: CRM/Gdpr/Form/Settings.php
+msgid "Default Terms and Conditions"
+msgstr ""
+
+#: CRM/Gdpr/Form/Settings.php
+#: templates/CRM/Gdpr/Form/Settings.tpl
 msgid "Data Policy"
 msgstr ""
 
@@ -309,12 +395,32 @@ msgstr ""
 msgid "I accept the Data Policy."
 msgstr ""
 
-#: CRM/Gdpr/Form/UpdatePreference.php
-msgid "Unknown"
+#: CRM/Gdpr/Form/Settings.php gdpr.php
+msgid "Terms &amp; Conditions"
+msgstr ""
+
+#: CRM/Gdpr/Form/Settings.php
+msgid "I accept the Terms &amp; Conditions for this event."
+msgstr ""
+
+#: CRM/Gdpr/Form/Settings.php
+msgid "Please read and accept the Terms &amp; Conditions and Data Policy."
 msgstr ""
 
 #: CRM/Gdpr/Form/UpdatePreference.php
-msgid "I have read and agree to the <a href='%1' target='_blank'>%2</a>"
+msgid "--Select--"
+msgstr ""
+
+#: CRM/Gdpr/Form/UpdatePreference.php
+msgid "<a href='%1' target='_blank'>%2</a>"
+msgstr ""
+
+#: CRM/Gdpr/Form/UpdatePreference.php
+msgid "Here is our <a href='%1' target='_blank'>%2</a>, which you agreed to on %3."
+msgstr ""
+
+#: CRM/Gdpr/Form/UpdatePreference.php
+msgid "Source of Communication Preferences"
 msgstr ""
 
 #: CRM/Gdpr/Form/UpdatePreference.php
@@ -342,7 +448,7 @@ msgid "Upgrade %1 to revision %2"
 msgstr ""
 
 #: gdpr.php
-msgid "Terms &amp; Conditions"
+msgid "Contribution Page"
 msgstr ""
 
 #: gdpr.php
@@ -355,6 +461,38 @@ msgstr ""
 
 #: gdpr.php
 msgid "Communication Preferences Link"
+msgstr ""
+
+#: gdpr.php
+msgid "Communication Preferences URL (Bulk Mailing)"
+msgstr ""
+
+#: gdpr.php
+msgid "Communication Preferences Link (Bulk Mailing)"
+msgstr ""
+
+#: gdpr.php
+msgid "access GDPR"
+msgstr ""
+
+#: gdpr.php
+msgid "View GDPR related information"
+msgstr ""
+
+#: gdpr.php
+msgid "forget contact"
+msgstr ""
+
+#: gdpr.php
+msgid "Anonymize contacts"
+msgstr ""
+
+#: gdpr.php
+msgid "administer GDPR"
+msgstr ""
+
+#: gdpr.php
+msgid "Manage GDPR settings"
 msgstr ""
 
 #: templates/CRM/Gdpr/Form/Activitycontact.tpl
@@ -471,6 +609,10 @@ msgstr ""
 msgid "Completion"
 msgstr ""
 
+#: templates/CRM/Gdpr/Form/CommunicationsPreferences.tpl
+msgid "Event & Contribution thank you page"
+msgstr ""
+
 #: templates/CRM/Gdpr/Form/Forgetme.tpl
 msgid ""
 "WARNING: 'Forget me' process will make the contact record totally "
@@ -479,6 +621,10 @@ msgstr ""
 
 #: templates/CRM/Gdpr/Form/Forgetme.tpl
 msgid "This action cannot be undone."
+msgstr ""
+
+#: templates/CRM/Gdpr/Form/Forgetme.tpl
+msgid " Please Note, this action will not remove Instant Messenger details for the contact. if any Instant Messenger details remains in the contact record, Please delete them manually.. "
 msgstr ""
 
 #: templates/CRM/Gdpr/Form/Forgetme.tpl
@@ -502,15 +648,11 @@ msgid "Search results listings."
 msgstr ""
 
 #: templates/CRM/Gdpr/Form/Settings.tpl
-msgid "Point of Contact"
+msgid "Set your organisation's point of contact for data protection compliance."
 msgstr ""
 
 #: templates/CRM/Gdpr/Form/Settings.tpl
-msgid "Set your organisation's point of contact."
-msgstr ""
-
-#: templates/CRM/Gdpr/Form/Settings.tpl
-msgid "Add your organisation's point of contact, such as an appointed data protection officer (DPO)."
+msgid "Add the person designated to be responsible for data protection compliance, such as the data protection officer (DPO)."
 msgstr ""
 
 #: templates/CRM/Gdpr/Form/Settings.tpl
@@ -537,6 +679,14 @@ msgstr ""
 
 #: templates/CRM/Gdpr/Form/Settings.tpl
 msgid "Name to be used for contacts that have been made anonymous."
+msgstr ""
+
+#: templates/CRM/Gdpr/Form/Settings.tpl
+msgid "Send Email notification to Data protection officer"
+msgstr ""
+
+#: templates/CRM/Gdpr/Form/Settings.tpl
+msgid "Optionally, you can specify the Email subject here. Default subject is '%Contact Id% has been Anonmized'"
 msgstr ""
 
 #: templates/CRM/Gdpr/Form/Settings.tpl
@@ -572,6 +722,22 @@ msgstr ""
 
 #: templates/CRM/Gdpr/Form/Settings.tpl
 msgid "The title for the user-facing page with the acceptance form."
+msgstr ""
+
+#: templates/CRM/Gdpr/Form/Settings.tpl
+msgid "Terms &amp; Conditions: Events and Contribution Pages"
+msgstr ""
+
+#: templates/CRM/Gdpr/Form/Settings.tpl
+msgid "Set defaults for Terms &amp Conditions. You can override these in the settings for individual Events and Contribution Pages."
+msgstr ""
+
+#: templates/CRM/Gdpr/Form/Settings.tpl
+msgid "A default terms and conditions file for use in Event registrations etc. This can be overridden on the settings for the particular event."
+msgstr ""
+
+#: templates/CRM/Gdpr/Page/ContactSummary.tpl
+msgid "GDPR Status"
 msgstr ""
 
 #: templates/CRM/Gdpr/Page/Dashboard.tpl
