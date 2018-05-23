@@ -496,7 +496,7 @@ function gdpr_civicrm_summaryActions( &$actions, $contactID ) {
   $actions['comm_pref'] = array(
     'title' => 'Communication Preferences Link',
     //need a weight parameter here, Contact BAO looking for weight key and returning notice message. 
-    'weight' => 0, 
+    'weight' => 60, 
     'ref' => 'comm_pref',
     'key' => 'comm_pref',
     'href' => CRM_Gdpr_CommunicationsPreferences_Utils::getCommPreferenceURLForContact($contactID, TRUE),
