@@ -109,6 +109,10 @@
     </div>
   </fieldset>
 
+  {if $isCaptcha}
+      {include file='CRM/common/ReCAPTCHA.tpl'}
+  {/if}
+
 	<div class="crm-submit-buttons">
 	{include file="CRM/common/formButtons.tpl" location="bottom"}
 	</div>

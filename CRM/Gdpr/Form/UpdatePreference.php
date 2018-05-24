@@ -67,6 +67,14 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
       $this->assign('page_intro', $introText);
     }
 
+    //Include reCAPTCHA?
+    $addCaptcha = $this->commPrefSettings['add_captcha'];
+    if ($addCaptcha) {
+      $captcha = CRM_Utils_ReCAPTCHA::singleton();
+      $captcha->add($this);
+      $this->assign('isCaptcha', TRUE);
+    }
+
     //Check the channels are enabled ?
     $channelEleNames   = array();
     $isChannelsEnabled = $this->commPrefSettings['enable_channels'];
