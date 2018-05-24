@@ -1,10 +1,8 @@
 {crmScope extensionKey='uk.co.vedaconsulting.gdpr'}
 {if $crmPermissions->check('forget contact')}
 <div class="action-link">
-  {if $isGdprAdmin }
     {capture assign=forgetMeURL}{crmURL p="civicrm/gdpr/forgetme" q="reset=1&cid=`$contactId`"}{/capture}
   <a href="{$forgetMeURL}" class="button small-popup"><span><i class="crm-i fa-chain-broken"></i> {ts}Forget Me{/ts}</span></a>
-  {/if}
   <br/><br/>
 </div>
 {/if}
