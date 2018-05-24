@@ -2,6 +2,34 @@
 
 ### Change Log ###
 
+v2.6
+
+Issues
+
+* Currently 'forget contact' permission in contact GDPR tab requires 'administer GDPR' permission https://github.com/veda-consulting/uk.co.vedaconsulting.gdpr/issues/114
+* Extra div tags on event and contribution pages https://github.com/veda-consulting/uk.co.vedaconsulting.gdpr/issues/104
+* Notice and empty "search" on dashboard https://github.com/veda-consulting/uk.co.vedaconsulting.gdpr/issues/100
+* Bad redirect after fill communication preferences form https://github.com/veda-consulting/uk.co.vedaconsulting.gdpr/issues/99
+* Missing Translations https://github.com/veda-consulting/uk.co.vedaconsulting.gdpr/issues/110
+
+Features
+
+* Allow Forget Me to optionally delete some activity types
+* Make address history button optional https://github.com/veda-consulting/uk.co.vedaconsulting.gdpr/issues/108
+* GDRP & Captcha https://github.com/veda-consulting/uk.co.vedaconsulting.gdpr/issues/103
+
+
+v2.5
+
+* README Updated for failed 2.4 release
+
+v2.4
+
+* Confirm Payment button locks when terms not checked  https://github.com/veda-consulting/uk.co.vedaconsulting.gdpr/issues/84
+* Incorrect Data Policy file path stored in GDPR settings  https://github.com/veda-consulting/uk.co.vedaconsulting.gdpr/issues/80
+* Missing T&C tab on Contributions in 4.6 https://github.com/veda-consulting/uk.co.vedaconsulting.gdpr/issues/78
+* Some tokens not working when this extension is enabled https://github.com/veda-consulting/uk.co.vedaconsulting.gdpr/issues/73
+
 v2.3
 * Navigation from Dashboard to settings page requires administer CiviCRM permission https://github.com/veda-consulting/uk.co.vedaconsulting.gdpr/issues/64
 * Fatal error when event registered https://github.com/veda-consulting/uk.co.vedaconsulting.gdpr/issues/62
