@@ -15,7 +15,7 @@
       <table_name>civicrm_value_event_terms_and_conditions_7</table_name>
       <is_multiple>0</is_multiple>
       <collapse_adv_display>0</collapse_adv_display>
-      <created_date>2018-03-08 13:12:40</created_date>
+      <created_date>20180308131240</created_date>
       <is_reserved>0</is_reserved>
       <is_public>0</is_public>
     </CustomGroup>
@@ -34,7 +34,7 @@
       <table_name>civicrm_value_event_terms_and_conditions_acceptance_9</table_name>
       <is_multiple>0</is_multiple>
       <collapse_adv_display>1</collapse_adv_display>
-      <created_date>2018-03-11 18:48:17</created_date>
+      <created_date>20180311184817</created_date>
       <is_reserved>0</is_reserved>
       <is_public>1</is_public>
     </CustomGroup>
@@ -51,7 +51,7 @@
       <table_name>civicrm_value_contribution_page_terms_and_conditions_7</table_name>
       <is_multiple>0</is_multiple>
       <collapse_adv_display>0</collapse_adv_display>
-      <created_date>2018-04-06 17:21:10</created_date>
+      <created_date>20180406172110</created_date>
       <is_reserved>0</is_reserved>
       <is_public>0</is_public>
     </CustomGroup>
@@ -70,7 +70,7 @@
       <table_name>civicrm_value_contribution_terms_and_conditions_acceptan_8</table_name>
       <is_multiple>0</is_multiple>
       <collapse_adv_display>1</collapse_adv_display>
-      <created_date>2018-04-08 21:10:50</created_date>
+      <created_date>20180408211050</created_date>
       <is_reserved>0</is_reserved>
       <is_public>1</is_public>
     </CustomGroup>
@@ -382,7 +382,7 @@
       <data_type>String</data_type>
       <is_reserved>1</is_reserved>
       <is_active>1</is_active>
-    </OptionGroup>        
+    </OptionGroup>
   </OptionGroups>
   <OptionValues>
     <OptionValue>
@@ -491,5 +491,5 @@
       <is_active>1</is_active>
       <option_group_name>comm_pref_options</option_group_name>
     </OptionValue>
-  </OptionValues>  
+  </OptionValues>
 </CustomData>

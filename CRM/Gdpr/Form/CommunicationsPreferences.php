@@ -47,12 +47,22 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
       false
     );
     $descriptions['use_as_mailing_subscribe'] = E::ts('Check to use the Communications Preferences page instead of the default Mailing Subscribe page.');
+    $this->add(
+      'advcheckbox',
+      'add_captcha',
+      E::ts('Include reCAPTCHA?'),
+      '',
+      false
+    );
+    $recaptchaSettingsUrl = CRM_Utils_System::url('civicrm/admin/setting/misc', 'reset=1');
+    $descriptions['add_captcha'] = E::ts('Check to use reCAPTCHA in Communications Preferences page. Make sure you have configured the <a href="'.$recaptchaSettingsUrl.'">reCAPTCHA keys</a>.');
     // Let the template know about elements in this section.
     $page_elements = array(
       'page_title',
       'page_intro',
       'profile',
-      'use_as_mailing_subscribe'
+      'use_as_mailing_subscribe',
+      'add_captcha'
     );
     $this->assign('page_elements', $page_elements);
     // Comms prefs channels

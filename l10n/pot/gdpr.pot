@@ -97,6 +97,14 @@ msgid "Check to use the Communications Preferences page instead of the default M
 msgstr ""
 
 #: CRM/Gdpr/Form/CommunicationsPreferences.php
+msgid "Use as the mailing subscribe page"
+msgstr ""
+
+#: CRM/Gdpr/Form/CommunicationsPreferences.php
+msgid "Check to use the Communications Preferences page instead of the default Mailing Subscribe page."
+msgstr ""
+
+#: CRM/Gdpr/Form/CommunicationsPreferences.php
 msgid "Enable Channels"
 msgstr ""
 
