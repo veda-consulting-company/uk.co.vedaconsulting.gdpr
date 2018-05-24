@@ -1,5 +1,5 @@
 <?php
-
+use CRM_Gdpr_ExtensionUtil as E;
 require_once 'CRM/Core/Page.php';
 
 class CRM_Gdpr_SLA_Utils {
