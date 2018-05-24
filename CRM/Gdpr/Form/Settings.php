@@ -44,6 +44,16 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
     // Forget me action
     $this->add('text', 'forgetme_name', E::ts('Forgetme contact name'));
 
+    // Activity types
+    $this->add(
+      'select',
+      'forgetme_activity_type',
+      E::ts('Delete Activities of Types'),
+      array('' => E::ts('- select -')) + $actTypes, // list of options
+      FALSE,
+      array('class' => 'crm-select2 huge', 'multiple' => 'multiple',)
+    );
+
     //Email to Point of Contact/DPO when someone access forget me.
     $this->add('checkbox', 'email_to_dpo', ts('Email the Point of Contact / DPO?'));
     $this->add('text', 'email_dpo_subject', ts('Email Subject'));
@@ -217,6 +227,7 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
     $settings['activity_period'] = $values['activity_period'];
     $settings['contact_type'] = $values['contact_type'];
     $settings['forgetme_name'] = $values['forgetme_name'];
+    $settings['forgetme_activity_type'] = $values['forgetme_activity_type'];
     $settings['email_to_dpo'] = isset($values['email_to_dpo']) ? $values['email_to_dpo'] : 0;
     $settings['email_dpo_subject'] = $values['email_dpo_subject'];
     $settings['sla_period'] = $values['sla_period'];
