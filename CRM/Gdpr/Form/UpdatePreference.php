@@ -27,7 +27,7 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
   public function preProcess() {
     //Retrieve contact id from URL
     $this->_cid = $this->getContactID();
-    
+
     //Do not allow anon users to update unless have a valid checksum
     if(empty($this->_cid)){
       //Do Nothing for now
@@ -37,7 +37,7 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
     CRM_Core_Resources::singleton()->addStyleFile('uk.co.vedaconsulting.gdpr', 'css/gdpr.css');
     parent::preProcess();
   }
-  
+
   public function getSettings() {
     $this->settings    = U::getSettings();
     $this->commPrefSettings = $this->settings[U::SETTING_NAME];
@@ -86,17 +86,21 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
 
       $commPrefOpGroup = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_OptionGroup', U::COMM_PREF_OPTIONS, 'id', 'name');
       $commPrefOptions = array('' => E::ts('--Select--')) + CRM_Core_BAO_OptionValue::getOptionValuesAssocArray($commPrefOpGroup);
+      // quick hack to translate yes/no options, because are not coming translated from core's function
+      foreach($commPrefOptions as $key => $value){
+        $commPrefOptions[$key] = E::ts($value);
+      }
 
       foreach ($this->commPrefSettings['channels'] as $key => $value) {
         if ($value) {
           $name  = str_replace($this->containerPrefix, '', $key);
           $label = ucwords(str_replace('_', ' ', $name));
-          $this->add('select', $key, $label, $commPrefOptions, TRUE);
-          $this->channelEleNames[] = $key; 
+          $this->add('select', $key, E::ts($label), $commPrefOptions, TRUE);
+          $this->channelEleNames[] = $key;
         }
       }
     }
-    
+
     // export form elements
     $this->assign('channelEleNames', $this->channelEleNames);
     $this->assign('containerPrefix', $this->containerPrefix);
@@ -104,14 +108,14 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
     //Communication preference Group settings enabled ?
     $isGroupSettingEnabled = !empty($this->commPrefSettings['enable_groups']) ? $this->commPrefSettings['enable_groups'] : NULL;
     if ($isGroupSettingEnabled) {
-      
+
       if ($groupsHeading = $this->commPrefSettings['groups_heading']) {
         $this->assign('groups_heading', $groupsHeading);
       }
-      
+
       if ($groupsIntro = $this->commPrefSettings['groups_intro']) {
         $this->assign('groups_intro', $groupsIntro);
-      }      
+      }
 
       //all for all groups and disable checkbox is group_enabled from settings
       $groups = U::getGroups();
@@ -126,19 +130,19 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
         }
       }
     }
-    
+
     //GDPR Terms and conditions
     //if already accepted then we dont this link at all
     $isContactDueAcceptance = empty($this->_cid) ?  TRUE : CRM_Gdpr_SLA_Utils::isContactDueAcceptance($this->_cid);
     if ($gdprTermsConditionsUrl = CRM_Gdpr_SLA_Utils::getTermsConditionsUrl()) {
       $this->assign('gdprTcURL', $gdprTermsConditionsUrl);
-    }    
+    }
     if ($gdprTermsConditionslabel = CRM_Gdpr_SLA_Utils::getLinkLabel()) {
       $this->assign('gdprTcLabel', $gdprTermsConditionslabel);
     }
     if ($isContactDueAcceptance) {
       $termsConditionsField = $this->getTermsAndConditionFieldId();
-      
+
       $tcFieldName  = 'custom_'.$termsConditionsField;
       $tcLink = E::ts("<a href='%1' target='_blank'>%2</a>", array(1 => $gdprTermsConditionsUrl, 2 => $gdprTermsConditionslabel));
       $this->assign('tcLink', $tcLink);
@@ -147,7 +151,7 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
       $this->assign('tcFieldlabel', $tcFieldlabel);
       $this->assign('tcFieldName', $tcFieldName);
       $this->assign('isContactDueAcceptance', $isContactDueAcceptance);
-      
+
       $this->add('checkbox', $tcFieldName, $gdprTermsConditionslabel, NULL, TRUE);
     }
     else {
@@ -156,10 +160,13 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
       if (!empty($accept_activity['activity_date_time'])) {
         $accept_date = date('d/m/Y', strtotime($accept_activity['activity_date_time']));
       }
-      $tcFieldlabel = sprintf("Here is our <a href='%s' target='_blank'>%s</a>, which you agreed to on %s."
-        , $gdprTermsConditionsUrl
-        , $gdprTermsConditionslabel
-        , $accept_date
+
+      $tcFieldlabel = E::ts("Here is our <a href='%1' target='_blank'>%2</a>, which you agreed to on %3.",
+        array(
+          1 => $gdprTermsConditionsUrl,
+          2 => $gdprTermsConditionslabel,
+          3 => $accept_date,
+        )
       );
       $this->assign('tcFieldlabel', $tcFieldlabel);
     }
@@ -180,7 +187,7 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
     // export form elements
     $this->assign('groupEleNames', $this->groupEleNames);
 
-    //add form rule 
+    //add form rule
     $this->addFormRule(array('CRM_Gdpr_Form_UpdatePreference', 'formRule'), $this);
     if (!empty($this->commPrefSettings['profile'])) {
       $this->addFormRule(array('CRM_Profile_Form', 'formRule'), $this);
@@ -215,7 +222,7 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
       if ($contactID) {
         CRM_Core_BAO_UFGroup::filterUFGroups($id, $contactID);
       }
-      
+
       $fields = CRM_Core_BAO_UFGroup::getFields($id, FALSE, CRM_Core_Action::ADD,
         NULL, NULL, FALSE, NULL,
         FALSE, NULL, CRM_Core_Permission::CREATE,
@@ -268,7 +275,7 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
         foreach ($self->channelEleNames as $channel) {
           $groupChannel = str_replace($self->containerPrefix, '', $channel);
           $channelSettingValue = $self->commPrefGroupsetting[$groupEleName][$groupChannel];
-          
+
           if (!is_null($channelSettingValue) && $channelSettingValue != '') {
             $channelArray[$groupChannel] = ($fields[$channel] == 'YES') ? 1 : 0;
             $groupChannelAray[$groupChannel] = empty($self->commPrefGroupsetting[$groupEleName][$groupChannel]) ? 0 : 1;
@@ -303,7 +310,7 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
           $defaults[$key] = '';
         }
         elseif ($value) {
-          $defaults[$key] = !empty($contactDetails[$contactPrefPrefix.$name]) ? 'NO' : 'YES'; 
+          $defaults[$key] = !empty($contactDetails[$contactPrefPrefix.$name]) ? 'NO' : 'YES';
         }
       }
 
@@ -325,7 +332,7 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
           }
         }
       }
-      
+
       //Set Profile defaults
       $fields = array();
       $removeCustomFieldTypes = array('Contribution', 'Membership');
@@ -348,16 +355,16 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
 
       if (!empty($fields)) {
         CRM_Core_BAO_UFGroup::setProfileDefaults($this->_cid, $fields, $defaults);
-      }       
+      }
     }
     return $defaults;
   }
 
   public function getTermsAndConditionFieldId() {
     $termsConditionsField =  CRM_Gdpr_SLA_Utils::getTermsConditionsField();
-    return $termsConditionsField['id']; 
+    return $termsConditionsField['id'];
   }
-  
+
   public function postProcess() {
     $submittedValues = $this->exportValues();
     $commPrefMapper  = U::getCommunicationPreferenceMapper();
@@ -410,13 +417,13 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
           'contact_id' => $contactID,
           'group_id'   => $group['id'],
         );
-        
+
         $existsInGroup = civicrm_api3('GroupContact', 'get', $groupDetails);
-        
+
         //Set status added or removed based on user selection
         $status = !empty($submittedValues[$container_name]) ? 'Added' : 'Removed';
         $groupDetails['status'] = $status;
-        
+
         //check before Add / Remove from group.
         if ((!empty($existsInGroup['id']) && $status == 'Removed')
           OR (empty($existsInGroup['id']) && $status == 'Added')

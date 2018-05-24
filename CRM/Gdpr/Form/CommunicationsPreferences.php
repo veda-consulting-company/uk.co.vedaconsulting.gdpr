@@ -168,7 +168,7 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
         'group_description',
         'Description',
         array(
-          'cols' => 30, 
+          'cols' => 30,
           'rows' => 6
           )
       );
@@ -210,7 +210,7 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
     $this->assign('descriptions', $descriptions);
     $this->assign('groups_elements', $groups_elements);
     $this->assign('group_containers', $group_containers);
-    // Use the current logged in user for the preview. 
+    // Use the current logged in user for the preview.
     $current_cid = CRM_Core_Session::singleton()->getLoggedInContactID();
     if ($current_cid) {
       $url = CRM_Gdpr_CommunicationsPreferences_Utils::getCommPreferenceURLForContact($current_cid);
@@ -221,17 +221,17 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
     $this->add(
       'advcheckbox',
       'enable_comm_pref_in_thankyou',
-      ts('Add link to the thank you page')
+      E::ts('Add link to the thank you page')
     );
     $this->add(
       'text',
       'comm_pref_link_label',
-      ts('Link label')
+      E::ts('Link label')
     );
     $this->add(
       'textarea',
       'comm_pref_link_intro',
-      ts('Text above the link'),
+      E::ts('Text above the link'),
       $text_area_attributes
     );
 

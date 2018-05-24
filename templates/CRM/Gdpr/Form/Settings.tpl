@@ -16,7 +16,7 @@
 	<div class="content">
 		{$form.data_officer.html}
 		<br />
-         <span class="description"><i>{ts}Add the person designated to be responsible for data protection compliance, such as the data protection officer (DPO).{/ts} <a href='https://ico.org.uk/for-organisations/data-protection-reform/overview-of-the-gdpr/accountability-and-governance/#dpo' target='_blank'>More info</a></i></span>
+         <span class="description"><i>{ts}Add the person designated to be responsible for data protection compliance, such as the data protection officer (DPO).{/ts} <a href='https://ico.org.uk/for-organisations/data-protection-reform/overview-of-the-gdpr/accountability-and-governance/#dpo' target='_blank'>{ts}More info{/ts}</a></i></span>
 	</div>
 	<div class="clear"></div>
 </div>
@@ -54,7 +54,7 @@
 <div class="crm-section">
 	<div class="label">{$form.activity_period.label}</div>
 	<div class="content">
-		{$form.activity_period.html} (days)
+		{$form.activity_period.html} {ts}(days){/ts}
 	</div>
 	<div class="clear"></div>
 </div>
@@ -129,7 +129,7 @@
 	</div>
 	<div class="crm-section">
 		<div class="label">{$form.sla_tc_upload.label}</div>
-    {if $sla_tc_current} 
+    {if $sla_tc_current}
     <div class="clear current-file">
     <div class="label">Current:</div>
       <div class="content"> <a href="{$sla_tc_current.url}" target="blank">{$sla_tc_current.name}</a><br />
@@ -206,7 +206,7 @@
     <div class="content">
 			{$form.entity_tc_upload.html}
 
-    {if $entity_tc_current} 
+    {if $entity_tc_current}
       <div class="clear current-file">
       <div class="">{ts}Current:{/ts}</div>
       <div class=""><a href="{$entity_tc_current.url}" target="blank">{$entity_tc_current.name}</a><br /></div>

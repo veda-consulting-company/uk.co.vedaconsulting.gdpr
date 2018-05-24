@@ -1,5 +1,5 @@
 <?php
-
+use CRM_Gdpr_ExtensionUtil as E;
 require_once 'CRM/Core/Page.php';
 
 class CRM_Gdpr_SLA_Utils {
@@ -9,7 +9,7 @@ class CRM_Gdpr_SLA_Utils {
   static protected $customGroupName = 'SLA_Acceptance';
 
   static protected $customFieldNameTC = 'Terms_Conditions';
-  
+
   /**
    * @var key used in session to flag that the acceptance form should be
    * displayed.
@@ -39,7 +39,7 @@ class CRM_Gdpr_SLA_Utils {
     $session = CRM_Core_Session::singleton();
     $session->set(self::getPromptFlagSessionKey(), -1);
   }
-  
+
   /**
    * Determines whether to show modal form.
    */
@@ -71,7 +71,7 @@ if (typeof CRM == 'object') {
    CRM.loadForm("$formPath")
   // Attach an event handler
   .on('crmFormSuccess', function(event, data) {
-  }); 
+  });
 }
 EOT;
 	  CRM_Core_Resources::singleton()->addScript($script);
@@ -142,7 +142,7 @@ EOT;
     $params = array(
       'source_contact_id' => $contactId,
       'target_id' => $contactId,
-      'subject' => 'Data Policy accepted',
+      'subject' => E::ts('Data Policy accepted'),
       'status_id' => 'Completed',
       'activity_type_id' => self::$activityTypeName,
       'custom_' . $termsConditionsField['id'] => $termsConditionsUrl,

@@ -93,8 +93,8 @@ class CRM_Gdpr_Form_Forgetme extends CRM_Core_Form {
     self::removeEntityRecords('Website', $params);
 
     // Remove all the IM records of this contact
-    // On Civi 4.6, 
-    // api IM get breaks and returning 500 error, because IM get api trying to check api/v3/IM.php instead of api/v3/Im.php. 
+    // On Civi 4.6,
+    // api IM get breaks and returning 500 error, because IM get api trying to check api/v3/IM.php instead of api/v3/Im.php.
     // on civi 4.7 IM get is working fine.n Need more investigation on this issue.
     // check civi Version if its below than 4.7 then skip executing IM API.
     $currentVer = CRM_Core_BAO_Domain::version(TRUE);
@@ -173,14 +173,14 @@ class CRM_Gdpr_Form_Forgetme extends CRM_Core_Form {
     $activityTypeIds = array_flip(CRM_Core_PseudoConstant::activityType(TRUE, FALSE, FALSE, 'name'));
     //check Activity type exits before fire an API.
     if (!empty($activityTypeIds[CRM_Gdpr_Constants::FORGET_ME_ACTIVITY_TYPE_NAME])) {
-      
+
       $activityTypeId = $activityTypeIds[CRM_Gdpr_Constants::FORGET_ME_ACTIVITY_TYPE_NAME];
       //Make logged in user record as source contact record
       $sourceContactID = $contactID;
       if ($loggedinUser = CRM_Core_Session::singleton()->getLoggedInContactID()) {
         $sourceContactID = $loggedinUser;
       }
-      $subject = ts('GDPR - Contact has been made anonymous');
+      $subject = E::ts('GDPR - Contact has been made anonymous');
       $params = array(
         'activity_type_id'  => $activityTypeId,
         'source_contact_id' => $sourceContactID,
@@ -222,8 +222,8 @@ class CRM_Gdpr_Form_Forgetme extends CRM_Core_Form {
     //Now we have all details to send email notification to Point of Contact/DPO
     if ($emailToDPO && $dpoContactEmail) {
 
-      $defaultSubject = ts("{$contactID} has been anonymized");
-      $msg = ts("Contact ID : {$contactID} has been anonymized.");
+      $defaultSubject = E::ts("{$contactID} has been anonymized");
+      $msg = E::ts("Contact ID : {$contactID} has been anonymized.");
 
       //get the default domain email address.
       list($domainEmailName, $domainEmailAddress) = CRM_Core_BAO_Domain::getNameAndEmail();
