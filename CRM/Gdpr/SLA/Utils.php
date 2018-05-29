@@ -136,7 +136,7 @@ EOT;
     if (!$contactId) {
       return;
     }
-    $termsConditionsUrl = $settings['sla_tc'];
+    $termsConditionsUrl = self::getTermsConditionsUrl();
     $termsConditionsField = self::getTermsConditionsField();
     $termsConditionsFieldKey = 'custom_' . $termsConditionsField['id'];
     $params = array(
@@ -188,15 +188,29 @@ EOT;
   static function getTermsConditionsUrl($absolute = FALSE) {
     $url = '';
     $settings = CRM_Gdpr_Utils::getGDPRSettings();
-    if (!empty($settings['sla_tc'])) {
-      $url = $settings['sla_tc'];
+    if (!empty($settings['sla_tc']) || !empty($settings['sla_tc_link'])) {
+      switch ($settings['sla_data_policy_option']) {
+        // File uploaded
+        case 1:
+        default:
+          $url = $settings['sla_tc'];
+          break;
+
+        // Web page link
+        case 2:
+          $url = $settings['sla_tc_link'];
+          break;
+      }
+    }
+
+    if (!empty($url)) {
       if (!$absolute) {
         return $url;
       }
       if (0 == strpos($url, '/')) {
         $url = substr($url, 1);
       }
-      return  CRM_System::url($url);
+      return CRM_System::url($url);
     }
   }
 

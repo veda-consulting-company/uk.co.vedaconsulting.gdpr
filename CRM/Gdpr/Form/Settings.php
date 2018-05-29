@@ -82,10 +82,26 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
       TRUE,
       array('class' => 'crm-select2')
     );
+    $dataPolicyOptions = array(
+      '1' => ts('File Upload'),
+      '2' => ts('Web page link'),
+    );
+    $this->addRadio('sla_data_policy_option',
+      ts('Data Policy options'),
+      $dataPolicyOptions,
+      array(),
+      '&nbsp;', FALSE
+    );
     $this->add(
       'file',
       'sla_tc_upload',
       E::ts('Data Policy file')
+    );
+    $this->add(
+      'text',
+      'sla_tc_link',
+      E::ts('Data Policy link'),
+      array('class' => 'huge')
     );
     $this->add(
       'checkbox',
@@ -156,10 +172,22 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
       E::ts('Introduction'),
       array('cols' => 50)
     );
+    $this->addRadio('entity_tc_option',
+      ts('Terms and Conditions options'),
+      $dataPolicyOptions,
+      array(),
+      '&nbsp;', FALSE
+    );
     $this->add(
       'file',
       'entity_tc_upload',
-      E::ts('Default Terms and Conditions')
+      ts('Default Terms and Conditions file')
+    );
+    $this->add(
+      'text',
+      'entity_tc_link',
+      E::ts('Default Terms and Conditions link'),
+      array('class' => 'huge')
     );
     $this->add(
       'hidden',
@@ -199,9 +227,21 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
       $this->setDefaults($defaults);
     }
     // Pass on variables to link to terms and conditions.
-    if (!empty($defaults['sla_tc'])) {
-      $sla_tc['url'] = $defaults['sla_tc'];
-      $sla_tc['name'] = basename($defaults['sla_tc']);
+    if (!empty($defaults['sla_tc']) || !empty($defaults['sla_tc_link'])) {
+      switch ($defaults['sla_data_policy_option']) {
+        // File uploaded
+        case 1:
+        default:
+          $sla_tc['url'] = $defaults['sla_tc'];
+          $sla_tc['name'] = basename($defaults['sla_tc']);
+          break;
+
+        // Web page link
+        case 2:
+          $sla_tc['url'] = $defaults['sla_tc_link'];
+          break;
+      }
+      $this->assign('sla_data_policy_option', $defaults['sla_data_policy_option']);
       $this->assign('sla_tc_current', $sla_tc);
       $version = !empty($defaults['sla_tc_version']) ? $defaults['sla_tc_version'] : 1;
       $this->assign('sla_tc_version', $version);
@@ -210,9 +250,21 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
         $this->assign('sla_tc_updated', $updated);
       }
     }
-    if (!empty($defaults['entity_tc'])) {
-      $entity_tc['url'] = $defaults['entity_tc'];
-      $entity_tc['name'] = basename($defaults['entity_tc']);
+    if (!empty($defaults['entity_tc'])  || !empty($defaults['entity_tc_link'])) {
+      switch ($defaults['entity_tc_option']) {
+        // File uploaded
+        case 1:
+        default:
+          $entity_tc['url'] = $defaults['entity_tc'];
+          $entity_tc['name'] = basename($defaults['entity_tc']);
+          break;
+
+        // Web page link
+        case 2:
+          $entity_tc['url'] = $defaults['entity_tc_link'];
+          break;
+      }
+      $this->assign('entity_tc_option', $defaults['entity_tc_option']);
       $this->assign('entity_tc_current', $entity_tc);
     }
     parent::buildQuickForm();
@@ -231,6 +283,11 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
     $settings['email_to_dpo'] = isset($values['email_to_dpo']) ? $values['email_to_dpo'] : 0;
     $settings['email_dpo_subject'] = $values['email_dpo_subject'];
     $settings['sla_period'] = $values['sla_period'];
+    $settings['sla_data_policy_option'] = $values['sla_data_policy_option'];
+    // Privacy policy link
+    if ($values['sla_data_policy_option'] == 2) {
+      $settings['sla_tc_link'] = $values['sla_tc_link'];
+    }
     $settings['sla_prompt'] = !empty($values['sla_prompt']) ? 1 : 0;
     $settings['sla_agreement_text'] = $values['sla_agreement_text'];
     $settings['sla_link_label'] = $values['sla_link_label'];
@@ -242,6 +299,11 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
     $settings['entity_tc_link_label'] = $values['entity_tc_link_label'];
     $settings['entity_tc_checkbox_text'] = $values['entity_tc_checkbox_text'];
     $settings['entity_tc_intro'] = $values['entity_tc_intro'];
+    $settings['entity_tc_option'] = $values['entity_tc_option'];
+    // Terms and conditions link
+    if ($values['entity_tc_option'] == 2) {
+      $settings['entity_tc_link'] = $values['entity_tc_link'];
+    }
     // Map the upload file element to setting name.
     $upload_elems = array(
       'sla_tc_upload' => 'sla_tc',
