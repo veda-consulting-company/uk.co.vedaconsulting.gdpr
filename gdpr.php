@@ -255,9 +255,15 @@ function gdpr_civicrm_buildForm($formName, $form) {
     }
   }
   if ($formName == 'CRM_Contribute_Form_Contribution_ThankYou') {
-    $trxnId = $form->getVar('_trxnId');
-    $cid    = CRM_Core_DAO::getFieldValue('CRM_Contribute_DAO_Contribution', $trxnId, 'contact_id', 'trxn_id');
-    if (!empty($cid)) {
+    // Contact id for logged in user.
+    $cid = $form->_contactID;
+    if (!$cid) {
+      $trxnId = $form->getVar('_trxnId');
+      if ($trxnId) {
+        $cid = CRM_Core_DAO::getFieldValue('CRM_Contribute_DAO_Contribution', $trxnId, 'contact_id', 'trxn_id');
+      }
+    }
+    if ($cid) {
       $templatePath = realpath(dirname(__FILE__).'/templates');
       CRM_Core_Region::instance('page-body')->add(
         array(
