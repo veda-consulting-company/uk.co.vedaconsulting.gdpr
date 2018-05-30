@@ -264,7 +264,7 @@ function gdpr_civicrm_buildForm($formName, $form) {
       }
     }
     if ($cid) {
-      $templatePath = realpath(dirname(__FILE__).'/templates');
+      $templatePath = realpath(dirname(__FILE__) . '/templates');
       CRM_Core_Region::instance('page-body')->add(
         array(
           'template' => "{$templatePath}/CRM/Gdpr/Event/ThankYou.tpl"
