@@ -210,7 +210,7 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
       $dao = new CRM_Core_DAO_UFGroup();
       $dao->id = $id;
       if ($dao->find(TRUE)) {
-        $this->_isUpdateDupe = 1;
+        $this->_isUpdateDupe = $dao->is_update_dupe; // Profile duplicate match option
         // $this->_isUpdateDupe = $dao->is_update_dupe;
         $this->_isAddCaptcha = $dao->add_captcha;
         $this->_ufGroup = (array) $dao;
