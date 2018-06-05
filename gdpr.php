@@ -244,7 +244,9 @@ function gdpr_civicrm_buildForm($formName, $form) {
           'template' => "{$templatePath}/CRM/Gdpr/Event/ThankYou.tpl"
         )
       );
-      CRM_Gdpr_CommunicationsPreferences_Utils::addCommsPreferenceLinkInThankYouPage($cid, $form, 'Event');
+
+      //amend communication preference link/embed form in thank you page
+      CRM_Gdpr_CommunicationsPreferences_Utils::commsPreferenceInThankyouPage($cid, $form, 'Event');  
     }
   }
   if ($formName == 'CRM_Contribute_Form_Contribution_Main') {
@@ -270,7 +272,8 @@ function gdpr_civicrm_buildForm($formName, $form) {
           'template' => "{$templatePath}/CRM/Gdpr/Event/ThankYou.tpl"
         )
       );
-      CRM_Gdpr_CommunicationsPreferences_Utils::addCommsPreferenceLinkInThankYouPage($cid, $form, 'ContributionPage');
+      //amend communication preference link/embed form in thank you page
+      CRM_Gdpr_CommunicationsPreferences_Utils::commsPreferenceInThankyouPage($cid, $form, 'ContributionPage');
     }
   }
   if ($formName == 'CRM_Mailing_Form_Subscribe') {

@@ -12,8 +12,8 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
   protected $settings;
   protected $commPrefSettings;
   protected $commPrefGroupsetting;
-  protected $channelEleNames;
-  protected $groupEleNames;
+  public $channelEleNames;
+  public $groupEleNames;
   protected $_fields = array();
 
   public $containerPrefix = 'enable_';
@@ -51,7 +51,7 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
     $this->_session = CRM_Core_Session::singleton();
     $userID  = $this->_session->get('userID');
 
-    $this->assign('commPrefGroupsetting', $this->commPrefGroupsetting);
+    // $this->assign('commPrefGroupsetting', $this->commPrefGroupsetting);
 
     if (!empty($this->commPrefSettings['profile'])) {
       $this->buildCustom($this->commPrefSettings['profile']);
@@ -75,61 +75,9 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
       $this->assign('isCaptcha', TRUE);
     }
 
-    //Check the channels are enabled ?
-    $channelEleNames   = array();
-    $isChannelsEnabled = $this->commPrefSettings['enable_channels'];
-    if ($isChannelsEnabled) {
-      //Display Page intro from settings.
-      if ($channelIntro = $this->commPrefSettings['channels_intro']) {
-        $this->assign('channels_intro', $channelIntro);
-      }
-
-      $commPrefOpGroup = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_OptionGroup', U::COMM_PREF_OPTIONS, 'id', 'name');
-      $commPrefOptions = array('' => E::ts('--Select--')) + CRM_Core_BAO_OptionValue::getOptionValuesAssocArray($commPrefOpGroup);
-      // quick hack to translate yes/no options, because are not coming translated from core's function
-      foreach($commPrefOptions as $key => $value){
-        $commPrefOptions[$key] = E::ts($value);
-      }
-
-      foreach ($this->commPrefSettings['channels'] as $key => $value) {
-        if ($value) {
-          $name  = str_replace($this->containerPrefix, '', $key);
-          $label = ucwords(str_replace('_', ' ', $name));
-          $this->add('select', $key, E::ts($label), $commPrefOptions, TRUE);
-          $this->channelEleNames[] = $key;
-        }
-      }
-    }
-
-    // export form elements
-    $this->assign('channelEleNames', $this->channelEleNames);
-    $this->assign('containerPrefix', $this->containerPrefix);
-
-    //Communication preference Group settings enabled ?
-    $isGroupSettingEnabled = !empty($this->commPrefSettings['enable_groups']) ? $this->commPrefSettings['enable_groups'] : NULL;
-    if ($isGroupSettingEnabled) {
-
-      if ($groupsHeading = $this->commPrefSettings['groups_heading']) {
-        $this->assign('groups_heading', $groupsHeading);
-      }
-
-      if ($groupsIntro = $this->commPrefSettings['groups_intro']) {
-        $this->assign('groups_intro', $groupsIntro);
-      }
-
-      //all for all groups and disable checkbox is group_enabled from settings
-      $groups = U::getGroups();
-      $groups = U::sortGroups($groups, array('group_weight' => 'asc'));
-      foreach ($groups as $group) {
-        $container_name = 'group_' . $group['id'];
-        if (!empty($this->commPrefGroupsetting[$container_name]['group_enable'])) {
-          $title = $this->commPrefGroupsetting[$container_name]['group_title'];
-          $groupsFromSettings[$title] = $group['id'];
-          $this->add('Checkbox', $container_name, $title);
-          $this->groupEleNames[] = $container_name;
-        }
-      }
-    }
+    //Inject channels and groups into comms preferenec form.
+    //we have moved this section into helper functions, because we are reusing same functions in other place like event / contribution thank you page to have comms preference embed form
+    U::injectCommPreferenceFieldsIntoForm($this);
 
     //GDPR Terms and conditions
     //if already accepted then we dont this link at all
@@ -394,68 +342,10 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
       TRUE
     );
 
-    //Prepare Comm pref params
-    $commPref = array('id' => $contactID);
+    //we have now moved this section into common helper function which reused in other place like event/contribution thank you to let update comms preference using embed form.
+    U::updateCommsPrefByFormValues($contactID, $submittedValues);
 
-    //Comm pref channel Values
-    foreach ($this->commPrefSettings['channels'] as $key => $value) {
-      $name  = str_replace($this->containerPrefix, '', $key);
-      if (!empty($submittedValues[$key])) {
-        $channelValue = $submittedValues[$key];
-        $commPref = array_merge($commPref, $commPrefMapper[$name][$channelValue]);
-      }
-    }
-
-    //Using API to update contact
-    $contact = civicrm_api3('Contact', 'create', $commPref);
-
-    $groups = U::getGroups();
-    foreach ($groups as $groupId => $group) {
-      $container_name = 'group_' . $group['id'];
-      if (!empty($this->commPrefGroupsetting[$container_name]['group_enable'])) {
-        $groupDetails = array(
-          'contact_id' => $contactID,
-          'group_id'   => $group['id'],
-        );
-
-        $existsInGroup = civicrm_api3('GroupContact', 'get', $groupDetails);
-
-        //Set status added or removed based on user selection
-        $status = !empty($submittedValues[$container_name]) ? 'Added' : 'Removed';
-        $groupDetails['status'] = $status;
-
-        //check before Add / Remove from group.
-        if ((!empty($existsInGroup['id']) && $status == 'Removed')
-          OR (empty($existsInGroup['id']) && $status == 'Added')
-        ) {
-          $groupResult = civicrm_api3('GroupContact', 'create', $groupDetails);
-        }
-      }
-    }
-
-    //Incase of offline communication preference update, Update logged in user as source contact,
-    $sourceContactID = $contactID;
-    $session = CRM_Core_Session::singleton();
-    if($userID = $session->get('userID')){
-      $sourceContactID = $userID;
-    }
-
-    //Create Activity for communication preference updated
-    $activityTypeIds = array_flip(CRM_Core_PseudoConstant::activityType(TRUE, FALSE, FALSE, 'name'));
-    if (!empty($activityTypeIds[U::COMM_PREF_ACTIVITY_TYPE])) {
-      $activityParams = array(
-        'activity_type_id'  => $activityTypeIds[U::COMM_PREF_ACTIVITY_TYPE],
-        'source_contact_id' => $sourceContactID,
-        'target_id'         => $contactID,
-        'subject'           => E::ts('Communication Preferences updated'),
-        'activity_date_time'=> date('Y-m-d H:i:s'),
-        'status_id'         => "Completed",
-      );
-      if (!empty($submittedValues['activity_source'])) {
-        $activityParams['details'] = $submittedValues['activity_source'];
-      }
-      civicrm_api3('Activity', 'Create', $activityParams);
-    }
+    U::createCommsPrefActivity($contactID, $submittedValues);
 
     if (!empty($this->commPrefSettings['completion_message'])) {
       $thankYouMsg = html_entity_decode($this->commPrefSettings['completion_message']);
