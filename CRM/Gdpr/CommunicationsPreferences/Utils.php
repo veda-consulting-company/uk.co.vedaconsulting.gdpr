@@ -496,7 +496,6 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
 
 
     $settings = self::getSettings();
-    CRM_Core_Error::debug_var('settings', $settings);
     $fieldsSettings = $settings[self::SETTING_NAME];
     //Assign required variables to smarty
     $form->assign('entity', $entity);
