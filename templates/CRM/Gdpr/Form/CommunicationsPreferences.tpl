@@ -126,7 +126,7 @@
  </div>
   <h3> {ts}Event & Contribution thank you page{/ts} </h3>
   <div class="crm-block crm-form-block crm-gdpr-comms-prefs-form-block">
-    <div class="help">{ts}Allows supporters set their preferences after registering an event or making a contribution.{/ts}</div>
+    <div class="help">{ts}<p>Allows supporters set their preferences after registering for an event or making a contribution.</p><p>Note, to embed the Communcation Preferences form in thank-you pages, you need to give anonymous users the permission: <em>CiviCRM: access AJAX API</em>.</p>{/ts}</div>
     <div class="crm-section">
       <div class="label">{$form.comm_pref_in_thankyou.label}</div>
       <div class="content">{$form.comm_pref_in_thankyou.html}
@@ -170,7 +170,9 @@
   $('input.toggle-select').on('change', function() {
     var map = $(this).data('toggle-mapping'),
     currVal = $(this).val();
-    console.log('selected val is: ' + currVal);
+    if (!$(this).prop('checked')) {
+      return;
+    }
     for (val in map) {
       if (!map[val]) {
         continue;
