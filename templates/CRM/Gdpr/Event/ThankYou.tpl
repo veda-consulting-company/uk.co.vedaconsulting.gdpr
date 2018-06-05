@@ -1,3 +1,4 @@
+{* Communication Preferences prepended to Event Registration and Contribution Thank You pages *}
 {if $comm_pref_in_thankyou eq 'link'}
   <div id="comm_pref_url" class="comm_pref_url_div">
     <div class="header-dark"> Communication Preferences </div>
@@ -27,21 +28,11 @@
 {/if}
 {if $comm_pref_in_thankyou eq 'embed'}
   <div id="comms_pref_form">
-  <!-- channesl fieldset -->
-  <fieldset id="comm_pref_fields">
-    <legend>{$channels_intro}</legend>
-    {foreach from=$channelEleNames item=elementName}
-      <div class="crm-section">
-        <div class="label">{$form.$elementName.label}</div>
-        <div class="content">{$form.$elementName.html}</div>
-        <div class="clear"></div>
-      </div>
-    {/foreach}
-  </fieldset>
-
+    {if $commPrefIntro }
+    {$commPrefIntro}
+    {/if}
   <!-- Groups Fieldset -->
   <fieldset id="comm_pref_groups" class="groups-fieldset">
-    <legend>{$groups_heading}</legend>
     {if $groups_intro}
       <div class="section-description">
       {ts}{$groups_intro}{/ts}
@@ -60,7 +51,7 @@
               {foreach from=$channelEleNames item=channelName}
                 {assign var=groupChannel value=$channelName|replace:$containerPrefix:''}
                 {if $commPrefGroupsetting.$elementName.$groupChannel}
-                  <span class="group-channel-matrix">
+                  <span class="group-channel-matrix" style="display:none;">
                   {$groupChannel|ucwords}
                   </span>
                 {/if}
@@ -73,6 +64,17 @@
     {/foreach}
   </fieldset>
 
+  <!-- channels fieldset -->
+  <fieldset id="comm_pref_fields">
+    <div class="section-description">{$channels_intro}</div>
+    {foreach from=$channelEleNames item=elementName}
+      <div class="crm-section">
+        <div class="label">{$form.$elementName.label}</div>
+        <div class="content">{$form.$elementName.html}</div>
+        <div class="clear"></div>
+      </div>
+    {/foreach}
+  </fieldset>
   <div class="submit-buttons">
     <input type="button" name="comm_pref_submit" id="comm_pref_submit" value="Submit" class="crm-button" />
   </div>

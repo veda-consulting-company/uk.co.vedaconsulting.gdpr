@@ -314,12 +314,13 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
   }
 
   /**
-   * to inject the communication preference fields into event / contribution thank you page for now.
-   * may be enhance this function for future use to inject into all other forms as well
+   * Inject the communication preference fields into a form.
+   *
+   * Intended to be used for Event registration and contribution thank-you pages.
    */
   public static function injectCommPreferenceFieldsIntoForm(&$form) {
 
-    //Get the Comms pref options (yes/no) form option group
+    // Get the Comms pref options (yes/no) form option group.
     $commPrefOpGroup = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_OptionGroup', self::COMM_PREF_OPTIONS, 'id', 'name');
     $commPrefOptions = array('' => E::ts('--Select--')) + CRM_Core_BAO_OptionValue::getOptionValuesAssocArray($commPrefOpGroup);
     // quick hack to translate yes/no options, because are not coming translated from core's function
@@ -393,6 +394,9 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
       $form->assign('groupEleNames', $form->groupEleNames);
       $form->assign('groupEleNamesJSON', json_encode($form->groupEleNames));
       $form->assign('commPrefGroupsetting', $groupSettings);
+      $intro = !empty($fieldsSettings['comm_pref_thankyou_embed_intro']) ? $fieldsSettings['comm_pref_thankyou_embed_intro'] : '';
+
+      $form->assign('commPrefIntro', $intro);
     }
   }
 
@@ -500,15 +504,14 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
     $form->assign('comm_pref_in_thankyou', $fieldsSettings['comm_pref_in_thankyou']);
     switch ($fieldsSettings['comm_pref_in_thankyou']) {
       case 'embed':
-          //inject comms preference fields in contribution thank you page.
+          // Inject comms preference fields in contribution thank you page.
           self::injectCommPreferenceFieldsIntoForm($form);
         break;
       case 'link':
-          //check embedded form is enabled or to display communication preference link in thank you page.
+          // Check embedded form is enabled or to display communication preference link in thank you page.
           self::addCommsPreferenceLinkInThankYouPage($cid, $form, $entity);
         break;
       default:
-        # code...
         break;
     }
     return TRUE;
