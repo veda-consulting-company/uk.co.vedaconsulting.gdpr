@@ -247,12 +247,6 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
       E::ts('Completion text'),
       $text_area_attributes
     );
-    //MV: Communication preference Link in Event and Contribution Thankyou page
-    //$this->add(
-      //'advcheckbox',
-      //'enable_comm_pref_in_thankyou',
-      //E::ts('Add link to the thank you page')
-    //);
     $this->add(
       'text',
       'comm_pref_link_label',
