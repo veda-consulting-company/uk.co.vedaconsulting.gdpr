@@ -503,11 +503,13 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
     $form->assign('comm_pref_in_thankyou', $fieldsSettings['comm_pref_in_thankyou']);
     switch ($fieldsSettings['comm_pref_in_thankyou']) {
       case 'embed':
-          // Inject comms preference fields in contribution thank you page.
-          self::injectCommPreferenceFieldsIntoForm($form);
+          $ajax_permission[] = array('access Ajax API', 'access CiviCRM');
+          if (CRM_Core_Permission::check($ajax_permission)) {
+            // Inject comms preference fields in contribution thank you page.
+            self::injectCommPreferenceFieldsIntoForm($form);
+          }
         break;
       case 'link':
-          // Check embedded form is enabled or to display communication preference link in thank you page.
           self::addCommsPreferenceLinkInThankYouPage($cid, $form, $entity);
         break;
       default:
