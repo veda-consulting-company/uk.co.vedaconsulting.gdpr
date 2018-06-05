@@ -87,6 +87,7 @@
       var entity = "{/literal}{$entity}{literal}";
       var channels_intro = "{/literal}{$channels_intro}{literal}";
       var contactId = "{/literal}{$contactId}{literal}";
+      var checksum = "{/literal}{$contact_cs}{literal}";
       var containerPrefix = "{/literal}{$containerPrefix}{literal}";
       var channelEleNames = {/literal}{$channelEleNamesJSON}{literal};
       var groupEleNames = {/literal}{$groupEleNamesJSON}{literal};
@@ -121,8 +122,10 @@
         $.ajax({
           type: "POST",
           url: ajaxURL,
-          data: { contactId : contactId
-            , preference :  updatePreferenceData
+          data: { 
+            contactId : contactId,
+            contact_cs : checksum,
+            preference :  updatePreferenceData
           },
           success: function (responseText) {
             $("#comms_pref_form").html("<div class='header-dark'>"+responseText+"</div><br>");

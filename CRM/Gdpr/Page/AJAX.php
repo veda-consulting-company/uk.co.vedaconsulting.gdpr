@@ -227,10 +227,11 @@ TABLE;
    */
   static function commPreferenceSubmission(){
     $iContactId = $_POST['contactId'];
+    $checksum = $_POST['contact_cs'];
     $submittedValues = $_POST['preference'];
 
-    if (empty($iContactId)) {
-      echo "Failed to Update communication preference";
+    if (empty($iContactId) || !CRM_Contact_BAO_Contact_Utils::validChecksum($iContactId, $checksum)) {
+      echo "Failed to Update communication preferences." . $checksum ;
       CRM_Utils_System::civiExit();
     }
 

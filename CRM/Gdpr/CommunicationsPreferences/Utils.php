@@ -500,13 +500,19 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
     //Assign required variables to smarty
     $form->assign('entity', $entity);
     $form->assign('contactId', $cid);
+    $cs = CRM_Contact_BAO_Contact_Utils::generateChecksum($cid);
+    $form->assign('contact_cs', $cs);
     $form->assign('comm_pref_in_thankyou', $fieldsSettings['comm_pref_in_thankyou']);
     switch ($fieldsSettings['comm_pref_in_thankyou']) {
       case 'embed':
-          $ajax_permission[] = array('access Ajax API', 'access CiviCRM');
+          $ajax_permission[] = array('access AJAX API', 'access CiviCRM');
           if (CRM_Core_Permission::check($ajax_permission)) {
             // Inject comms preference fields in contribution thank you page.
             self::injectCommPreferenceFieldsIntoForm($form);
+          }
+          else {
+            $form->add('hidden', 'noperm', '1');
+
           }
         break;
       case 'link':
