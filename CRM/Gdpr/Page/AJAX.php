@@ -221,4 +221,36 @@ TABLE;
     echo CRM_Utils_JSON::encodeDataTableSelector($contactList, $sEcho, $iTotal, $iFilteredTotal, $selectorElements);
     CRM_Utils_System::civiExit();
   }
+
+  /**
+   * To handle the comms preference submission from Thank you page Event/Contribution page.
+   */
+  static function commPreferenceSubmission(){
+    $iContactId = $_POST['contactId'];
+    $checksum = $_POST['contact_cs'];
+    $submittedValues = $_POST['preference'];
+
+    if (empty($iContactId) || !CRM_Contact_BAO_Contact_Utils::validChecksum($iContactId, $checksum)) {
+      echo "Failed to Update communication preferences." . $checksum ;
+      CRM_Utils_System::civiExit();
+    }
+
+    //Update preferences
+    CRM_Gdpr_CommunicationsPreferences_Utils::updateCommsPrefByFormValues($iContactId, $submittedValues);
+
+    //Create comms preference activity 
+    CRM_Gdpr_CommunicationsPreferences_Utils::createCommsPrefActivity($iContactId, $submittedValues);
+
+    //Get completion msg from settings
+    $settings = CRM_Gdpr_CommunicationsPreferences_Utils::getSettings();
+    $fieldsSettings = $settings[CRM_Gdpr_CommunicationsPreferences_Utils::SETTING_NAME];
+
+    $completionMsg = "Thank you for updating your Communication Preferences..";
+    if (!empty($fieldsSettings['comm_pref_thankyou_embed_complete_msg'])) {
+      $completionMsg = $fieldsSettings['comm_pref_thankyou_embed_complete_msg'];
+    }
+
+    echo $completionMsg;
+    CRM_Utils_System::civiExit();
+  }
 }

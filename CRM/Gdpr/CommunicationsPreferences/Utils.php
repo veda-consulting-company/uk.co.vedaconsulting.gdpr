@@ -303,11 +303,224 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
     $settings = $settings[CRM_Gdpr_CommunicationsPreferences_Utils::SETTING_NAME];
 
     //To display Communication Preference URL in Thank you page for event
-    if (!empty($cid) && !empty($settings['enable_comm_pref_in_thankyou'])) {
+    if (!empty($cid)) {
       $commPrefURL = CRM_Gdpr_CommunicationsPreferences_Utils::getCommPreferenceURLForContact($cid);
+      $linkIntro   = CRM_Utils_Array::value('comm_pref_link_intro', $settings, NULL);
+      $linkLabel   = CRM_Utils_Array::value('comm_pref_link_label', $settings, 'Update Communication Preferences');
       $form->assign('comm_pref_url', $commPrefURL);
-      $form->assign('link_label', $settings['comm_pref_link_label']);
-      $form->assign('entity', $entity);
+      $form->assign('link_label', $linkLabel);
+      $form->assign('link_intro', $linkIntro);
     }
+  }
+
+  /**
+   * Inject the communication preference fields into a form.
+   *
+   * Intended to be used for Event registration and contribution thank-you pages.
+   */
+  public static function injectCommPreferenceFieldsIntoForm(&$form) {
+
+    // Get the Comms pref options (yes/no) form option group.
+    $commPrefOpGroup = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_OptionGroup', self::COMM_PREF_OPTIONS, 'id', 'name');
+    $commPrefOptions = array('' => E::ts('--Select--')) + CRM_Core_BAO_OptionValue::getOptionValuesAssocArray($commPrefOpGroup);
+    // quick hack to translate yes/no options, because are not coming translated from core's function
+    foreach($commPrefOptions as $key => $value){
+      $commPrefOptions[$key] = E::ts($value);
+    }
+
+    //get Communication preference settings
+    $settings = self::getSettings();
+    $fieldsSettings = $settings[self::SETTING_NAME];
+    $groupSettings  = $settings[self::GROUP_SETTING_NAME];
+
+    $containerPrefix = 'enable_';
+    $form->assign('containerPrefix', $containerPrefix);
+
+    //Prepare channel fields
+    $form->channelEleNames = array();
+    $isChannelsEnabled = $fieldsSettings['enable_channels'];
+    if ($isChannelsEnabled) {
+      if ($channelIntro = $fieldsSettings['channels_intro']) {
+        $form->assign('channels_intro', $channelIntro);
+      }
+
+
+      foreach ($fieldsSettings['channels'] as $key => $value) {
+        if ($value) {
+          $name  = str_replace($containerPrefix, '', $key);
+          $label = ucwords(str_replace('_', ' ', $name));
+          $form->add('select', $key, E::ts($label), $commPrefOptions, TRUE);
+          $form->channelEleNames[] = $key;
+
+          //Elements may set to flag frozen, because of thankyou page may be.
+          //Check if the fields are frozen fields then unset it. so you can see the fields in thank you page.
+          $elemIndex = $form->_elementIndex[$key];
+          $form->_elements[$elemIndex]->_flagFrozen = 0;
+        }
+      }
+    }
+    $form->assign('channelEleNames', $form->channelEleNames);
+    $form->assign('channelEleNamesJSON', json_encode($form->channelEleNames));
+
+    //Communication preference Group settings enabled ?
+    $isGroupSettingEnabled = !empty($fieldsSettings['enable_groups']) ? $fieldsSettings['enable_groups'] : NULL;
+    if ($isGroupSettingEnabled) {
+
+      if ($groupsHeading = $fieldsSettings['groups_heading']) {
+        $form->assign('groups_heading', $groupsHeading);
+      }
+
+      if ($groupsIntro = $fieldsSettings['groups_intro']) {
+        $form->assign('groups_intro', $groupsIntro);
+      }
+
+      //all for all groups and disable checkbox is group_enabled from settings
+      $groups = self::getGroups();
+      $groups = self::sortGroups($groups, array('group_weight' => 'asc'));
+      foreach ($groups as $group) {
+        $container_name = 'group_' . $group['id'];
+        if (!empty($groupSettings[$container_name]['group_enable'])) {
+          $title = $groupSettings[$container_name]['group_title'];
+          $groupsFromSettings[$title] = $group['id'];
+          $form->add('Checkbox', $container_name, $title);
+          $form->groupEleNames[] = $container_name;
+
+          //Elements may set to flag frozen, because of thankyou page may be.
+          //Check if the fields are frozen fields then unset it. so you can see the fields in thank you page.
+          $elemIndex = $form->_elementIndex[$container_name];
+          $form->_elements[$elemIndex]->_flagFrozen = 0;
+        }
+      }
+      $form->assign('groupEleNames', $form->groupEleNames);
+      $form->assign('groupEleNamesJSON', json_encode($form->groupEleNames));
+      $form->assign('commPrefGroupsetting', $groupSettings);
+      $intro = !empty($fieldsSettings['comm_pref_thankyou_embed_intro']) ? $fieldsSettings['comm_pref_thankyou_embed_intro'] : '';
+
+      $form->assign('commPrefIntro', $intro);
+    }
+  }
+
+  /**
+   * This is helper function to update communication preference by form submitted values.
+   */
+  public static function updateCommsPrefByFormValues($contactId, $submittedValues) {
+    if (empty($submittedValues) OR empty($contactId)) {
+      return;
+    }
+
+    //Get all comms preference settings
+    $settings = self::getSettings();
+    $fieldsSettings = $settings[self::SETTING_NAME];
+    $groupSettings  = $settings[self::GROUP_SETTING_NAME];
+    $commPrefMapper = self::getCommunicationPreferenceMapper();
+
+    //Prepare Comm pref params
+    $commPref = array('id' => $contactId);
+
+    //FIXME, this must go under constant file
+    $containerPrefix = 'enable_';
+
+    //Update contact communication preference based on channels selected
+    foreach ($fieldsSettings['channels'] as $key => $value) {
+      $name  = str_replace($containerPrefix, '', $key);
+      if (!empty($submittedValues[$key])) {
+        $channelValue = $submittedValues[$key];
+        $commPref = array_merge($commPref, $commPrefMapper[$name][$channelValue]);
+      }
+    }
+
+    //Using API to update contact
+    $contact = civicrm_api3('Contact', 'create', $commPref);
+
+    //By now we have updated the contact preferences, now update groups selected by User.
+    $groups = self::getGroups();
+    foreach ($groups as $groupId => $group) {
+      $container_name = 'group_' . $group['id'];
+      if (!empty($groupSettings[$container_name]['group_enable'])) {
+        $groupDetails = array(
+          'contact_id' => $contactId,
+          'group_id'   => $group['id'],
+        );
+        //Make sure contact is already exist in group and want to remove /add ?
+        $existsInGroup = civicrm_api3('GroupContact', 'get', $groupDetails);
+
+        //Set status added or removed based on user selection
+        $status = !empty($submittedValues[$container_name]) ? 'Added' : 'Removed';
+        $groupDetails['status'] = $status;
+
+        //check before Add / Remove from group.
+        if ((!empty($existsInGroup['id']) && $status == 'Removed')
+          OR (empty($existsInGroup['id']) && $status == 'Added')
+        ) {
+          $groupResult = civicrm_api3('GroupContact', 'create', $groupDetails);
+        }
+      }
+    }//end foreach groups
+  }
+
+  public static function createCommsPrefActivity($contactID, $submittedValues = array()) {
+    if (empty($contactID)) {
+      return FALSE;
+    }
+
+    //Incase of offline communication preference update, Update logged in user as source contact,
+    $sourceContactID = $contactID;
+    $session = CRM_Core_Session::singleton();
+    if($userID = $session->get('userID')){
+      $sourceContactID = $userID;
+    }
+
+    //Create Activity for communication preference updated
+    $activityTypeIds = array_flip(CRM_Core_PseudoConstant::activityType(TRUE, FALSE, FALSE, 'name'));
+    if (!empty($activityTypeIds[self::COMM_PREF_ACTIVITY_TYPE])) {
+      $activityParams = array(
+        'activity_type_id'  => $activityTypeIds[self::COMM_PREF_ACTIVITY_TYPE],
+        'source_contact_id' => $sourceContactID,
+        'target_id'         => $contactID,
+        'subject'           => E::ts('Communication Preferences updated'),
+        'activity_date_time'=> date('Y-m-d H:i:s'),
+        'status_id'         => "Completed",
+      );
+      if (!empty($submittedValues['activity_source'])) {
+        $activityParams['details'] = $submittedValues['activity_source'];
+      }
+      return civicrm_api3('Activity', 'Create', $activityParams);
+    }
+    return FALSE;
+  }
+
+  public static function commsPreferenceInThankyouPage($cid, &$form, $entity = 'Event') {
+    if (empty($cid)) {
+      return;
+    }
+
+
+    $settings = self::getSettings();
+    $fieldsSettings = $settings[self::SETTING_NAME];
+    //Assign required variables to smarty
+    $form->assign('entity', $entity);
+    $form->assign('contactId', $cid);
+    $cs = CRM_Contact_BAO_Contact_Utils::generateChecksum($cid);
+    $form->assign('contact_cs', $cs);
+    $form->assign('comm_pref_in_thankyou', $fieldsSettings['comm_pref_in_thankyou']);
+    switch ($fieldsSettings['comm_pref_in_thankyou']) {
+      case 'embed':
+          $ajax_permission[] = array('access AJAX API', 'access CiviCRM');
+          if (CRM_Core_Permission::check($ajax_permission)) {
+            // Inject comms preference fields in contribution thank you page.
+            self::injectCommPreferenceFieldsIntoForm($form);
+          }
+          else {
+            $form->add('hidden', 'noperm', '1');
+
+          }
+        break;
+      case 'link':
+          self::addCommsPreferenceLinkInThankYouPage($cid, $form, $entity);
+        break;
+      default:
+        break;
+    }
+    return TRUE;
   }
 }

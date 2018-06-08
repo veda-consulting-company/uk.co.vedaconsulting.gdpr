@@ -123,25 +123,29 @@
     </div>
     <div class="clear"></div>
   </div> {* end Completion block *}
- </div>{* end form *}
-
-  <!-- MV: Settings for Communications Preference Link in event and contribution thank you page -->
+ </div>
   <h3> {ts}Event & Contribution thank you page{/ts} </h3>
   <div class="crm-block crm-form-block crm-gdpr-comms-prefs-form-block">
-    <div class="help">{ts}To display communication preference link in Event and Contribution thank you pages{/ts}</div>
+    <div class="help">{ts}<p>Allows supporters set their preferences after registering for an event or making a contribution.</p><p>Note, to embed the Communcation Preferences form in thank-you pages, you need to give anonymous users the permission: <em>CiviCRM: access AJAX API</em>.</p>{/ts}</div>
     <div class="crm-section">
-      <div class="label">{$form.enable_comm_pref_in_thankyou.label}</div>
-      <div class="content">{$form.enable_comm_pref_in_thankyou.html}
+      <div class="label">{$form.comm_pref_in_thankyou.label}</div>
+      <div class="content">{$form.comm_pref_in_thankyou.html}
         <div class="description"> </div>
       </div>
     </div>
     <div class="clear"></div>
-    <div class="crm-section">
+    <div class="crm-section thank-you-embed-wrapper">
+      <div class="label">{$form.comm_pref_thankyou_embed_intro.label}</div>
+      <div class="content">{$form.comm_pref_thankyou_embed_intro.html}</div>
+        <div class="clear"> </div>
+      <div class="label">{$form.comm_pref_thankyou_embed_complete_msg.label}</div>
+      <div class="content">{$form.comm_pref_thankyou_embed_complete_msg.html}</div>
+        <div class="description"> </div>
+    </div>
+    <div class="crm-section thank-you-link-wrapper">
       <div class="label">{$form.comm_pref_link_label.label}</div>
       <div class="content">{$form.comm_pref_link_label.html}</div>
-    </div>
-    <div class="clear"></div>
-    <div class="crm-section">
+      <div class="clear"></div>
       <div class="label">{$form.comm_pref_link_intro.label}</div>
       <div class="content">{$form.comm_pref_link_intro.html}</div>
     </div>
@@ -163,7 +167,19 @@
       $(toggleTarget).toggle($(this).is(':checked'));
     }
   }).trigger('change');
-
+  $('input.toggle-select').on('change', function() {
+    var map = $(this).data('toggle-mapping'),
+    currVal = $(this).val();
+    if (!$(this).prop('checked')) {
+      return;
+    }
+    for (val in map) {
+      if (!map[val]) {
+        continue;
+      }
+      $(map[val]).toggle(val == currVal);
+    }
+  }).trigger('change');
   // Toggle completion setting elements.
   var completionRadioSelector = 'input[name="completion_redirect"]',
     completionRadio = $(completionRadioSelector),
