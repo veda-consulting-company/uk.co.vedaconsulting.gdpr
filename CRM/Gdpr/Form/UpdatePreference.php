@@ -373,12 +373,6 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
     if (!empty($this->_id)) {
       $existingContact = $this->_id;
     }
-    //Terms and condition Record SLA acceptance
-    $termsConditionsField = $this->getTermsAndConditionFieldId();
-    $tcFieldName  = 'custom_'.$termsConditionsField;
-    if (!empty($submittedValues[$tcFieldName]) && !empty($existingContact)) {
-      $acceptance = CRM_Gdpr_SLA_Utils::recordSLAAcceptance($existingContact);
-    }
 
     $contactType = 'Individual';
     if ($existingContact) {
@@ -393,6 +387,13 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
       $contactType,
       TRUE
     );
+
+    //Terms and condition Record SLA acceptance
+    $termsConditionsField = $this->getTermsAndConditionFieldId();
+    $tcFieldName  = 'custom_'.$termsConditionsField;
+    if (!empty($submittedValues[$tcFieldName])) {
+      $acceptance = CRM_Gdpr_SLA_Utils::recordSLAAcceptance($contactID);
+    }
 
     //Prepare Comm pref params
     $commPref = array('id' => $contactID);
