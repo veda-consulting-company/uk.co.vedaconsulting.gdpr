@@ -458,6 +458,12 @@ WHERE url.time_stamp > '{$date}'";
       $params['last_name'] = $settings['forgetme_name'];
     }
 
+    // Update all privacy options to make sure we dont send any communications by mistake
+    $privacyFlags = array('do_not_email', 'do_not_phone', 'do_not_mail', 'do_not_sms', 'do_not_trade', 'is_opt_out');
+    foreach($privacyFlags as $flag) {
+      $params[$flag] = 1;
+    }
+
     // Allow params to be modified via hook
     CRM_Gdpr_Hook::alterAnonymizeContactParams($params);
 
