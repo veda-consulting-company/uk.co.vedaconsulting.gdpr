@@ -305,6 +305,11 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
         CRM_Core_BAO_UFGroup::setProfileDefaults($this->_cid, $fields, $defaults);
       }
     }
+    //#7955 params from URL
+    $emailPrimary = CRM_Utils_Request::retrieve('field_email', 'String', CRM_Core_DAO::$_nullObject);
+    if ($emailPrimary) {
+      $defaults['email-Primary'] = $emailPrimary;
+    }    
     return $defaults;
   }
 
