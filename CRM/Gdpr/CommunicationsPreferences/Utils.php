@@ -221,7 +221,7 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
     return $channels = array(
       'email' => E::ts('Email'),
       'phone' => E::ts('Phone'),
-      'post' => E::ts('Post'),
+      'post' => E::ts('Postal Mail'),
       'sms' => E::ts('SMS'),
     );
   }
