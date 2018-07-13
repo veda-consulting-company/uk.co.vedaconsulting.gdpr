@@ -83,7 +83,10 @@
 		<div class="content">
 			{$form.forgetme_email.html}
 			<br />
-	        <span class="description"><i>{ts}When field is empty, then each email will be deleted. When field is not empty, then each email will be updated with this value.{/ts}</i></span>
+	        <span class="description">
+						<i>{ts}When field is empty, then each email will be deleted. When field is not empty, then each email will be updated with this value.{/ts}</i><br />
+						<i>{ts}You can include %RANDOM% in order to have randomized email.{/ts}</i>
+					</span>
 		</div>
 		<div class="clear"></div>
 	</div>
