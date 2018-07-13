@@ -331,6 +331,10 @@ msgid "Custom groups"
 msgstr ""
 
 #: CRM/Gdpr/Form/Settings.php
+msgid "Forgetme e-mail"
+msgstr ""
+
+#: CRM/Gdpr/Form/Settings.php
 msgid "Email the Point of Contact / DPO?"
 msgstr ""
 
@@ -695,6 +699,16 @@ msgstr ""
 
 #: templates/CRM/Gdpr/Form/Settings.tpl
 msgid "Name to be used for contacts that have been made anonymous."
+msgstr ""
+
+#: templates/CRM/Gdpr/Form/Settings.tpl
+msgid ""
+"When field is empty, then each email will be deleted. "
+"When field is not empty, then each email will be updated with this value."
+msgstr ""
+
+#: templates/CRM/Gdpr/Form/Settings.tpl
+msgid "You can include %RANDOM% in order to have randomized email."
 msgstr ""
 
 #: templates/CRM/Gdpr/Form/Settings.tpl
