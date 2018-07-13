@@ -71,27 +71,6 @@ class CRM_Gdpr_Form_Forgetme extends CRM_Core_Form {
     );
     self::removeEntityRecords('Address', $params);
 
-    // Remove all the email records of this contact
-    $params = array(
-      'sequential' => 1,
-      'contact_id' => $this->_contactID,
-    );
-    self::removeEntityRecords('Email', $params);
-
-    // Remove all the phone records of this contact
-    $params = array(
-      'sequential' => 1,
-      'contact_id' => $this->_contactID,
-    );
-    self::removeEntityRecords('Phone', $params);
-
-    // Remove all the website records of this contact
-    $params = array(
-      'sequential' => 1,
-      'contact_id' => $this->_contactID,
-    );
-    self::removeEntityRecords('Website', $params);
-
     // Remove all the IM records of this contact
     // On Civi 4.6,
     // api IM get breaks and returning 500 error, because IM get api trying to check api/v3/IM.php instead of api/v3/Im.php.
