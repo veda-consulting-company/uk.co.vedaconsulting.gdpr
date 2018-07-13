@@ -88,6 +88,15 @@
 		<div class="clear"></div>
 	</div>
 	<div class="crm-section">
+	<div class="label">{$form.forgetme_custom_groups.label}</div>
+		<div class="content">
+			{$form.forgetme_custom_groups.html}
+			<br />
+	        <span class="description"><i>{ts}Data from selected custom groups to be deleted during 'Forget me' process. Leave empty if you do not want any custom groups to be deleted.{/ts}</i></span>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div class="crm-section">
 		<div class="label">{$form.email_to_dpo.label}</div>
 		<div class="content">
 			{$form.email_to_dpo.html}

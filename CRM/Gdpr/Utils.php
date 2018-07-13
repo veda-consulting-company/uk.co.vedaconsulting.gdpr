@@ -569,4 +569,24 @@ WHERE url.time_stamp > '{$date}'";
     return $delResult;
   }
 
+  /**
+   * @return array
+   */
+  public static function getCustomGroups() {
+    $customGroups = array();
+    $getResult = self::CiviCRMAPIWrapper('CustomGroup', 'get', array(
+      'sequential' => 1,
+      'is_active' => 1,
+      'extends' => array('IN' => array("Contact", "Individual", "Household", "Organization")),
+      'options' => array('limit' => 0),
+    ));
+    if ($getResult['values']) {
+      foreach ($getResult['values'] as $group) {
+        $customGroups[$group['id']] = $group['title'];
+      }
+    }
+
+    return $customGroups;
+  }
+
 }//End Class
