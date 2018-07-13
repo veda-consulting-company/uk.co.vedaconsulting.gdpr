@@ -477,6 +477,10 @@ WHERE url.time_stamp > '{$date}'";
       self::deleteActivities($contactId, $settings['forgetme_activity_type']);
     }
 
+    if (array_key_exists('forgetme_custom_groups', $settings) && $settings['forgetme_custom_groups']) {
+      self::deleteCustomGroupsData($contactId, $settings['forgetme_custom_groups']);
+    }
+
     return $updateResult;
   }
 
@@ -507,6 +511,26 @@ WHERE url.time_stamp > '{$date}'";
           }
         }
       }
+    }
+  }
+
+  /**
+   * Delete whole row from selected custom groups.
+   *
+   * @param integer $contactId
+   * @param array $customGroups
+   */
+  private static function deleteCustomGroupsData($contactId, $customGroups) {
+    $query = "SELECT table_name
+              FROM civicrm_custom_group
+              WHERE id IN (" . implode(', ', $customGroups) .")";
+    $dao = CRM_Core_DAO::executeQuery($query);
+    while ($dao->fetch()) {
+      $queryDelete = "DELETE FROM {$dao->table_name} WHERE entity_id = %1";
+      $params = array(
+        1 => array($contactId, 'Integer'),
+      );
+      CRM_Core_DAO::executeQuery($queryDelete, $params);
     }
   }
 
