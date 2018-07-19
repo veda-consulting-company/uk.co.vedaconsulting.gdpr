@@ -2,7 +2,7 @@
 <fieldset class="crm-gdpr-terms-conditions" id="gdpr-terms-conditions">
   <div class="crm-section">
     <div class="label">
-      <label>Terms &amp; Conditions
+      <label>{ts}Terms &amp; Conditions{/ts}
         <span class="crm-marker" title="This field is required">*</span>
       </label>
     </div>
