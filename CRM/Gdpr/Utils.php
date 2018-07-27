@@ -597,6 +597,7 @@ WHERE url.time_stamp > '{$date}'";
           'sequential' => 1,
           'id' => $id,
           'email' => $randomEmail,
+          'on_hold' => 1,
         ));
       }
     }
