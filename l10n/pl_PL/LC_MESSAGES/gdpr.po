@@ -327,6 +327,10 @@ msgid "Forgetme contact name"
 msgstr "Nazwa użytkownika - ZAPOMNIJ MNIE"
 
 #: CRM/Gdpr/Form/Settings.php
+msgid "Forgetme e-mail"
+msgstr "Zanonimizowany e-mail"
+
+#: CRM/Gdpr/Form/Settings.php
 msgid "Email the Point of Contact / DPO?"
 msgstr "E-mail do punktu kontaktowego / IODO?"
 
@@ -645,6 +649,18 @@ msgstr "Ustawienia związane z procesem \"ZAPOMNIJ MNIE\"."
 #: templates/CRM/Gdpr/Form/Settings.tpl
 msgid "Name to be used for contacts that have been made anonymous."
 msgstr "Nazwa używana dla kontaktów zanonimizowanych."
+
+#: templates/CRM/Gdpr/Form/Settings.tpl
+msgid ""
+"When field is empty, then each email will be deleted. "
+"When field is not empty, then each email will be updated with this value."
+msgstr ""
+"Jeśli pole pozostanie puste, wówczas każdy email zostanie skasowany. "
+"Jeśli pole zostanie wypełnione, wówczas każdy email zostanie zaktualizowany."
+
+#: templates/CRM/Gdpr/Form/Settings.tpl
+msgid "You can include %RANDOM% in order to have randomized email."
+msgstr "Możesz użyć ciągu %RANDOM% aby dodać losowy ciąg w treści emaila."
 
 #: templates/CRM/Gdpr/Form/Settings.tpl
 msgid "Send Email notification to Data protection officer"

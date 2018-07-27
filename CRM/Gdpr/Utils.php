@@ -8,7 +8,7 @@ class CRM_Gdpr_Utils {
    *
    * @param string $entity
    * @param string $action
-   * @param string $params
+   * @param array $params
    *
    * @return array of API results
    */
@@ -391,9 +391,10 @@ WHERE url.time_stamp > '{$date}'";
    *
    * @param int $contactId
    *  Id for a contact.
-   * 
+   *
    * @return array
    *  Associative array with the format of an API Contact.create result.
+   * @throws \Exception
    */
   public static function anonymizeContact($contactId) {
     // Should we check contact exists?
@@ -468,12 +469,17 @@ WHERE url.time_stamp > '{$date}'";
     CRM_Gdpr_Hook::alterAnonymizeContactParams($params);
 
     $updateResult = CRM_Gdpr_Utils::CiviCRMAPIWrapper('Contact', 'create', $params);
-    $associatedResult = self::deleteContactAssociatedData($contactId, array(
-      'Email', 
+    $types = array(
+      'Email',
       'Phone',
       'IM',
       'Website',
-    ));
+    );
+    if (array_key_exists('forgetme_email', $settings) && $settings['forgetme_email']) {
+      self::anonymizeEmails($contactId, $settings['forgetme_email']);
+      unset($types[array_search('Email', $types)]);
+    }
+    $associatedResult = self::deleteContactAssociatedData($contactId, $types);
 
     // Update all active memberships to 'GDPR Cancelled'
     self::cancelAllActiveMemberships($contactId);
@@ -573,6 +579,66 @@ WHERE url.time_stamp > '{$date}'";
       }
     }
     return $delResult;
+  }
+
+  /**
+   * @param $contactId
+   * @param $forgetMeEmail
+   *
+   * @return array
+   * @throws \Exception
+   */
+  private static function anonymizeEmails($contactId, $forgetMeEmail) {
+    $updateResult = array();
+    $getResult = CRM_Gdpr_Utils::CiviCRMAPIWrapper('Email', 'get', array(
+      'sequential' => 1,
+      'contact_id' => $contactId,
+    ));
+
+    if (!empty($getResult['values'])) {
+      foreach ($getResult['values'] as $data) {
+        $id = $data['id'];
+        $randomEmail = self::randomEmail($forgetMeEmail);
+        $updateResult['Email'][$id] = CRM_Gdpr_Utils::CiviCRMAPIWrapper('Email', 'create', array(
+          'sequential' => 1,
+          'id' => $id,
+          'email' => $randomEmail,
+          'on_hold' => 1,
+        ));
+      }
+    }
+
+    return $updateResult;
+  }
+
+  /**
+   * @param $forgetMeEmail
+   *
+   * @return mixed
+   * @throws \Exception
+   */
+  private static function randomEmail($forgetMeEmail) {
+    return str_replace('%RANDOM%', self::uniqidReal(), $forgetMeEmail);
+  }
+
+  /**
+   * @param int $lenght
+   *
+   * @return bool|string
+   * @throws \Exception
+   */
+  private static function uniqidReal($lenght = 13) {
+    if (function_exists("random_bytes")) {
+      $bytes = random_bytes(ceil($lenght / 2));
+    }
+    elseif (function_exists("openssl_random_pseudo_bytes")) {
+      $bytes = openssl_random_pseudo_bytes(ceil($lenght / 2));
+    }
+    else {
+      throw new Exception("no cryptographically secure random function available");
+    }
+
+    return substr(bin2hex($bytes), 0, $lenght);
   }
 
 }//End Class
