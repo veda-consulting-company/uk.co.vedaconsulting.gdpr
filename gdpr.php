@@ -357,8 +357,28 @@ function gdpr_civicrm_tabset($tabsetName, &$tabs, $context) {
 function gdpr_civicrm_exportIds($ids, $componentTable, $exportMode) {
   switch ($exportMode) {
     case CRM_Export_Form_Select::CONTACT_EXPORT:
-      CRM_Core_Error::debug_var('$componentTable', $componentTable);
+      $session = CRM_Core_Session::singleton();
+      $loggedUserID = $session->get('userID');
       $activityTypeId = CRM_Gdpr_Activity::contactExportedTypeId();
+      $query = "SELECT contact_id FROM {$componentTable}";
+      $dao = CRM_Core_DAO::executeQuery($query);
+      while ($dao->fetch()) {
+        $contactId = $dao->contact_id;
+        $params = [
+          'sequential' => 1,
+          'source_record_id' => $contactId,
+          'source_contact_id' => $loggedUserID,
+          'activity_type_id' => $activityTypeId,
+          'activity_date_time' => date('YmdHis'),
+          'status_id' => 'Completed',
+          'api.ActivityContact.create' => [
+            'activity_id' => '$value.id',
+            'contact_id' => $contactId,
+            'record_type_id' => 3,
+          ]
+        ];
+        CRM_Gdpr_Utils::CiviCRMAPIWrapper('Activity', 'create', $params);
+      }
       break;
 
     case CRM_Export_Form_Select::ACTIVITY_EXPORT:
