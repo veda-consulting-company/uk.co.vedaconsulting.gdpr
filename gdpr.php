@@ -353,8 +353,6 @@ function gdpr_civicrm_tabset($tabsetName, &$tabs, $context) {
 
 /**
  * Implements hook_civicrm_exportIds().
- *
- * @throws \CiviCRM_API3_Exception
  */
 function gdpr_civicrm_exportIds($ids, $componentTable, $exportMode) {
   switch ($exportMode) {

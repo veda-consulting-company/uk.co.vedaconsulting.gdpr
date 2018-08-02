@@ -10,7 +10,6 @@ class CRM_Gdpr_Activity {
    * Get activity type id for Contact exported
    *
    * @return int|mixed
-   * @throws \CiviCRM_API3_Exception
    */
   public static function contactExportedTypeId() {
     $key = __CLASS__ . __FUNCTION__;
@@ -27,7 +26,6 @@ class CRM_Gdpr_Activity {
    * Get activity type id for Activity exported
    *
    * @return int|mixed
-   * @throws \CiviCRM_API3_Exception
    */
   public static function activityExportedTypeId() {
     $key = __CLASS__ . __FUNCTION__;
@@ -44,7 +42,6 @@ class CRM_Gdpr_Activity {
    * Get activity type id for Activity exported
    *
    * @return int|mixed
-   * @throws \CiviCRM_API3_Exception
    */
   public static function contributionExportedTypeId() {
     $key = __CLASS__ . __FUNCTION__;
@@ -63,7 +60,6 @@ class CRM_Gdpr_Activity {
    * @param $name
    *
    * @return int
-   * @throws \CiviCRM_API3_Exception
    */
   private static function activityType($name) {
     return self::set('activity_type', $name);
@@ -77,7 +73,6 @@ class CRM_Gdpr_Activity {
    * @param array $options
    *
    * @return int
-   * @throws \CiviCRM_API3_Exception
    */
   private static function set($optionGroupName, $name, $options = []) {
     $params = array(
@@ -85,12 +80,12 @@ class CRM_Gdpr_Activity {
       'option_group_id' => $optionGroupName,
       'name' => $name,
     );
-    $result = civicrm_api3('OptionValue', 'get', $params);
+    $result = CRM_Gdpr_Utils::CiviCRMAPIWrapper('OptionValue', 'get', $params);
     if ($result['count'] == 0) {
       $params['is_active'] = 1;
       $params['title'] = $name;
       $params = array_merge($params, $options);
-      $result = civicrm_api3('OptionValue', 'create', $params);
+      $result = CRM_Gdpr_Utils::CiviCRMAPIWrapper('OptionValue', 'create', $params);
     }
     return $result['values'][0]['value'];
   }
