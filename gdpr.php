@@ -350,6 +350,30 @@ function gdpr_civicrm_tabset($tabsetName, &$tabs, $context) {
   }
 }
 
+
+/**
+ * Implements hook_civicrm_exportIds().
+ *
+ * @throws \CiviCRM_API3_Exception
+ */
+function gdpr_civicrm_exportIds($ids, $componentTable, $exportMode) {
+  switch ($exportMode) {
+    case CRM_Export_Form_Select::CONTACT_EXPORT:
+      CRM_Core_Error::debug_var('$componentTable', $componentTable);
+      $activityTypeId = CRM_Gdpr_Activity::contactExportedTypeId();
+      break;
+
+    case CRM_Export_Form_Select::ACTIVITY_EXPORT:
+      CRM_Core_Error::debug_var('$ids', $ids);
+      $activityTypeId = CRM_Gdpr_Activity::activityExportedTypeId();
+      break;
+
+    case CRM_Export_Form_Select::CONTRIBUTE_EXPORT:
+      $activityTypeId = CRM_Gdpr_Activity::contributionExportedTypeId();
+      break;
+  }
+}
+
 /**
  * Add a Terms & Conditions tab for Event or Contribution Page.
  */
