@@ -120,7 +120,7 @@ msgstr "Los usuarios pueden suscribirse a estos canales"
 
 #: CRM/Gdpr/Form/CommunicationsPreferences.php
 msgid "Allow users to opt-in to mailing groups."
-msgstr "Permitir a los usuarios suscribirse a listas de distribución"
+msgstr "Permitir a los usuarios suscribirse a listas de distribución."
 
 #: CRM/Gdpr/Form/CommunicationsPreferences.php
 msgid "Heading for the groups section"
@@ -426,7 +426,7 @@ msgstr "Acepto los términos  y condiciones para este evento."
 msgid "Please read and accept the Terms &amp; Conditions and Data Policy."
 msgstr ""
 "Por favor lea y acepte la política de privacidad y los términos y "
-"condiciones ."
+"condiciones."
 
 #: CRM/Gdpr/Form/UpdatePreference.php
 msgid "--Select--"
@@ -440,7 +440,7 @@ msgstr "<a href='%1' target='_blank'>%2</a>"
 msgid ""
 "Here is our <a href='%1' target='_blank'>%2</a>, which you agreed to on %3."
 msgstr ""
-"Este es nuestro <a href='%1' target='_blank'>%2</a>, que ha aceptado el %3."
+"Esta es nuestra <a href='%1' target='_blank'>%2</a>, que ha aceptado el %3."
 
 #: CRM/Gdpr/Form/UpdatePreference.php
 msgid "Source of Communication Preferences"
@@ -496,7 +496,7 @@ msgstr "Enlace de las preferencias de comunicación (envíos masivos)"
 
 #: gdpr.php
 msgid "access GDPR"
-msgstr "Acceder a GDPR"
+msgstr "acceder a GDPR"
 
 #: gdpr.php
 msgid "View GDPR related information"
@@ -610,7 +610,7 @@ msgid ""
 msgstr ""
 "Configure a qué grupos públicos el usuario puede suscribirse en la página. "
 "Puede opcionalmente cambiar el título y la descripción del grupo. (Por "
-"ejemplo para añadir más detalles del contenido, frecuencia de envío, etc.)"
+"ejemplo para añadir más detalles del contenido, frecuencia de envío, etc.)."
 
 #: templates/CRM/Gdpr/Form/CommunicationsPreferences.tpl
 #: templates/CRM/Gdpr/Page/Tab.tpl
@@ -647,7 +647,7 @@ msgid ""
 " pages"
 msgstr ""
 "Para mostrar el enlace de las preferencias de comunicación en las páginas de"
-" agradecimiento de eventos y páginas de contribución"
+" agradecimiento de eventos y páginas de contribución."
 
 #: templates/CRM/Gdpr/Form/Forgetme.tpl
 msgid ""
@@ -706,7 +706,7 @@ msgid ""
 "such as the data protection officer (DPO)."
 msgstr ""
 "Añada la persona de contacto de su organización, como el Delegado de "
-"Protección de Datos (DPD)"
+"Protección de Datos (DPD)."
 
 #: templates/CRM/Gdpr/Form/Settings.tpl
 msgid "Activity types"
@@ -784,7 +784,7 @@ msgstr "Texto utilizado para el enlace. Normalmente el título del documento."
 
 #: templates/CRM/Gdpr/Form/Settings.tpl
 msgid " Text for the checkbox. An acceptance statement."
-msgstr "Texto para la casilla de selección Una declaración de aceptació."
+msgstr "Texto para la casilla de selección. Una declaración de aceptación."
 
 #: templates/CRM/Gdpr/Form/Settings.tpl
 msgid "The title for the user-facing page with the acceptance form."
@@ -830,7 +830,9 @@ msgstr "Número de contactos"
 
 #: templates/CRM/Gdpr/Page/Dashboard.tpl
 msgid "(Excluding contacts who clicked through links in emails)"
-msgstr "(Contactos excluidos porque han hecho click en enlaces de emails)"
+msgstr ""
+"(Excluyendo los contactos que hayan hecho click en enlaces de correos "
+"electrónicos)"
 
 #: templates/CRM/Gdpr/Page/Dashboard.tpl
 msgid "Click-throughs"
