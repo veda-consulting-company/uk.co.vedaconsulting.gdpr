@@ -54,6 +54,16 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
       array('class' => 'crm-select2 huge', 'multiple' => 'multiple',)
     );
 
+    $customGroups = CRM_Gdpr_Utils::getCustomGroups();
+    $this->add(
+      'select',
+      'forgetme_custom_groups',
+      E::ts('Custom groups'),
+      array('' => E::ts('- select -')) + $customGroups,
+      FALSE,
+      array('class' => 'crm-select2 huge', 'multiple' => 'multiple',)
+    );
+
     //Email to Point of Contact/DPO when someone access forget me.
     $this->add('checkbox', 'email_to_dpo', E::ts('Email the Point of Contact / DPO?'));
     $this->add('text', 'email_dpo_subject', E::ts('Email Subject'));
@@ -280,6 +290,7 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
     $settings['contact_type'] = $values['contact_type'];
     $settings['forgetme_name'] = $values['forgetme_name'];
     $settings['forgetme_activity_type'] = $values['forgetme_activity_type'];
+    $settings['forgetme_custom_groups'] = $values['forgetme_custom_groups'];
     $settings['email_to_dpo'] = isset($values['email_to_dpo']) ? $values['email_to_dpo'] : 0;
     $settings['email_dpo_subject'] = $values['email_dpo_subject'];
     $settings['sla_period'] = $values['sla_period'];

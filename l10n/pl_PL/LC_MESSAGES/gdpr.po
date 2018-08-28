@@ -327,6 +327,10 @@ msgid "Forgetme contact name"
 msgstr "Nazwa użytkownika - ZAPOMNIJ MNIE"
 
 #: CRM/Gdpr/Form/Settings.php
+msgid "Custom groups"
+msgstr "Grupy pól dodatkowych"
+
+#: CRM/Gdpr/Form/Settings.php
 msgid "Email the Point of Contact / DPO?"
 msgstr "E-mail do punktu kontaktowego / IODO?"
 
@@ -714,6 +718,15 @@ msgid ""
 msgstr ""
 "Ustaw wartości domyślne dla Warunków. Możesz je zastąpić w ustawieniach "
 "poszczególnych wydarzeń i stron transakcyjnych."
+
+#: templates/CRM/Gdpr/Form/Settings.tpl
+msgid ""
+"Data from selected custom groups to be deleted during 'Forget me' process. "
+"Leave empty if you do not want any custom groups to be deleted."
+msgstr ""
+"Dane kontaktu należące do wybranych grup pól dodatkowych zostaną skasowane. "
+"Pozostaw puste pole jeśli nie chcesz wprowadzać żadnych zmian do wartości "
+"pól dodatkowych."
 
 #: templates/CRM/Gdpr/Page/ContactSummary.tpl
 msgid "GDPR Status"
