@@ -1,4 +1,5 @@
 <?php
+use CRM_Gdpr_ExtensionUtil as E;
 
 require_once 'CRM/Core/Page.php';
 
@@ -619,4 +620,51 @@ WHERE url.time_stamp > '{$date}'";
     return $customGroups;
   }
 
+  public static function checkIntallationIssues() {
+
+    //Check the all the custom data from XML has been created during installation.
+    $dom = new DomDocument();
+    $status = array();
+    foreach (array('CustomData_v1', 'CustomGroupData') as $fileName) {
+      $file = E::path("xml/{$fileName}.xml");
+      $xmlString = file_get_contents($file);
+      $load = $dom->loadXML($xmlString);
+      if (!$load) {
+        $status['error'][] = ts("Error loading {$fileName}.xml file while installing");
+      }
+      $dom->xinclude();
+      $xml = simplexml_import_dom($dom);     
+      
+      //check CustomGroups are exists
+      $mapArray = array(
+        'CustomGroups' => 'CustomGroup', 
+        'CustomFields' => 'CustomField',
+        'OptionGroups' => 'OptionGroup',
+        'OptionValues' => 'OptionValue'
+      );
+
+      foreach ($mapArray as $entityMap => $entities) {
+        foreach ($xml->$entityMap as $entityMapXML) {
+          foreach ($entityMapXML->$entities as $entitiesXML) {
+            $className   = "CRM_Core_DAO_{$entities}";
+            $customGroup = new $className();
+            $customGroup->name = $entitiesXML->name;
+            if (!$customGroup->find(TRUE)) {
+              $status['error'][] = ts("$entitiesXML->name {$entities} is not found.");
+            }
+          }
+        }
+      }//End foreach map array      
+    }
+
+    return $status;
+  }
+
+  public static function reRunInstallationCustomXML() {
+    $import = new CRM_Utils_Migrate_Import();
+    foreach (array('CustomData_v1', 'CustomGroupData') as $fileName) {
+      $file = E::path("xml/{$fileName}.xml");
+      $import->run($file);
+    }
+  }
 }//End Class
