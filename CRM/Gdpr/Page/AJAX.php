@@ -253,4 +253,11 @@ TABLE;
     echo $completionMsg;
     CRM_Utils_System::civiExit();
   }
+
+  static function reRunInstallationCustomData() {
+    CRM_Gdpr_Utils::reRunInstallationCustomXML();
+
+    echo "Custom Data XMl processed successfully";
+    CRM_Utils_System::civiExit();
+  }
 }

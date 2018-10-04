@@ -49,3 +49,15 @@ form#EventInfo .custom-group-Event_terms_and_conditions {
 .crm-grouo-subscription-list-form-block .list_public_group_div {
 	padding: 10px 5px 10px 10px;
 }
+
+#gdpr-status-list {
+	border: 1px solid #999;
+    padding: 10px;
+    margin-bottom: 1em;
+    border-radius: 4px;
+}
+#gdpr-status-list .gdpr-severity-error {
+	background-color: #E43D2B;
+	color:white;
+	opacity: .85;
+}

@@ -3,6 +3,24 @@
 
 <div>
 
+{if !empty($statusCheck)}
+<div id="gdpr-status-list">
+	<h3 class="gdpr-severity-error">Some of GDPR custom data were not installed properly</h3>
+	<ul>
+		{foreach from=$statusCheck.error item=status}
+			<li>{$status}</li>
+		{/foreach}
+	</ul>
+
+	<div class="crm-submit-buttons">
+		<span class="crm-button crm-i-button">
+		<i class="crm-i fa-check"></i>
+		<input class="crm-form-submit default validate" crm-icon="fa-check" name="fix_custom_data" value="Fix Custom Data" type="button" id="fix_custom_data">
+		</span>
+	</div>
+</div>
+{/if}
+
 <h3>{ts}Point of Contact{/ts}</h3>
 
 <div class="crm-block crm-form-block crm-gdpr-settings-form-block">
@@ -308,6 +326,20 @@
   showHidePrivacyOptionField();
   $('input[name=sla_data_policy_option], input[name=entity_tc_option]').change(function() {
 	showHidePrivacyOptionField();
+  });
+
+  //On Fix custom data submission
+  $("#fix_custom_data").click(function(){
+    var ajaxURL = {/literal}'{crmURL p="civicrm/ajax/rest" h=0 q="className=CRM_Gdpr_Page_AJAX&fnName=reRunInstallationCustomData&json=1"}'{literal};
+
+    $.ajax({
+      type: "POST",
+      url: ajaxURL,
+      async: false,
+      success: function (responseText) {
+        window.location.reload();
+      } //end of success
+    }); //end of ajax
   });
 
   function showHidePrivacyOptionField() {

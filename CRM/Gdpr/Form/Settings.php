@@ -9,6 +9,16 @@ require_once 'CRM/Core/Form.php';
  * @see http://wiki.civicrm.org/confluence/display/CRMDOC43/QuickForm+Reference
  */
 class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
+  
+  function preProcess() {
+    //check all custom datas are being installed properly
+    CRM_Core_Resources::singleton()->addStyleFile('uk.co.vedaconsulting.gdpr', 'css/gdpr.css');
+    $status = CRM_Gdpr_Utils::checkIntallationIssues();
+    $this->assign('statusCheck', $status);
+
+    parent::preProcess();
+  }
+
   function buildQuickForm() {
     CRM_Utils_System::setTitle(E::ts('GDPR - Settings'));
 
