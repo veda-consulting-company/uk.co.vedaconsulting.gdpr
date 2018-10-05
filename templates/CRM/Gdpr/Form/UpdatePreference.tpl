@@ -132,6 +132,12 @@
       checkGroupChannels(this);
     });
 
+    // any email fields - trim any space around or embedded in it
+    $("input[id^='email-'][type='text']").on('input',function(e){
+      var trtxt = $(this).val().replace(/\s+/g, '');
+      $(this).val(trtxt);
+    });
+
     function checkGroupChannels(controller) {
     	var groupId 	= $(controller).attr('id')
     	var groupDiv	= $(controller).parent('.group-channel-div');
