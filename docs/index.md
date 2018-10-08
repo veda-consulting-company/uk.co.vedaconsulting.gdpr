@@ -5,9 +5,9 @@ The [GDPR extension](https://github.com/veda-consulting/uk.co.vedaconsulting.gdp
 
 ## Other resources
 
-* [GitHub repository]
-* [Release downloads](https://civicrm.org/extensions/gdpr) (within CiviCRM.org's extensions directory)
-* [GitHub Issue Queue] (in GitHub)
+* [GitHub Repository](https://github.com/veda-consulting/uk.co.vedaconsulting.gdpr “GDPR extension")
+* [Release Downloads](https://civicrm.org/extensions/gdpr) (within CiviCRM.org's extensions directory)
+* [GitHub Issue Queue] (https://github.com/veda-consulting/uk.co.vedaconsulting.gdpr/issues)
 * [Q&A on StackExchange](http://civicrm.stackexchange.com/questions/tagged/gdpr) (with the `gdpr` tag)
 
 ## Requirements
@@ -16,7 +16,7 @@ The [GDPR extension](https://github.com/veda-consulting/uk.co.vedaconsulting.gdp
 
 ## Known Issues
 
-You can see any ongoing issues/discussions at the [Issue Queue]
+You can see any ongoing issues/discussions at the [Issue Queue](https://github.com/veda-consulting/uk.co.vedaconsulting.gdpr/issues)
 
 ## Future plans
 
