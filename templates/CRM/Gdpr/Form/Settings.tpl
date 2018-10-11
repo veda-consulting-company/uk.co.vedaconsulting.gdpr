@@ -5,7 +5,7 @@
 
 {if !empty($statusCheck)}
 <div id="gdpr-status-list">
-	<h3 class="gdpr-severity-error">Some of GDPR custom data were not installed properly</h3>
+	<h3 class="gdpr-severity-error">{ts}Some of the installation data for this extension is missing.{/ts}</h3>
 	<ul>
 		{foreach from=$statusCheck.error item=status}
 			<li>{$status}</li>
