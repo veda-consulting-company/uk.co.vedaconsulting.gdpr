@@ -419,7 +419,17 @@ function _gdpr_isCiviCRMVersion47(){
  */
 function gdpr_civicrm_navigationMenu( &$params ) {
   // get the id of Contacts Menu
-  $contactsMenuId = CRM_Core_DAO::getFieldValue('CRM_Core_BAO_Navigation', 'Contacts', 'id', 'name');
+  $contactsMenuId = 0;
+  $menu_ctr=0;
+  foreach ($params as $param)
+  {
+    if (!strcmp($param['attributes']['name'], 'Contacts'))
+    {
+      $contactsMenuId = $menu_ctr;
+      break;
+    }
+    $menu_ctr++;
+  }
   // skip adding menu if there is no contacts menu
   if ($contactsMenuId) {
     // get the maximum key under contacts menu
