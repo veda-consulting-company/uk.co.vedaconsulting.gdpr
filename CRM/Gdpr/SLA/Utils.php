@@ -132,15 +132,18 @@ EOT;
    */
   static function recordSLAAcceptance($contactId = NULL) {
     $settings = self::getSettings();
-    $contactId = $contactId ? $contactId : CRM_Core_Session::singleton()->getLoggedInContactID();
+    $userID   = CRM_Core_Session::singleton()->getLoggedInContactID();
+    $contactId = $contactId ? $contactId : $userID;
     if (!$contactId) {
       return;
     }
     $termsConditionsUrl = self::getTermsConditionsUrl();
     $termsConditionsField = self::getTermsConditionsField();
     $termsConditionsFieldKey = 'custom_' . $termsConditionsField['id'];
+    //MV 11Oct2018 Incase of offline Data policy acceptance, Update logged in user as source contact
+    $sourceContactID = $userID ? $userID : $contactId;    
     $params = array(
-      'source_contact_id' => $contactId,
+      'source_contact_id' => $sourceContactID,
       'target_id' => $contactId,
       'subject' => E::ts('Data Policy accepted'),
       'status_id' => 'Completed',
