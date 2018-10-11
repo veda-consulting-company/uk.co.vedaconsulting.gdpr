@@ -97,6 +97,18 @@
 		<div class="clear"></div>
 	</div>
 	<div class="crm-section">
+		<div class="label">{$form.forgetme_email.label}</div>
+		<div class="content">
+			{$form.forgetme_email.html}
+			<br />
+	        <span class="description">
+						<i>{ts}When field is empty, then each email will be deleted. When field is not empty, then each email will be updated with this value.{/ts}</i><br />
+						<i>{ts}You can include %RANDOM% in order to have randomized email.{/ts}</i>
+					</span>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div class="crm-section">
 	<div class="label">{$form.forgetme_activity_type.label}</div>
 		<div class="content">
 			{$form.forgetme_activity_type.html}
