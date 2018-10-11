@@ -236,7 +236,7 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
       'sla_checkbox_text' => E::ts('I accept the Data Policy.'),
       'sla_tc_new_version' => FALSE,
       'entity_tc_link_label' => E::ts('Terms &amp; Conditions'),
-      'entity_tc_checkbox_text' => E::ts('I accept the Terms &amp; Conditions for this event.'),
+      'entity_tc_checkbox_text' => E::ts('I accept the Terms &amp; Conditions'),
       'entity_tc_intro' => E::ts('Please read and accept the Terms &amp; Conditions and Data Policy.'),
     );
 
