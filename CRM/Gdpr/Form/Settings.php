@@ -53,6 +53,7 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
 
     // Forget me action
     $this->add('text', 'forgetme_name', E::ts('Forgetme contact name'));
+    $this->add('text', 'forgetme_email', E::ts('Forgetme e-mail'));
 
     // Activity types
     $this->add(
@@ -299,6 +300,7 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
     $settings['activity_period'] = $values['activity_period'];
     $settings['contact_type'] = $values['contact_type'];
     $settings['forgetme_name'] = $values['forgetme_name'];
+    $settings['forgetme_email'] = $values['forgetme_email'];
     $settings['forgetme_activity_type'] = $values['forgetme_activity_type'];
     $settings['forgetme_custom_groups'] = $values['forgetme_custom_groups'];
     $settings['email_to_dpo'] = isset($values['email_to_dpo']) ? $values['email_to_dpo'] : 0;
