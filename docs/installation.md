@@ -8,7 +8,7 @@ Use the following steps to install GDPR.
 1. **Add New**
 1. Sort by name
 1. Find, download, and install this extension:
-    * **GDPR**
+    * ** General Data Protection Regulation**
 
 1. If necessary, click Enable after the extension has been downloaded and installed. When the extension is enabled:
 
@@ -20,13 +20,16 @@ Use the following steps to install GDPR.
 
 After installing, GDPR’s features can be found in the following places:
 
-* A ‘Contacts’ menu item
-* A ‘GDPR’ tab within a contacts record
+* A GDPR Dashboard link in the CiviCRM 'Contacts’ menu
+* A GDPR tab within a contacts record
 
-You will need to complete the [GDPR settings](/projects#events)
+You will need to complete the GDPR settings in the GDPR dashboard.
+
 ## Permissions {:#permissions}
 
-GDPR adds a handful of new permissions which should be configured within your CMS before using. TO DO
+The GDPR extension adds 3 new permissions which should be configured within your CMS before the extension can be used.
+See [Permissions and access control](https://docs.civicrm.org/user/en/latest/initial-set-up/permissions-and-access-control) the CiviCRM User Guide for more information.
+
 
 ## Removing
 
