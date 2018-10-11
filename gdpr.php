@@ -478,14 +478,18 @@ function gdpr_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = array(
     the old token. 
     IN FUTURE or V3.0, WE CAN REMOVE THIS CHANGE ALONG WITH CONTACT CUSTOM TOKEN ABOVE.
     */
+    $tokenValues = array();
     if ($context == 'CRM_Core_BAO_ActionSchedule') {
-      list($values) = CRM_Utils_Token::getTokenDetails($cids,
+      list($tokenValues) = CRM_Utils_Token::getTokenDetails($cids,
         array(),
         FALSE,
         FALSE
       );
     }
     foreach ($cids as $cid) {
+      if (!empty($tokenValues[$cid])) {
+        $values[$cid] = array_merge($values[$cid], $tokenValues[$cid]);
+      }
       $commPrefURL = CRM_Gdpr_CommunicationsPreferences_Utils::getCommPreferenceURLForContact($cid);
       $link = sprintf("<a href='%s' target='_blank'>%s</a>",$commPrefURL, E::ts('Communication Preferences'));
       $values[$cid]['contact.comm_pref_supporter_url'] = $commPrefURL;
