@@ -352,9 +352,9 @@ function gdpr_civicrm_tabset($tabsetName, &$tabs, $context) {
 
 
 /**
- * Implements hook_civicrm_exportIds().
+ * Implements hook_civicrm_export().
  */
-function gdpr_civicrm_exportIds($ids, $componentTable, $exportMode) {
+function gdpr_civicrm_export($exportTempTable, $headerRows, $sqlColumns, $exportMode, $componentTable, $ids) {
   switch ($exportMode) {
     case CRM_Export_Form_Select::CONTACT_EXPORT:
       CRM_Gdpr_Export::contact($componentTable);
