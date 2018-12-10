@@ -419,7 +419,20 @@ function _gdpr_isCiviCRMVersion47(){
  */
 function gdpr_civicrm_navigationMenu( &$params ) {
   // get the id of Contacts Menu
-  $contactsMenuId = CRM_Core_DAO::getFieldValue('CRM_Core_BAO_Navigation', 'Contacts', 'id', 'name');
+  // MV #9990, to get contact menu id including multi domain.
+  // CRM_Core_DAO::getFieldValue wouldn't return if more than one available.
+  // then we end up with no GDPR menu link not appear on list even though have enough permission.
+  // so use domain id in query to get contact menu id.
+  // $contactsMenuId = CRM_Core_DAO::getFieldValue('CRM_Core_BAO_Navigation', 'Contacts', 'id', 'name');
+  $domainID = CRM_Core_Config::domainID();
+  $sqlParams = array(
+    1 => array('Contacts', 'String'),
+    2 => array($domainID, 'Integer'),
+  );
+  $contactsMenuId = CRM_Core_DAO::singleValueQuery("
+    SELECT id FROM civicrm_navigation WHERE name = %1 AND domain_id = %2 AND is_active = 1
+  ", $sqlParams);
+
   // skip adding menu if there is no contacts menu
   if ($contactsMenuId) {
     // get the maximum key under contacts menu
