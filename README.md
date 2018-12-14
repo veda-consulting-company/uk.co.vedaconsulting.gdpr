@@ -35,6 +35,23 @@ support (at) vedaconsulting.co.uk
 
 ### Change Log ###
 
+v2.7
+
+Includes:
+* Data Policy/T&C web page link instead of uploaded file - #97
+* Capture T&C condition field for new contacts - #123
+* Fatal Error making contribution after redirect #118 
+* Anon overwriting current user #121,  Inherit profile's duplicate match option #127
+* Comms prefs in contributions and events #129
+* Update all privacy options during 'Forget Me' process #132, #133
+* Forget me should clean out selected custom groups #146
+* Transalation updates
+* What to do with email in case of Forget me action #145  
+* Allow "Forget Me" to optionally delete some activity types #13 
+* Add missing data check and means to fix it. #167 
+* Default terms and condition text #172, #165
+* Navigation Menu item for multi domain #183
+
 v2.6
 
 Issues
