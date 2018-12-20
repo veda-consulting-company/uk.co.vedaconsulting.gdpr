@@ -6,6 +6,10 @@ class CRM_Gdpr_Export {
    * @param string $componentTable
    */
   public static function contact($componentTable) {
+    if (empty($componentTable)) {
+      CRM_Core_Error::debug_log_message("Contant export not logged due to empty componentTable - '{$componentTable}'");
+      return false;
+    } 
     $session = CRM_Core_Session::singleton();
     $loggedUserID = $session->get('userID');
     $activityTypeId = CRM_Gdpr_Activity::contactExportedTypeId();
