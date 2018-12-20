@@ -28,6 +28,22 @@ function gdpr_civicrm_xmlMenu(&$files) {
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_install
  */
 function gdpr_civicrm_install() {
+  // #188 - use install instead of managed entities hook to avoid fatal
+  $result = civicrm_api3('OptionValue', 'get', array(
+    'sequential'      => 1,
+    'option_group_id' => "cg_extend_objects",
+    'value'           => "ContributionPage",
+  ));
+  if (empty($result['id'])) {
+    $result = civicrm_api3('OptionValue', 'create', [
+      'label'           => ts('Contribution Page'),
+      'name'            => 'civicrm_contribution_page',
+      'value'           => 'ContributionPage',
+      'option_group_id' => 'cg_extend_objects',
+      'is_active'       => 1,
+      'version'         => 3,
+    ]);
+  }
   _gdpr_civix_civicrm_install();
 }
 
@@ -46,6 +62,22 @@ function gdpr_civicrm_postInstall() {
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_uninstall
  */
 function gdpr_civicrm_uninstall() {
+  $result = civicrm_api3('CustomGroup', 'get', array(
+    'sequential' => 1,
+    'extends'    => "ContributionPage",
+  ));
+  if (!$result['is_error'] && $result['count'] <= 0) {
+    $result = civicrm_api3('OptionValue', 'get', array(
+      'sequential'      => 1,
+      'option_group_id' => "cg_extend_objects",
+      'value'           => "ContributionPage",
+    ));
+    if (!empty($result['id'])) {
+      $result = civicrm_api3('OptionValue', 'delete', array(
+        'id' => $result['id'],
+      ));
+    }
+  }
   _gdpr_civix_civicrm_uninstall();
 }
 
@@ -86,20 +118,6 @@ function gdpr_civicrm_upgrade($op, CRM_Queue_Queue $queue = NULL) {
  */
 function gdpr_civicrm_managed(&$entities) {
   _gdpr_civix_civicrm_managed($entities);
-  $entities[] = [
-    'module' => 'uk.co.vedaconsulting.gdpr',
-    'name' => 'contributionpagecustomdata',
-    'update' => 'never',
-    'entity' => 'OptionValue',
-    'params' => [
-      'label' => ts('Contribution Page'),
-      'name' => 'civicrm_contribution_page',
-      'value' => 'ContributionPage',
-      'option_group_id' => 'cg_extend_objects',
-      'is_active' => 1,
-      'version' => 3,
-    ],
-  ];
 }
 
 /**
