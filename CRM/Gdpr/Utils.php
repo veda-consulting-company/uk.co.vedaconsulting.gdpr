@@ -24,7 +24,7 @@ class CRM_Gdpr_Utils {
     }
     catch (Exception $e) {
       CRM_Core_Error::debug_log_message('CiviCRM API Call Failed');
-      CRM_Core_Error::debug_var('CiviCRM API Call Error', $e);
+      CRM_Core_Error::debug_var('CiviCRM API Call Error', $e->getMessage());
       return;
     }
 
