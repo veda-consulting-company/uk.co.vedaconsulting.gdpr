@@ -40,21 +40,22 @@
     <div class="clear"></div>
   {/if}
 </fieldset>
-<script type="text/javascript">
 {literal}
+<script type="text/javascript">
   (function($) {
-    {/literal}
     var field = $('#gdpr-terms-conditions');
-    {if $terms_conditions.position == 'formTop'}
-    $('form .crm-section:first').prepend(field);
-    {elseif $terms_conditions.position == 'customPre'}
-    $('form .custom_pre-section:first, form .custom_pre_profile-group:first').after(field);
-    {elseif $terms_conditions.position ==  'customPost'}
-    $('form .custom_post-section:first,form .custom_post_profile-group:first').after(field);
-    {else}
-    $('form #crm-submit-buttons:last').before(field);
-    {/if}
-    {literal}
-  }(cj))
-{/literal}
+    var tncPosition = {/literal}'{$terms_conditions.position}'{literal};
+    if (tncPosition == 'formTop' && $('form .crm-section:first').length) {
+      $('form .crm-section:first').prepend(field);
+    } else if (tncPosition == 'customPre' && $('form .custom_pre-section:first, form .custom_pre_profile-group:first').length) {
+      $('form .custom_pre-section:first, form .custom_pre_profile-group:first').after(field);
+    } else if (tncPosition == 'customPost' && $('form .custom_post-section:first,form .custom_post_profile-group:first').length) {
+      $('form .custom_post-section:first,form .custom_post_profile-group:first').after(field);
+    } else if ($('form #crm-submit-buttons:last').length) {
+      $('form #crm-submit-buttons:last').before(field);
+    } else {
+      console.log("Error: Couldn't find a place to position terms and conditions");
+    }
+  })(CRM.$ || cj || jQuery);
 </script>
+{/literal}
