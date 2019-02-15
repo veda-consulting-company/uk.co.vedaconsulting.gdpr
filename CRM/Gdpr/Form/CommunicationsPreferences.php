@@ -27,7 +27,7 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
       array('size' => 40)
     );
     $this->add(
-      'textarea',
+      'wysiwyg',
       'page_intro',
       E::ts('Introduction'),
       $text_area_attributes
@@ -78,7 +78,7 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
       )
     );
     $this->add(
-      'textarea',
+      'wysiwyg',
       'channels_intro',
       E::ts('Introduction'),
       $text_area_attributes
@@ -122,7 +122,7 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
       array('size' => 40)
     );
     $this->add(
-      'textarea',
+      'wysiwyg',
       'groups_intro',
       E::ts('Introduction or description for this section.'),
       $text_area_attributes
@@ -196,7 +196,7 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
     );
     $descriptions['completion_url'] = E::ts('Add the a URL for a page to redirect the user after they complete the form. The page should already exist. The URL may be absolute (http://example.com/thank-you) or relative (thank-you), with no leading forward slash. Leave blank to redirect to the front page.');
     $this->add(
-      'textarea',
+      'wysiwyg',
       'completion_message',
       E::ts('Completion message'),
       $text_area_attributes
@@ -236,13 +236,13 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
       )
     );
     $this->add(
-      'textarea',
+      'wysiwyg',
       'comm_pref_thankyou_embed_intro',
       E::ts('Introductory text'),
       $text_area_attributes
     );
     $this->add(
-      'textarea',
+      'wysiwyg',
       'comm_pref_thankyou_embed_complete_msg',
       E::ts('Completion text'),
       $text_area_attributes
@@ -253,7 +253,7 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
       E::ts('Link label')
     );
     $this->add(
-      'textarea',
+      'wysiwyg',
       'comm_pref_link_intro',
       E::ts('Text above the link'),
       $text_area_attributes
@@ -291,6 +291,15 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
     $groupContainers = $this->groupContainerNames;
     // Save values to settings except for groups.
     $settingsElements = array_diff($this->getRenderableElementNames(), $groupContainers);
+
+    // Purify HTML.
+    foreach ($values as $key => $value) {
+      $idx = !empty($this->_elementIndex[$key]) ? $this->_elementIndex[$key] : NULL;
+      if ($idx && !empty($this->_elements[$idx]->_type) && $this->_elements[$idx]->_type == 'textarea') { 
+        $values[$key] = CRM_Utils_String::purifyHTML($values[$key]);
+      }
+    }
+    
     foreach ($settingsElements as $settingName) {
       if (isset($values[$settingName])) {
         $settings[$settingName] = $values[$settingName];
