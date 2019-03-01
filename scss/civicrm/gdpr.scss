@@ -27,12 +27,16 @@
   }
 }
 
-// @TODO This selector is definitely not stable, find a better way.
+// @TODO This selector may not be too stable because
+// it does not identify the exact table explicitly.
+// However, this should not be a problem, because we
+// are including this style on a GDPR page only,
+// not globally on the whole site.
 table.selector#SummaryTable {
   @include table-selector();
 }
 
-// @TODO this is an adhoc, should be fixed globally
+// @TODO this is an adhoc, this should be fixed globally
 #GroupSubscriptionListTable_wrapper {
   .dataTables_length {
     padding-left: $crm-standard-gap;

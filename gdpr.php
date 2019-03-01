@@ -264,7 +264,7 @@ function gdpr_civicrm_buildForm($formName, $form) {
       );
 
       //amend communication preference link/embed form in thank you page
-      CRM_Gdpr_CommunicationsPreferences_Utils::commsPreferenceInThankyouPage($cid, $form, 'Event');  
+      CRM_Gdpr_CommunicationsPreferences_Utils::commsPreferenceInThankyouPage($cid, $form, 'Event');
     }
   }
   if ($formName == 'CRM_Contribute_Form_Contribution_Main') {
@@ -497,8 +497,8 @@ function gdpr_civicrm_navigationMenu( &$params ) {
  * implementation of hook_civicrm_token
  */
 function gdpr_civicrm_tokens( &$tokens ){
-  //Keeping this token only to sustain the old tokens otherwise, 
-  //the token 'CommunicationPreferences' can be used in all places  
+  //Keeping this token only to sustain the old tokens otherwise,
+  //the token 'CommunicationPreferences' can be used in all places
   $tokens['contact']['contact.comm_pref_supporter_url'] = E::ts("Communication Preferences URL");
   $tokens['contact']['contact.comm_pref_supporter_link'] = E::ts("Communication Preferences Link");
   $tokens['CommunicationPreferences'] = array(
@@ -515,20 +515,20 @@ function gdpr_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = array(
     /*
     THIS CHANGE IS ONLY FOR ACTIONSCHEDULE (SEND EMAIL USING SCHEDULE REMINDER)
 
-    we have mentioned the contact custom tokens in token hook. 
-    so whenever replaceHookToken called its trying replace Category 'Contact' tokens 
+    we have mentioned the contact custom tokens in token hook.
+    so whenever replaceHookToken called its trying replace Category 'Contact' tokens
     (which cause null values in template result).
 
-    This is not happening when send email via contact summary or mailing, 
-    because all other work flow to send emails are builds the contact details array 
+    This is not happening when send email via contact summary or mailing,
+    because all other work flow to send emails are builds the contact details array
     before replaceHookToken fired using this function CRM_Utils_Token::getTokenDetails().
-    
-    When Action schedule send email, Contact Details get from BAO API Query 
-    which doesn't return some default contact values ex: email_greetings, 
+
+    When Action schedule send email, Contact Details get from BAO API Query
+    which doesn't return some default contact values ex: email_greetings,
     postal greetings etc. So build the contact details array with all default values.
-    
-    This changes is needed only when we have $tokens['contact']. Keeping this oly to sustain 
-    the old token. 
+
+    This changes is needed only when we have $tokens['contact']. Keeping this oly to sustain
+    the old token.
     IN FUTURE or V3.0, WE CAN REMOVE THIS CHANGE ALONG WITH CONTACT CUSTOM TOKEN ABOVE.
     */
     $tokenValues = array();
@@ -561,12 +561,12 @@ function gdpr_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = array(
 function gdpr_civicrm_summaryActions( &$actions, $contactID ) {
   $actions['comm_pref'] = array(
     'title' => 'Communication Preferences Link',
-    //need a weight parameter here, Contact BAO looking for weight key and returning notice message. 
-    'weight' => 60, 
+    //need a weight parameter here, Contact BAO looking for weight key and returning notice message.
+    'weight' => 60,
     'ref' => 'comm_pref',
     'key' => 'comm_pref',
     'href' => CRM_Gdpr_CommunicationsPreferences_Utils::getCommPreferenceURLForContact($contactID, TRUE),
-  );  
+  );
 }
 
 function gdpr_civicrm_permission(&$permissions) {
@@ -616,6 +616,8 @@ function gdpr_civicrm_pageRun( &$page ) {
       $accept_date = date('d/m/Y', strtotime($accept_activity['activity_date_time']));
       $page->assign('lastAcceptanceDate', $accept_date);
     }
+
+    CRM_Core_Resources::singleton()->addStyleFile('uk.co.vedaconsulting.gdpr', 'css/shoreditch-only.min.css');
   }
   if ($pageName == 'CRM_Event_Page_EventInfo') {
     CRM_Core_Resources::singleton()->addStyleFile('uk.co.vedaconsulting.gdpr', 'css/gdpr.css');
