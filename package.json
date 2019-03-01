@@ -1,0 +1,22 @@
+{
+  "name": "uk.co.compucorp.civicrm.pivotreport",
+  "version": "1.0.0",
+  "description": "Pivot Report extension",
+  "engines": {
+    "node": "8.9.4",
+    "npm": "6.4.0"
+  },
+  "devDependencies": {
+    "civicrm-scssroot": "github:totten/civicrm-scssroot",
+    "gulp": "^4.0.0",
+    "gulp-cssmin": "^0.2.0",
+    "gulp-sass": "^4.0.2",
+    "gulp-strip-css-comments": "^2.0.0",
+    "husky": "^1.3.1",
+    "lint-staged": "^8.1.4",
+    "stylelint": "^9.10.1",
+    "stylelint-config-sass-guidelines": "^5.3.0",
+    "stylelint-order": "^2.0.0",
+    "stylelint-scss": "^3.5.4"
+  }
+}
