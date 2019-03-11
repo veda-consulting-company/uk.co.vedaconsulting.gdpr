@@ -629,7 +629,9 @@ function gdpr_civicrm_pageRun( &$page ) {
 /**
  * Checks if an extension is enabled
  *
- * @param  string $key extension key
+ * @param string $key
+ *   extension key
+ *
  * @return bool
  */
 function isExtensionEnabled($key) {
@@ -648,7 +650,9 @@ function isExtensionEnabled($key) {
  * @return void
  */
 function includeShoreditchStylingIfEnabled () {
-  if (!isExtensionEnabled('org.civicrm.shoreditch')) return;
+  if (!isExtensionEnabled('org.civicrm.shoreditch')) {
+    return;
+  }
 
   CRM_Core_Resources::singleton()->
     addStyleFile('uk.co.vedaconsulting.gdpr', 'css/shoreditch-only.min.css', 10);
