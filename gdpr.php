@@ -311,6 +311,8 @@ function gdpr_civicrm_buildForm($formName, $form) {
       CRM_Utils_System::redirect($commsPrefsUrl);
     }
   }
+
+  includeShoreditchStylingIfEnabled();
 }
 
 /**
@@ -616,10 +618,38 @@ function gdpr_civicrm_pageRun( &$page ) {
       $accept_date = date('d/m/Y', strtotime($accept_activity['activity_date_time']));
       $page->assign('lastAcceptanceDate', $accept_date);
     }
-
-    CRM_Core_Resources::singleton()->addStyleFile('uk.co.vedaconsulting.gdpr', 'css/shoreditch-only.min.css');
   }
   if ($pageName == 'CRM_Event_Page_EventInfo') {
     CRM_Core_Resources::singleton()->addStyleFile('uk.co.vedaconsulting.gdpr', 'css/gdpr.css');
   }
+
+  includeShoreditchStylingIfEnabled();
+}
+
+/**
+ * Checks if an extension is enabled
+ *
+ * @param  string $key extension key
+ * @return bool
+ */
+function isExtensionEnabled($key) {
+  $isEnabled = CRM_Core_DAO::getFieldValue(
+    'CRM_Core_DAO_Extension',
+    $key,
+    'is_active',
+    'full_name'
+  );
+  return !empty($isEnabled);
+}
+
+/**
+ * Includes Shoreditch styling for the extension, if Shoreditch is enabled
+ *
+ * @return void
+ */
+function includeShoreditchStylingIfEnabled () {
+  if (!isExtensionEnabled('org.civicrm.shoreditch')) return;
+
+  CRM_Core_Resources::singleton()->
+    addStyleFile('uk.co.vedaconsulting.gdpr', 'css/shoreditch-only.min.css', 10);
 }
