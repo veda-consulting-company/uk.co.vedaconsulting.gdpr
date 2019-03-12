@@ -312,7 +312,7 @@ function gdpr_civicrm_buildForm($formName, $form) {
     }
   }
 
-  includeShoreditchStylingIfEnabled();
+  gdpr_includeShoreditchStylingIfEnabled();
 }
 
 /**
@@ -623,7 +623,7 @@ function gdpr_civicrm_pageRun( &$page ) {
     CRM_Core_Resources::singleton()->addStyleFile('uk.co.vedaconsulting.gdpr', 'css/gdpr.css');
   }
 
-  includeShoreditchStylingIfEnabled();
+  gdpr_includeShoreditchStylingIfEnabled();
 }
 
 /**
@@ -634,7 +634,7 @@ function gdpr_civicrm_pageRun( &$page ) {
  *
  * @return bool
  */
-function isExtensionEnabled($key) {
+function gdpr_isExtensionEnabled($key) {
   $isEnabled = CRM_Core_DAO::getFieldValue(
     'CRM_Core_DAO_Extension',
     $key,
@@ -649,8 +649,8 @@ function isExtensionEnabled($key) {
  *
  * @return void
  */
-function includeShoreditchStylingIfEnabled () {
-  if (!isExtensionEnabled('org.civicrm.shoreditch')) {
+function gdpr_includeShoreditchStylingIfEnabled () {
+  if (!gdpr_isExtensionEnabled('org.civicrm.shoreditch')) {
     return;
   }
 
