@@ -36,12 +36,17 @@ class CRM_Gdpr_SLA_Entity {
    * Determines if this entity has terms and conditions enabled.
    *
    * @param bool $useDefault
-   *  If true, will include defaults for the entity type from the gdpr settings, otherwise will
+   *  If true, will fall back to the defaults for the entity type from the gdpr settings if terms and conditions are not set, otherwise will
    *  only use the settings for this particular entity.
    */
   public function isEnabled($useDefault = FALSE) {
     $entityEnabled = $this->getValue('Enable_terms_and_Conditions_Acceptance');
+    // If TC explicitlty disabled for this entity, return false.
+    if ($entityEnabled === '0') {
+      return FALSE;
+    }
     $typeEnabled = FALSE;
+    // Determine whether to fall back to global settings.
     if ($useDefault && $this->enabledSetting) {
       $typeEnabled = $this->getSetting($this->enabledSetting);
     }
