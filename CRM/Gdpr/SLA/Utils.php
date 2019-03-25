@@ -213,7 +213,7 @@ EOT;
       if (0 == strpos($url, '/')) {
         $url = substr($url, 1);
       }
-      return CRM_System::url($url);
+      return CRM_Utils_System::url($url);
     }
   }
 
