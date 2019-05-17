@@ -376,7 +376,7 @@ function gdpr_civicrm_export($exportTempTable, $headerRows, $sqlColumns, $export
   if (version_compare(CRM_Utils_System::version(), '5.8.0', '>=')) {
     switch ($exportMode) {
       case CRM_Export_Form_Select::CONTACT_EXPORT:
-        CRM_Gdpr_Export::contact($componentTable);
+        CRM_Gdpr_Export::contact($ids);
         break;
 
       case CRM_Export_Form_Select::ACTIVITY_EXPORT:
