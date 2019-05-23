@@ -220,18 +220,19 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
     if (!empty($self->groupEleNames)) {
       foreach ($self->groupEleNames as $groupName => $groupEleName) {
         //get the channel array and group channel array
+        $groupChannelArray = array();
         foreach ($self->channelEleNames as $channel) {
           $groupChannel = str_replace($self->containerPrefix, '', $channel);
           $channelSettingValue = $self->commPrefGroupsetting[$groupEleName][$groupChannel];
 
           if (!is_null($channelSettingValue) && $channelSettingValue != '') {
             $channelArray[$groupChannel] = ($fields[$channel] == 'YES') ? 1 : 0;
-            $groupChannelAray[$groupChannel] = empty($self->commPrefGroupsetting[$groupEleName][$groupChannel]) ? 0 : 1;
+            $groupChannelArray[$groupChannel] = empty($self->commPrefGroupsetting[$groupEleName][$groupChannel]) ? 0 : 1;
           }
         }
 
         //check any difference then return as error
-        if(!empty($fields[$groupEleName]) && ($diff = array_diff_assoc($groupChannelAray, $channelArray))){
+        if(!empty($fields[$groupEleName]) && ($diff = array_diff_assoc($groupChannelArray, $channelArray))){
           //do something here.
           $diff = implode(', ', array_keys($diff));
           $errors[$groupEleName] = E::ts("Communication Preferences {$diff} has to be selected for this group");
