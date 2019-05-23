@@ -36,12 +36,13 @@ class CRM_Gdpr_Page_Tab extends CRM_Core_Page {
       $field = CRM_Gdpr_SLA_Utils::getTermsConditionsField();
       $key = 'custom_' . $field['id'];
       $url = !empty($activity[$key]) ? $activity[$key] : '';
-      $label = CRM_Gdpr_SLA_Utils::getLinkLabel();
       $separator = '<br />';
       if ($isDue) {
         $dueMsg = '<span class="notice">The contact is due to renew their acceptance.</span>';
       }
       if ($url) {
+        $path = parse_url($url, PHP_URL_PATH);
+        $label = pathinfo($path, PATHINFO_FILENAME);
         $details['details']  .= $separator . '<a target="blank" href="' . $url . '">' . $label  .'</a>' . $separator . $dueMsg;
       }
     }
