@@ -190,9 +190,16 @@ class CRM_Gdpr_Upgrader extends CRM_Gdpr_Upgrader_Base {
 
 
   /**
-   * Example: Run an external SQL script when the module is uninstalled.
+   * Create 'GDPR Cancelled' membership status
    */
   private function createGDPRCancelledMembershipStatus() {
+    $result = CRM_Gdpr_Utils::CiviCRMAPIWrapper('MembershipStatus', 'get', [
+      'name' => "GDPR_Cancelled",
+    ]);
+    if ($result['count']) {
+      return ;
+    }
+
     // Get max weight for membership status
     $result = CRM_Gdpr_Utils::CiviCRMAPIWrapper('MembershipStatus', 'get', array(
       'sequential' => 1,
