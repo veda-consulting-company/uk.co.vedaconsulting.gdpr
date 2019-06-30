@@ -14,13 +14,12 @@
     <url desc="Support">https://vedaconsulting.co.uk</url>
     <url desc="Licensing">http://www.gnu.org/licenses/agpl-3.0.html</url>
   </urls>
-  <releaseDate>2018-12-14</releaseDate>
-  <version>2.7</version>
+  <releaseDate>2019-10-14</releaseDate>
+  <version>2.8</version>
   <develStage>stable</develStage>
   <compatibility>
     <ver>5.13</ver>
   </compatibility>
-  <comments>This extension is under active development, with the up and coming GDPR implementation date of the 25th of May we're expecting a lot of activity on the extension.</comments>
   <civix>
     <namespace>CRM/Gdpr</namespace>
   </civix>
