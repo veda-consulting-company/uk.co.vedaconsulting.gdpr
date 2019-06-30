@@ -367,64 +367,6 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
 
   }
 
-  public function addRules() {
-    $this->addFormRule(array('CRM_Gdpr_Form_CommunicationsPreferences', 'validateRedirectUrl'));
-  }
-
-  /**
-   * Validation callback for completion redirect url.
-   */
-  public static function validateRedirectUrl($values) {
-    $errors = array();
-    if (!empty($values['completion_redirect'])) {
-      if (empty($values['completion_url'])) {
-        // This is okay, we will redirect to the home page.
-      }
-      else {
-        $url = $values['completion_url'];
-        $parsed_url = parse_url($url);
-        $base_url = CIVICRM_UF_BASEURL;
-        if (!empty($parsed_url['host']) && !empty($parsed_url['scheme'])) {
-          $full_url = $url;
-        }
-        else {
-          // Remove leading slash from base and trailing slash from path.
-          if (0 === strpos($url, '/')) {
-            $url = substr($url, 1);
-          }
-          $last_pos = strlen($base_url) -1;
-          if (strrpos($base_url, '/') === $last_pos) {
-            $base_url = substr($base_url, 0, $last_pos);
-          }
-          $full_url = $base_url . '/' . $url;
-        }
-
-        // We have been unable to construct a URL.
-        if (!$full_url) {
-          $errors['completion_url'] = E::ts('Invalid URL.');
-        }
-        elseif (function_exists('curl_init')) {
-          // Test if the url exists.
-          $ch  = curl_init();
-          curl_setopt($ch, CURLOPT_URL, $full_url);
-          curl_setopt($ch, CURLOPT_HEADER, TRUE);
-          curl_setopt($ch, CURLOPT_NOBODY, TRUE);
-          curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-          curl_setopt($ch, CURLOPT_FOLLOWLOCATION ,true);
-          curl_setopt($ch, CURLOPT_MAXREDIRS, 10);
-          $result = curl_exec($ch);
-          $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-          $code = trim($code);
-          curl_close($ch);
-          if ($code[0] != '2') {
-            $errors['completion_url'] = E::ts('The completion URL does not belong to a valid page. Please check that an anonymous in user can access it.');
-          }
-        }
-      }
-    }
-    return $errors;
-  }
-
   /**
    * Get the fields/elements defined in this form.
    *
