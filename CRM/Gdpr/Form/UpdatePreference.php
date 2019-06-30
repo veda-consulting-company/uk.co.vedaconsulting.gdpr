@@ -68,8 +68,7 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
     }
 
     //Include reCAPTCHA?
-    $addCaptcha = $this->commPrefSettings['add_captcha'];
-    if ($addCaptcha) {
+    if ($addCaptcha = $this->commPrefSettings['add_captcha']) {
       $captcha = CRM_Utils_ReCAPTCHA::singleton();
       $captcha->add($this);
       $this->assign('isCaptcha', TRUE);
