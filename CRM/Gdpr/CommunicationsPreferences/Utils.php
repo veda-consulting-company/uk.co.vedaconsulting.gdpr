@@ -341,6 +341,7 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
     $isChannelsEnabled = $fieldsSettings['enable_channels'];
     if ($isChannelsEnabled) {
       if ($channelIntro = $fieldsSettings['channels_intro']) {
+        $channelIntro = preg_replace("/[\r\n]*/", "", $channelIntro);
         $form->assign('channels_intro', $channelIntro);
       }
 
