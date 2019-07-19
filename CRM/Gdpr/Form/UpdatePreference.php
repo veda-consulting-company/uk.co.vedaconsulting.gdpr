@@ -266,7 +266,7 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
       $lastAcceptance = CRM_Gdpr_SLA_Utils::getContactLastAcceptance($this->_cid);
 
       //Set Channel default values
-      $contactPrefPrefix = 'do_not_';
+      $communicationPreferenceMapperFields = U::getCommunicationPreferenceMapperField();
       foreach ($this->commPrefSettings['channels'] as $key => $value) {
         $name  = str_replace($this->containerPrefix, '', $key);
         if (!$lastAcceptance) {
@@ -274,7 +274,14 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
           $defaults[$key] = '';
         }
         elseif ($value) {
-          $defaults[$key] = !empty($contactDetails[$contactPrefPrefix.$name]) ? 'NO' : 'YES';
+          $comPref = FALSE;
+          foreach ($communicationPreferenceMapperFields[$name] as $fieldName) {
+            if (!empty($contactDetails[$fieldName])) {
+              $comPref = TRUE;
+              break;
+            }
+          }
+          $defaults[$key] = $comPref ? 'NO' : 'YES';
         }
       }
 

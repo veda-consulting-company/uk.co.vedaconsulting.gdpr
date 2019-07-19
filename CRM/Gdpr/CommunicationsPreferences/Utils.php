@@ -227,6 +227,14 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
     );
   }
 
+  public static function getCommunicationPreferenceMapperField() {
+    return array(
+      'email' => ['do_not_email', 'is_opt_out'],
+      'phone' => ['do_not_phone'],
+      'post' => ['do_not_mail'],
+      'sms' => ['do_not_sms'],
+    );
+  }
   public static function getCommunicationPreferenceMapper() {
     return array(
       'email' => array(
@@ -430,7 +438,6 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
         $commPref = array_merge($commPref, $commPrefMapper[$name][$channelValue]);
       }
     }
-
     //Using API to update contact
     $contact = civicrm_api3('Contact', 'create', $commPref);
 
