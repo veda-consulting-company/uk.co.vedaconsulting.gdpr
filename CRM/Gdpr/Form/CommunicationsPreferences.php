@@ -259,6 +259,8 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
       $text_area_attributes
     );
 
+    $this->buildMailBlock();
+
     $this->addButtons(array(
       array(
         'type' => 'submit',
@@ -266,67 +268,34 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
         'isDefault' => TRUE,
       ),
     ));
-    $this->setDefaults($this->getDefaults());
     parent::buildQuickForm();
   }
 
   /**
-   * Gets public groups.
+   * Build Email Block
    */
-  function getGroups() {
-    if (!$this->groups) {
-      $groups = U::getGroups();
-      $this->groups = U::sortGroups($groups, array(
-        'group_enable' => 'desc',
-        'group_weight' => 'asc',
-        'group_title' => 'asc',
-      ));
-    }
-    return $this->groups;
+  public function buildMailBlock() {
+    $this->registerRule('emailList', 'callback', 'emailList', 'CRM_Utils_Rule');
+    $this->addYesNo('is_email_confirm', ts('Send Confirmation Email?'), NULL, NULL, ['onclick' => "return showHideByValue('is_email_confirm','','confirmEmail','block','radio',false);"]);
+    $this->add('textarea', 'confirm_email_text', ts('Text'));
+    $this->add('text', 'cc_confirm', ts('CC Confirmation To'));
+    $this->addRule('cc_confirm', ts('Please enter a valid list of comma delimited email addresses'), 'emailList');
+    $this->add('text', 'bcc_confirm', ts('BCC Confirmation To'));
+    $this->addRule('bcc_confirm', ts('Please enter a valid list of comma delimited email addresses'), 'emailList');
+    $this->add('text', 'confirm_from_name', ts('Confirm From Name'));
+    $this->add('text', 'confirm_from_email', ts('Confirm From Email'));
+    $this->addRule('confirm_from_email', ts('Email is not valid.'), 'email');
   }
 
-  public function postProcess() {
-    $values = $this->exportValues();
-    parent::postProcess();
-    $groupContainers = $this->groupContainerNames;
-    // Save values to settings except for groups.
-    $settingsElements = array_diff($this->getRenderableElementNames(), $groupContainers);
+  public function setDefaultValues() {
+    // Set some initial defaults
+    $defaults['is_email_confirm'] = 0;
 
-    // Purify HTML.
-    foreach ($values as $key => $value) {
-      $idx = !empty($this->_elementIndex[$key]) ? $this->_elementIndex[$key] : NULL;
-      if ($idx && !empty($this->_elements[$idx]->_type) && $this->_elements[$idx]->_type == 'textarea') { 
-        $values[$key] = CRM_Utils_String::purifyHTML($values[$key]);
-      }
-    }
-    
-    foreach ($settingsElements as $settingName) {
-      if (isset($values[$settingName])) {
-        $settings[$settingName] = $values[$settingName];
-      }
-    }
-    $groupSettings = array();
-    foreach ($groupContainers as $key) {
-      if (isset($values[$key])) {
-        $groupSettings[$key] = $values[$key];
-      }
-    }
-    $save = array(
-      U::SETTING_NAME => $settings,
-      U::GROUP_SETTING_NAME => $groupSettings,
-    );
-    U::saveSettings($save);
-    $url = CRM_Utils_System::url('civicrm/gdpr/dashboard', 'reset=1');
-    CRM_Core_Session::setStatus('Settings Saved.', 'GDPR', 'success');
-    CRM_Utils_System::redirect($url);
-    CRM_Utils_System::civiExit();
-  }
-
-  public function getDefaults() {
+    // Load defaults from settings
     $settings = U::getSettings();
     $key = U::SETTING_NAME;
     $group_key = U::GROUP_SETTING_NAME;
-    $form_defaults = array();
+    $defaults = array();
     $group_settings = $settings[$group_key] ? $settings[$group_key] : array();
     $groups = $this->getGroups();
     $map = array(
@@ -357,13 +326,64 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
     }
     // Flatten to fit the form structure.
     if (isset($settings[$key]) && isset($group_settings)) {
-      $form_defaults = array_merge($settings[$key], $group_settings);
+      $defaults = array_merge($settings[$key], $group_settings);
     }
-    return $form_defaults;
+    return $defaults;
   }
 
+  /**
+   * Gets public groups.
+   */
+  function getGroups() {
+    if (!$this->groups) {
+      $groups = U::getGroups();
+      $this->groups = U::sortGroups($groups, array(
+        'group_enable' => 'desc',
+        'group_weight' => 'asc',
+        'group_title' => 'asc',
+      ));
+    }
+    return $this->groups;
+  }
 
-  protected function getProfileOptions() {
+  public function postProcess() {
+    $values = $this->exportValues();
+    parent::postProcess();
+    $groupContainers = $this->groupContainerNames;
+    // Save values to settings except for groups.
+    $settingsElements = array_diff($this->getRenderableElementNames(), $groupContainers);
+
+    // Purify HTML.
+    foreach ($values as $key => $value) {
+      $idx = !empty($this->_elementIndex[$key]) ? $this->_elementIndex[$key] : NULL;
+      if ($idx && !empty($this->_elements[$idx]->_type) && $this->_elements[$idx]->_type == 'textarea') {
+        $values[$key] = CRM_Utils_String::purifyHTML($values[$key]);
+      }
+    }
+
+    foreach ($settingsElements as $settingName) {
+      if (isset($values[$settingName])) {
+        $settings[$settingName] = $values[$settingName];
+      }
+    }
+    $groupSettings = array();
+    foreach ($groupContainers as $key) {
+      if (isset($values[$key])) {
+        $groupSettings[$key] = $values[$key];
+      }
+    }
+    $save = array(
+      U::SETTING_NAME => $settings,
+      U::GROUP_SETTING_NAME => $groupSettings,
+    );
+    U::saveSettings($save);
+    $url = CRM_Utils_System::url('civicrm/gdpr/dashboard', 'reset=1');
+    CRM_Core_Session::setStatus('Settings Saved.', 'GDPR', 'success');
+    CRM_Utils_System::redirect($url);
+    CRM_Utils_System::civiExit();
+  }
+
+  public function getDefaults() {
 
   }
 

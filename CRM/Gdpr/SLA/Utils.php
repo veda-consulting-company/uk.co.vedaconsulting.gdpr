@@ -131,17 +131,15 @@ EOT;
    * Records a contact accepting Terms and Conditions.
    */
   static function recordSLAAcceptance($contactId = NULL) {
-    $settings = self::getSettings();
-    $userID   = CRM_Core_Session::singleton()->getLoggedInContactID();
+    $userID = CRM_Core_Session::singleton()->getLoggedInContactID();
     $contactId = $contactId ? $contactId : $userID;
     if (!$contactId) {
       return;
     }
     $termsConditionsUrl = self::getTermsConditionsUrl();
     $termsConditionsField = self::getTermsConditionsField();
-    $termsConditionsFieldKey = 'custom_' . $termsConditionsField['id'];
     //MV 11Oct2018 Incase of offline Data policy acceptance, Update logged in user as source contact
-    $sourceContactID = $userID ? $userID : $contactId;    
+    $sourceContactID = $userID ? $userID : $contactId;
     $params = array(
       'source_contact_id' => $sourceContactID,
       'target_id' => $contactId,
@@ -150,7 +148,7 @@ EOT;
       'activity_type_id' => self::$activityTypeName,
       'custom_' . $termsConditionsField['id'] => $termsConditionsUrl,
     );
-    $result = civicrm_api3('Activity', 'create', $params);
+    civicrm_api3('Activity', 'create', $params);
   }
 
   static function isContactDueAcceptance($contactId = NULL) {

@@ -151,6 +151,62 @@
     </div>
     <div class="clear"></div>
   </div> {* end Completion block *}
+    {* Confirmation Email Block *}
+  <fieldset id="mail" class="crm-collapsible {if $defaultsEmpty}collapsed{/if}">
+    <legend class="collapsible-title">{ts}Confirmation Email{/ts}</legend>
+    <div>
+      <table class="form-layout-compressed">
+        <tr class="crm-event-manage-registration-form-block-is_email_confirm">
+          <td scope="row" class="label" width="20%">{$form.is_email_confirm.label}</td>
+          <td>{$form.is_email_confirm.html}<br/>
+            <span
+                    class="description">{ts}Do you want a confirmation email sent automatically to the user?{/ts}</span>
+          </td>
+        </tr>
+      </table>
+      <div id="confirmEmail">
+        <table class="form-layout-compressed">
+          <tr class="crm-event-manage-registration-form-block-confirm_email_text">
+            <td scope="row" class="label"
+                width="20%">{$form.confirm_email_text.label} {if $action == 2}{include file='CRM/Core/I18n/Dialog.tpl' table='civicrm_event' field='confirm_email_text' id=$eventID}{/if}</td>
+            <td>{$form.confirm_email_text.html}<br/>
+              <span
+                      class="description">{ts}Additional message or instructions to include in confirmation email.{/ts}</span>
+            </td>
+          </tr>
+          <tr class="crm-event-manage-registration-form-block-confirm_from_name">
+            <td scope="row" class="label" width="20%">{$form.confirm_from_name.label} <span
+                      class="crm-marker">*</span> {if $action == 2}{include file='CRM/Core/I18n/Dialog.tpl' table='civicrm_event' field='confirm_from_name' id=$eventID}{/if}
+            </td>
+            <td>{$form.confirm_from_name.html}<br/>
+              <span class="description">{ts}FROM name for email.{/ts}</span>
+            </td>
+          </tr>
+          <tr class="crm-event-manage-registration-form-block-confirm_from_email">
+            <td scope="row" class="label" width="20%">{$form.confirm_from_email.label} <span class="crm-marker">*</span></td>
+            <td>{$form.confirm_from_email.html}<br/>
+              <span
+                      class="description">{ts}FROM email address (this must be a valid email account with your SMTP email service provider).{/ts}</span>
+            </td>
+          </tr>
+          <tr class="crm-event-manage-registration-form-block-cc_confirm">
+            <td scope="row" class="label" width="20%">{$form.cc_confirm.label}</td>
+            <td>{$form.cc_confirm.html}<br/>
+              <span
+                      class="description">{ts}You may specify one or more email addresses to receive a carbon copy (cc). Multiple email addresses should be separated by a comma (e.g. jane@example.org, paula@example.org).{/ts}</span>
+            </td>
+          </tr>
+          <tr class="crm-event-manage-registration-form-block-bcc_confirm">
+            <td scope="row" class="label" width="20%">{$form.bcc_confirm.label}</td>
+            <td>{$form.bcc_confirm.html}<br/>
+              <span
+                      class="description">{ts}You may specify one or more email addresses to receive a blind carbon copy (bcc) of the confirmation email. Multiple email addresses should be separated by a comma (e.g. jane@example.org, paula@example.org).{/ts}</span>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </fieldset>
  </div>{* end form *}
 
 {* FOOTER *}
@@ -224,3 +280,12 @@
 </script>
 {/literal}
 {/crmScope}
+
+{include file="CRM/common/showHideByFieldValue.tpl"
+trigger_field_id    ="is_email_confirm"
+trigger_value       =""
+target_element_id   ="confirmEmail"
+target_element_type ="block"
+field_type          ="radio"
+invert              = 0
+}
