@@ -50,7 +50,7 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
   public function preProcess() {
     //Retrieve contact id from URL
     if (empty($this->getContactID())) {
-      CRM_Core_Error::statusBounce(ts('You do not have permission to access this page.'));
+      // Do nothing as we need anonymous users to be able to "update" their details
     };
 
     //Add Gdpr CSS file
@@ -67,10 +67,7 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
   public function buildQuickForm() {
     //Get all Communication preference settings
     $this->getSettings();
-    $this->_session = CRM_Core_Session::singleton();
-    $userID  = $this->_session->get('userID');
-
-    // $this->assign('commPrefGroupsetting', $this->commPrefGroupsetting);
+    $userID = CRM_Core_Session::getLoggedInContactID();
 
     if (!empty($this->commPrefSettings['profile'])) {
       $this->buildCustom($this->commPrefSettings['profile']);
