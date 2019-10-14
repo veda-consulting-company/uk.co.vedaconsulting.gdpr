@@ -108,8 +108,10 @@ EOT;
   static function getContactLastAcceptance($contactId) {
     static $cache = array();
     if (empty($cache[$contactId])) {
+      $field = CRM_Gdpr_SLA_Utils::getTermsConditionsField();
       $result = civicrm_api3('Activity', 'get', array(
         'sequential' => 1,
+        'return' => ['subject', 'activity_date_time', "custom_{$field['id']}"],
         'activity_type_id' => self::$activityTypeName,
         'target_contact_id' => $contactId,
         'options' => array(
