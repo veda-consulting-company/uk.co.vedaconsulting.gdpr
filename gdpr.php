@@ -319,14 +319,18 @@ function gdpr_civicrm_buildForm($formName, $form) {
  * Implements hook_civicrm_postProcess().
  */
 function gdpr_civicrm_postProcess($formName, $form) {
-  if ($formName == 'CRM_Contribute_Form_Contribution_Confirm') {
+  //When Membership and Monetary is enabled on contribution page, then expecting the hook should be called twice on submission.
+  //we should not duplicate the data policy and T&C acceptance.
+  //it might be core bug, but incase we should avoid duplication
+  if ($formName == 'CRM_Contribute_Form_Contribution_Confirm' && empty($form->_params['gdprAccepted'])) {
     $contact_id = $form->_contactID;
     $contribution_page_id = $form->_id;
     if ($contact_id && $contribution_page_id) {
       $tc = new CRM_Gdpr_SLA_ContributionPage($contribution_page_id);
       if ($tc->isEnabled(TRUE)) {
         $tc->recordAcceptance($contact_id);
-        CRM_Gdpr_SLA_Utils::recordSLAAcceptance($contact_id);
+	CRM_Gdpr_SLA_Utils::recordSLAAcceptance($contact_id);
+	$form->_params['gdprAccepted'] = TRUE;
       }
     }
   }
