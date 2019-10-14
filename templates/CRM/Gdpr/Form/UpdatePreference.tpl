@@ -11,7 +11,7 @@
 		{/if}
 
 		{if !empty($form.activity_source)}
-		<fieldset>
+		<fieldset id="crm-communications-preferences-groups">
 			<div class="crm-section">
 				<div class="label">{$form.activity_source.label}</div>
 				<div class="content">{$form.activity_source.html}</div>
@@ -21,7 +21,7 @@
 
 		<!-- if any profile has configured -->
 		{if !empty($custom_pre)}
-		<fieldset>
+		<fieldset id="crm-communications-preferences-profile">
 		    <div class="crm-public-form-item crm-group custom_pre_profile-group">
 		    {include file="CRM/UF/Form/Block.tpl" fields=$custom_pre}
 		    </div>
@@ -29,8 +29,11 @@
 		{/if}
 
 		<!-- Channels fieldset section -->
-		<fieldset>
+		{if $channelEleNames}
+		<fieldset id="crm-communications-preferences-channels">
+			{if $channels_intro}
 			<legend>{$channels_intro}</legend>
+			{/if}
 			{foreach from=$channelEleNames item=elementName}
 			  <div class="crm-section">
 			    <div class="label">{$form.$elementName.label}</div>
@@ -39,14 +42,18 @@
 			  </div>
 			{/foreach}
 		</fieldset>
+		{/if}
 	</div>
 
 	<!-- Groups from settings -->
 	<div class="comm-pref-block groups-block">
 
+		{if $groupEleNames}
 		<!-- Groups Fieldset -->
-		<fieldset class="groups-fieldset">
+		<fieldset id="crm-communications-preferences-groups" class="groups-fieldset">
+			{if $groups_heading}
 			<legend>{$groups_heading}</legend>
+			{/if}
       {if $groups_intro}
       <div class="section-description">
         {ts}{$groups_intro}{/ts}
@@ -77,10 +84,11 @@
 			  </div>
 			{/foreach}
 		</fieldset>
+		{/if}
 
 	<div class="clear"></div>
 		<!-- GDPR Terms and conditions url link and checkbox -->
-    <fieldset class="data-policy-fieldset">
+    <fieldset id="crm-communications-preferences-datapolicy" class="data-policy-fieldset">
 		{if $isContactDueAcceptance}
       <div class="data-policy-intro section-sescription">
           {$tcIntro}

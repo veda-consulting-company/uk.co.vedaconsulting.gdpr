@@ -18,20 +18,40 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
 
   public $containerPrefix = 'enable_';
 
-  //for Profile form validation
+  /**
+   * @var int the Contact ID
+   * @deprecated Use $this->getContactID and $this->_cid;
+   */
   public $_id;
+
+  /**
+   * @var int The contact ID
+   */
+  public $_cid;
+
   public $_gid;
   public $_context;
   public $_ruleGroupID;
 
+  public function getContactID() {
+    if (!empty($this->_cid)) {
+      $contactID = $this->_cid;
+    }
+    elseif (!empty($this->_id)) {
+      $contactID = $this->_id;
+    }
+    else {
+      $contactID = parent::getContactID();
+    }
+    $this->_cid = $this->_id = $contactID;
+    return $contactID;
+  }
+
   public function preProcess() {
     //Retrieve contact id from URL
-    $this->_cid = $this->getContactID();
-
-    //Do not allow anon users to update unless have a valid checksum
-    if(empty($this->_cid)){
-      //Do Nothing for now
-    }
+    if (empty($this->getContactID())) {
+      // Do nothing as we need anonymous users to be able to "update" their details
+    };
 
     //Add Gdpr CSS file
     CRM_Core_Resources::singleton()->addStyleFile('uk.co.vedaconsulting.gdpr', 'css/gdpr.css');
@@ -39,19 +59,15 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
   }
 
   public function getSettings() {
-    $this->settings    = U::getSettings();
+    $this->settings = U::getSettings();
     $this->commPrefSettings = $this->settings[U::SETTING_NAME];
     $this->commPrefGroupsetting   = $this->settings[U::GROUP_SETTING_NAME];
   }
 
   public function buildQuickForm() {
-
     //Get all Communication preference settings
     $this->getSettings();
-    $this->_session = CRM_Core_Session::singleton();
-    $userID  = $this->_session->get('userID');
-
-    // $this->assign('commPrefGroupsetting', $this->commPrefGroupsetting);
+    $userID = CRM_Core_Session::getLoggedInContactID();
 
     if (!empty($this->commPrefSettings['profile'])) {
       $this->buildCustom($this->commPrefSettings['profile']);
@@ -68,8 +84,7 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
     }
 
     //Include reCAPTCHA?
-    $addCaptcha = $this->commPrefSettings['add_captcha'];
-    if ($addCaptcha) {
+    if ($addCaptcha = $this->commPrefSettings['add_captcha']) {
       $captcha = CRM_Utils_ReCAPTCHA::singleton();
       $captcha->add($this);
       $this->assign('isCaptcha', TRUE);
@@ -214,20 +229,20 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
     }
   }
 
-  public static function formRule($fields, $files, $self){
+  public static function formRule($fields, $files, $form){
     $errors = array();
 
-    if (!empty($self->groupEleNames)) {
-      foreach ($self->groupEleNames as $groupName => $groupEleName) {
+    if (!empty($form->groupEleNames)) {
+      foreach ($form->groupEleNames as $groupName => $groupEleName) {
         //get the channel array and group channel array
         $groupChannelArray = array();
-        foreach ($self->channelEleNames as $channel) {
-          $groupChannel = str_replace($self->containerPrefix, '', $channel);
-          $channelSettingValue = $self->commPrefGroupsetting[$groupEleName][$groupChannel];
+        foreach ($form->channelEleNames as $channel) {
+          $groupChannel = str_replace($form->containerPrefix, '', $channel);
+          $channelSettingValue = $form->commPrefGroupsetting[$groupEleName][$groupChannel];
 
           if (!is_null($channelSettingValue) && $channelSettingValue != '') {
             $channelArray[$groupChannel] = ($fields[$channel] == 'YES') ? 1 : 0;
-            $groupChannelArray[$groupChannel] = empty($self->commPrefGroupsetting[$groupEleName][$groupChannel]) ? 0 : 1;
+            $groupChannelArray[$groupChannel] = empty($form->commPrefGroupsetting[$groupEleName][$groupChannel]) ? 0 : 1;
           }
         }
 
@@ -310,7 +325,7 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
     $emailPrimary = CRM_Utils_Request::retrieve('field_email', 'String', CRM_Core_DAO::$_nullObject);
     if ($emailPrimary) {
       $defaults['email-Primary'] = $emailPrimary;
-    }    
+    }
     return $defaults;
   }
 
@@ -321,12 +336,7 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
 
   public function postProcess() {
     $submittedValues = $this->exportValues();
-    $commPrefMapper  = U::getCommunicationPreferenceMapper();
-    //profile form validation will do dedupe and update id in $form
-    $existingContact = $this->_cid;
-    if (!empty($this->_id)) {
-      $existingContact = $this->_id;
-    }
+    $existingContact = $this->getContactID();
 
     $contactType = 'Individual';
     if ($existingContact) {
@@ -345,24 +355,24 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
     $termsConditionsField = $this->getTermsAndConditionFieldId();
     $tcFieldName  = 'custom_'.$termsConditionsField;
     if (!empty($submittedValues[$tcFieldName])) {
-      $acceptance = CRM_Gdpr_SLA_Utils::recordSLAAcceptance($contactID);
+      CRM_Gdpr_SLA_Utils::recordSLAAcceptance($contactID);
     }
 
     //we have now moved this section into common helper function which reused in other place like event/contribution thank you to let update comms preference using embed form.
-    U::updateCommsPrefByFormValues($contactID, $submittedValues);   
+    U::updateCommsPrefByFormValues($contactID, $submittedValues);
     U::createCommsPrefActivity($contactID, $submittedValues);
+
+    $this->sendConfirmation();
 
     if (!empty($this->commPrefSettings['completion_message'])) {
       $thankYouMsg = html_entity_decode($this->commPrefSettings['completion_message']);
-
-      //FIXME Redirect to Thank you page or destination url from setting
       CRM_Core_Session::setStatus($thankYouMsg, E::ts('Communication Preferences'), 'Success');
     }
 
     //Get the destination url from settings and redirect if we found one.
     if (!empty($this->commPrefSettings['completion_redirect'])) {
       $destinationURL = !empty($this->commPrefSettings['completion_url']) ? $this->commPrefSettings['completion_url'] : NULL;
-      //MV: commenting this line, We have already restriceted the setting to get only absoulte URl.
+      //MV: commenting this line, We have already restricted the setting to get only absolute URL.
       //check URL is not absolute and no leading slash then add leading slash before redirect.
       $parseURL = parse_url($destinationURL);
       if (empty($parseURL['host']) && (strpos($destinationURL, '/') !== 0)) {
@@ -371,6 +381,37 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
       CRM_Utils_System::redirect($destinationURL);
     }
     parent::postProcess();
+  }
+
+  public function sendConfirmation() {
+    if (empty($this->commPrefSettings['is_email_confirm'])) {
+      return;
+    }
+
+    $contactID = $this->getContactID();
+
+    list($displayName, $email) = CRM_Contact_BAO_Contact_Location::getEmailDetails($contactID);
+
+    $tplParams = [
+      'email' => $email,
+      'confirm_email_text' => CRM_Utils_Array::value('confirm_email_text', $this->commPrefSettings),
+      'display_name' => $displayName,
+    ];
+
+    $sendTemplateParams = [
+      'groupName' => 'msg_tpl_workflow_gdpr',
+      'valueName' => 'gdpr_update_preferences',
+      'contactId' => $contactID,
+      'tplParams' => $tplParams,
+    ];
+
+    $sendTemplateParams['from'] = CRM_Utils_Array::value('confirm_from_name', $this->commPrefSettings) . " <" . CRM_Utils_Array::value('confirm_from_email', $this->commPrefSettings) . ">";
+    $sendTemplateParams['toName'] = $displayName;
+    $sendTemplateParams['toEmail'] = $email;
+    $sendTemplateParams['autoSubmitted'] = TRUE;
+    $sendTemplateParams['cc'] = CRM_Utils_Array::value('cc_confirm', $this->commPrefSettings);
+    $sendTemplateParams['bcc'] = CRM_Utils_Array::value('bcc_confirm', $this->commPrefSettings);
+    CRM_Core_BAO_MessageTemplate::sendTemplate($sendTemplateParams);
   }
 
 

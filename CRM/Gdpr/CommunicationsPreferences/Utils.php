@@ -27,7 +27,8 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
       'enable_groups' => 0,
       'groups_heading' => E::ts('Interest groups'),
       'groups_intro' => E::ts('We want to continue to keep you informed about our work. Opt-in to the groups that interest you.'),
-      'completion_message' => E::ts('Your communications preferences have been updated. Thank you.')
+      'completion_message' => E::ts('Your communications preferences have been updated. Thank you.'),
+      'add_captcha' => 0,
     );
 
     foreach (self::getGroups() as $group) {
