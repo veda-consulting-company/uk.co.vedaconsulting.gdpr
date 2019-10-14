@@ -3,29 +3,23 @@
 class CRM_Gdpr_Export {
 
   /**
-   * @param string $componentTable
+   * @param array $ids
    */
-  public static function contact($componentTable) {
-    if (empty($componentTable)) {
-      CRM_Core_Error::debug_log_message("Contant export not logged due to empty componentTable - '{$componentTable}'");
-      return false;
-    } 
+  public static function contact($ids) {
     $session = CRM_Core_Session::singleton();
     $loggedUserID = $session->get('userID');
     $activityTypeId = CRM_Gdpr_Activity::contactExportedTypeId();
-    $query = "SELECT contact_id FROM {$componentTable}";
-    $dao = CRM_Core_DAO::executeQuery($query);
-    while ($dao->fetch()) {
+    foreach ($ids as $id) {
       $params = [
         'sequential' => 1,
-        'source_record_id' => $dao->contact_id,
+        'source_record_id' => $id,
         'source_contact_id' => $loggedUserID,
         'activity_type_id' => $activityTypeId,
         'activity_date_time' => date('YmdHis'),
         'status_id' => 'Completed',
         'api.ActivityContact.create' => [
           'activity_id' => '$value.id',
-          'contact_id' => $dao->contact_id,
+          'contact_id' => $id,
           'record_type_id' => 3,
         ]
       ];
