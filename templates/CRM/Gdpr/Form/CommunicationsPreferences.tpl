@@ -123,7 +123,6 @@
     </div>
     <div class="clear"></div>
   </div> {* end Completion block *}
- </div>
   <h3> {ts}Event & Contribution thank you page{/ts} </h3>
   <div class="crm-block crm-form-block crm-gdpr-comms-prefs-form-block">
     <div class="help">{ts}<p>Allows supporters set their preferences after registering for an event or making a contribution.</p><p>Note, to embed the Communcation Preferences form in thank-you pages, you need to give anonymous users the permission: <em>CiviCRM: access AJAX API</em>.</p>{/ts}</div>

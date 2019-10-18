@@ -249,7 +249,7 @@
     </div>
 	</div>
 </div>
-</div>
+
 {* Terms and conditions for Events and Contribution Pages *}
 <h3>{ts}Terms &amp; Conditions: Events and Contribution Pages{/ts}</h3>
 <div class="crm-block crm-form-block crm-gdpr-settings-form-block">
@@ -311,7 +311,6 @@
 {include file="CRM/common/formButtons.tpl" location="bottom"}
 </div>
 
-</div>
 {literal}
 <script>
 (function($) {
