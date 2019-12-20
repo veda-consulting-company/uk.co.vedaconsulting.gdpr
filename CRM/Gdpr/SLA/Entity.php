@@ -234,7 +234,7 @@ class CRM_Gdpr_SLA_Entity {
   public function recordAcceptance($contactId = NULL) {
     $contactId = $contactId ? $contactId : CRM_Core_Session::singleton()->getLoggedInContactID();
     $fields = $this->getCustomFields($this->activityCustomGroup);
-    $url = $this->getUrl(TRUE);
+    $url = $this->getUrl();
     $entity = $this->getEntity();
     $source = $this->type . ': ' .  $entity['title'] . ' (' . $entity['id'] . ')';
     $params = array(
