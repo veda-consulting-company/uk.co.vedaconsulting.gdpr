@@ -64,6 +64,35 @@ class CRM_Gdpr_Upgrader extends CRM_Gdpr_Upgrader_Base {
         'id' => "\$value.id",
       ),
     ));
+
+    // Delete custom data.
+    $result = civicrm_api3('CustomGroup', 'get', [
+      'name' => ['IN' => [
+        'SLA_Acceptance',
+        'Event_terms_and_conditions',
+        'Event_terms_and_conditions_acceptance',
+        'Contribution_Page_terms_and_conditions',
+        'Contribution_terms_and_conditions_acceptance',
+      ]],
+      'return' => ['id']
+    ]);
+    $group_ids = array_keys($result['values'] ?? []);
+    if ($group_ids) {
+      // Found one or more of our custom groups.
+      // Lookup fields for these and delete those first.
+      $fields = civicrm_api3('CustomField', 'get', [
+        'custom_group_id' => ['IN' => $group_ids],
+        'return'          => ['id'],
+      ]);
+      foreach (array_keys($fields['values'] ?? []) as $field_id) {
+        civicrm_api3('CustomField', 'delete', ['id' => $field_id]);
+      }
+
+      // Now delete the groups themselves.
+      foreach ($group_ids as $group_id) {
+        civicrm_api3('CustomGroup', 'delete', ['id' => $group_id]);
+      }
+    }
   }
 
   /**
