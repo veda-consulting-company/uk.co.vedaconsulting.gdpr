@@ -13,6 +13,7 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
   private static $groups = array();
 
   public static function getSettingsDefaults() {
+    // @fixme This should be replaced with a proper settings definition file (eg. settings/gdpr.setting.php)
     $settings[self::SETTING_NAME] = array(
       'page_title' => E::ts('Communication Preferences'),
       'page_intro' => E::ts('We want to ensure we are only sending you information that is of interest to you, in a way you are happy to receive.'),
@@ -29,6 +30,7 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
       'groups_intro' => E::ts('We want to continue to keep you informed about our work. Opt-in to the groups that interest you.'),
       'completion_message' => E::ts('Your communications preferences have been updated. Thank you.'),
       'add_captcha' => 0,
+      'comm_pref_in_thankyou' => 'none',
     );
 
     foreach (self::getGroups() as $group) {
@@ -50,6 +52,7 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
    *  Whether to use default values if the settings do not exist.
    */
   public static function getSettings($use_defaults = TRUE) {
+    // @fixme: We should be using settings/gdpr.setting.php and \Civi::settings()->get() instead of this.
     $settings = array();
     $defaults = $use_defaults ? self::getSettingsDefaults() : array();
     foreach (array(self::SETTING_NAME, self::GROUP_SETTING_NAME) as $setting_name) {
@@ -74,12 +77,12 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
    */
   public static function getProfileOptions() {
     $types = array('Individual', 'Contact');
-    
+
     //To get Profile with array of group type
-    //using core method to get the profiles, because group_type has been imploded with (,) in database civicrm_uf_group. 
+    //using core method to get the profiles, because group_type has been imploded with (,) in database civicrm_uf_group.
     //for eg group type can be Individual,Contact or Contact,Individual . so api didn't return all the result where profiles with group type Individual or Contact. (have to mention 'Individual,Contact')
     //we can use core method to get all profiles which are Individual or Contact or Both
-    
+
     $profiles = CRM_Core_BAO_UFGroup::getProfiles($types);
 
     $options = array(0 => '-- Please select --') + $profiles;
@@ -208,7 +211,7 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
       'activity_type_id' => "Update_Communication_Preferences",
       // 'source_contact_id' => $cid,
       //MV: Civi Older version doesn't return api value using source_contact_id. if we add target_contact_id then BAO query include activity contact table and filter out using params
-      'target_contact_id' => $cid,      
+      'target_contact_id' => $cid,
       'options' => array('sort' => "id desc"),
     ));
     return !empty($result['values']) ? $result['values'][0] : $return;
@@ -491,11 +494,17 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
     return FALSE;
   }
 
+  /**
+   * @param int $cid
+   * @param \CRM_Core_Form $form
+   * @param string $entity
+   *
+   * @throws \CRM_Core_Exception
+   */
   public static function commsPreferenceInThankyouPage($cid, &$form, $entity = 'Event') {
     if (empty($cid)) {
       return;
     }
-
 
     $settings = self::getSettings();
     $fieldsSettings = $settings[self::SETTING_NAME];
@@ -514,15 +523,16 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
           }
           else {
             $form->add('hidden', 'noperm', '1');
-
           }
         break;
+
       case 'link':
           self::addCommsPreferenceLinkInThankYouPage($cid, $form, $entity);
         break;
+
       default:
         break;
+
     }
-    return TRUE;
   }
 }
