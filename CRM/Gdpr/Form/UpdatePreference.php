@@ -302,7 +302,7 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
       $removeCustomFieldTypes = array('Contribution', 'Membership');
       $contribFields = CRM_Contribute_BAO_Contribution::getContributionFields();
 
-      foreach ($this->_fields as $name => $dontCare) {
+      foreach ($this->_fields as $name => $field) {
         //don't set custom data Used for Contribution (CRM-1344)
         if (substr($name, 0, 7) == 'custom_') {
           $id = substr($name, 7);
@@ -314,7 +314,7 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
         elseif (array_key_exists($name, $contribFields) || (substr($name, 0, 11) == 'membership_') || (substr($name, 0, 13) == 'contribution_')) {
           continue;
         }
-        $fields[$name] = 1;
+        $fields[$name] = $field;
       }
 
       if (!empty($fields)) {
