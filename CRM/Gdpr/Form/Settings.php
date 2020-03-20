@@ -9,7 +9,7 @@ require_once 'CRM/Core/Form.php';
  * @see http://wiki.civicrm.org/confluence/display/CRMDOC43/QuickForm+Reference
  */
 class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
-  
+
   function preProcess() {
     //check all custom datas are being installed properly
     CRM_Core_Resources::singleton()->addStyleFile('uk.co.vedaconsulting.gdpr', 'css/gdpr.css');
@@ -39,6 +39,9 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
       TRUE,
       array('class' => 'crm-select2 huge', 'multiple' => 'multiple',)
     );
+
+    //Track Exports
+    $this->addElement('checkbox', 'track_exports', ts('Do you Want to track Exports?'), NULL);
 
     // Get all contact types
     $contactTypes = CRM_Gdpr_Utils::getAllContactTypes($parentOnly = TRUE);
@@ -243,6 +246,7 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
     // Get GDPR settings, for setting defaults
     $defaults = CRM_Gdpr_Utils::getGDPRSettings();
     $defaults = array_merge($bare_defaults, $defaults);
+    $defaults['track_exports'] = CRM_Core_BAO_Setting::getItem(CRM_Gdpr_Constants::GDPR_SETTING_GROUP,'track_exports',NULL, FALSE);
     // Set defaults
     if (!empty($defaults)) {
       $this->setDefaults($defaults);
@@ -351,6 +355,11 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
 
     // Save the settings
     CRM_Core_BAO_Setting::setItem($settingsStr, CRM_Gdpr_Constants::GDPR_SETTING_GROUP, CRM_Gdpr_Constants::GDPR_SETTING_NAME);
+    $trackExports = NULL;
+    if(isset($values['track_exports'])){
+      $trackExports = $values['track_exports'];
+    }
+    CRM_Core_BAO_Setting::setItem($trackExports, CRM_Gdpr_Constants::GDPR_SETTING_GROUP,'track_exports');
 
     $message = "GDPR settings saved.";
     $url = CRM_Utils_System::url('civicrm/gdpr/dashboard', 'reset=1');

@@ -79,6 +79,13 @@
 
 </div>
 
+<div class="crm-section">
+	<div class="label">{$form.track_exports.label}</div>
+	<div class="content">
+		{$form.track_exports.html}
+	</div>
+</div>
+
 <!-- Forget Me settings -->
 <h3>{ts}Forget me{/ts}</h3>
 
