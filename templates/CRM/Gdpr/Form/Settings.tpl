@@ -83,7 +83,7 @@
 <div class="crm-block crm-form-block crm-gdpr-settings-form-block">
 
 	<div id="help">
-		{ts}Tick this checkbox if you need an activity to be created when data (contacts, activities, contributions) isexported from CiviCRM.{/ts}
+		{ts}Tick this checkbox if you need an activity to be created when data (contacts, activities, contributions) is exported from CiviCRM.{/ts}
 	</div>
 
 	<div class="crm-section">
