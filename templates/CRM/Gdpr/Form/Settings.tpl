@@ -76,6 +76,22 @@
 	</div>
 	<div class="clear"></div>
 </div>
+</div>
+
+<h3>{ts}Data Export{/ts}</h3>
+
+<div class="crm-block crm-form-block crm-gdpr-settings-form-block">
+
+	<div id="help">
+		{ts}Tick this checkbox if you need an activity to be created when data (contacts, activities, contributions) is exported from CiviCRM.{/ts}
+	</div>
+
+	<div class="crm-section">
+		<div class="label">{$form.track_exports.label}</div>
+		<div class="content">
+			{$form.track_exports.html}
+		</div>
+	</div>
 
 </div>
 

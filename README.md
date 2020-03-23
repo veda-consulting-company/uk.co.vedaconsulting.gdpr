@@ -35,6 +35,10 @@ support (at) vedaconsulting.co.uk
 
 ### Change Log ###
 
+v2.9
+Includes:
+* Added the setting to choose whether exports should be tracked.
+
 v2.8
 
 Includes:
