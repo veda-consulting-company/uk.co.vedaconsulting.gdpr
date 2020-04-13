@@ -13,7 +13,7 @@ markdown_extensions:
   - pymdownx.betterem
   - pymdownx.mark
   - pymdownx.magiclink
-pages:
+nav:
 - Introduction: index.md
 - Overview: overview.md
 - Installation: installation.md
