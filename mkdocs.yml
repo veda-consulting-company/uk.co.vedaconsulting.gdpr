@@ -1,12 +1,15 @@
 site_name: GDPR
 repo_url: https://github.com/veda-consulting/uk.co.vedaconsulting.gdpr
-theme: material
+theme: 
+ name: material
 markdown_extensions:
   - attr_list
   - admonition
   - def_list
-  - codehilite(guess_lang=false)
-  - toc(permalink=true)
+  - codehilite:
+      guess_lang: false
+  - toc:
+      permalink: true
   - pymdownx.superfences
   - pymdownx.inlinehilite
   - pymdownx.tilde
