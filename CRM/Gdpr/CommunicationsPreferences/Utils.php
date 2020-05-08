@@ -13,6 +13,7 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
   private static $groups = array();
 
   public static function getSettingsDefaults() {
+    // @fixme This should be replaced with a proper settings definition file (eg. settings/gdpr.setting.php)
     $settings[self::SETTING_NAME] = array(
       'page_title' => E::ts('Communication Preferences'),
       'page_intro' => E::ts('We want to ensure we are only sending you information that is of interest to you, in a way you are happy to receive.'),
@@ -29,6 +30,7 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
       'groups_intro' => E::ts('We want to continue to keep you informed about our work. Opt-in to the groups that interest you.'),
       'completion_message' => E::ts('Your communications preferences have been updated. Thank you.'),
       'add_captcha' => 0,
+      'comm_pref_in_thankyou' => 'none',
     );
 
     foreach (self::getGroups() as $group) {
@@ -50,6 +52,7 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
    *  Whether to use default values if the settings do not exist.
    */
   public static function getSettings($use_defaults = TRUE) {
+    // @fixme: We should be using settings/gdpr.setting.php and \Civi::settings()->get() instead of this.
     $settings = array();
     $defaults = $use_defaults ? self::getSettingsDefaults() : array();
     foreach (array(self::SETTING_NAME, self::GROUP_SETTING_NAME) as $setting_name) {
@@ -498,11 +501,17 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
     return FALSE;
   }
 
+  /**
+   * @param int $cid
+   * @param \CRM_Core_Form $form
+   * @param string $entity
+   *
+   * @throws \CRM_Core_Exception
+   */
   public static function commsPreferenceInThankyouPage($cid, &$form, $entity = 'Event') {
     if (empty($cid)) {
       return;
     }
-
 
     $settings = self::getSettings();
     $fieldsSettings = $settings[self::SETTING_NAME];
@@ -521,15 +530,16 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
           }
           else {
             $form->add('hidden', 'noperm', '1');
-
           }
         break;
+
       case 'link':
           self::addCommsPreferenceLinkInThankYouPage($cid, $form, $entity);
         break;
+
       default:
         break;
+
     }
-    return TRUE;
   }
 }
