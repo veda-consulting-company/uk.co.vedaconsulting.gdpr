@@ -74,12 +74,12 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
    */
   public static function getProfileOptions() {
     $types = array('Individual', 'Contact');
-    
+
     //To get Profile with array of group type
-    //using core method to get the profiles, because group_type has been imploded with (,) in database civicrm_uf_group. 
+    //using core method to get the profiles, because group_type has been imploded with (,) in database civicrm_uf_group.
     //for eg group type can be Individual,Contact or Contact,Individual . so api didn't return all the result where profiles with group type Individual or Contact. (have to mention 'Individual,Contact')
     //we can use core method to get all profiles which are Individual or Contact or Both
-    
+
     $profiles = CRM_Core_BAO_UFGroup::getProfiles($types);
 
     $options = array(0 => '-- Please select --') + $profiles;
@@ -208,7 +208,7 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
       'activity_type_id' => "Update_Communication_Preferences",
       // 'source_contact_id' => $cid,
       //MV: Civi Older version doesn't return api value using source_contact_id. if we add target_contact_id then BAO query include activity contact table and filter out using params
-      'target_contact_id' => $cid,      
+      'target_contact_id' => $cid,
       'options' => array('sort' => "id desc"),
     ));
     return !empty($result['values']) ? $result['values'][0] : $return;
@@ -227,6 +227,14 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
     );
   }
 
+  public static function getCommunicationPreferenceMapperField() {
+    return array(
+      'email' => ['do_not_email', 'is_opt_out'],
+      'phone' => ['do_not_phone'],
+      'post' => ['do_not_mail'],
+      'sms' => ['do_not_sms'],
+    );
+  }
   public static function getCommunicationPreferenceMapper() {
     return array(
       'email' => array(
@@ -430,7 +438,6 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
         $commPref = array_merge($commPref, $commPrefMapper[$name][$channelValue]);
       }
     }
-
     //Using API to update contact
     $contact = civicrm_api3('Contact', 'create', $commPref);
 
