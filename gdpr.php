@@ -277,11 +277,8 @@ function gdpr_civicrm_buildForm($formName, $form) {
   if ($formName == 'CRM_Contribute_Form_Contribution_ThankYou') {
     // Contact id for logged in user.
     $cid = $form->_contactID;
-    if (!$cid) {
-      $trxnId = $form->getVar('_trxnId');
-      if ($trxnId) {
-        $cid = CRM_Core_DAO::getFieldValue('CRM_Contribute_DAO_Contribution', $trxnId, 'contact_id', 'trxn_id');
-      }
+    if (empty($cid)) {
+      $cid = CRM_Core_Smarty::singleton()->get_template_vars('contactId');
     }
     if ($cid) {
       $templatePath = realpath(dirname(__FILE__) . '/templates');
