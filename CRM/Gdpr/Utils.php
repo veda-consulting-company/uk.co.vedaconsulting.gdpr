@@ -446,6 +446,12 @@ WHERE url.time_stamp > '{$date}'";
 
 
       $fieldName = $field['name'];
+
+      //#235: - Keeping the is_deceased value as it is
+      if($fieldName == 'is_deceased'){
+        continue;
+      }
+
       $params[$fieldName] = '';
     }
 

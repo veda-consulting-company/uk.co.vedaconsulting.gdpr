@@ -186,16 +186,22 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
         CRM_Core_BAO_UFGroup::filterUFGroups($id, $contactID);
       }
 
-      $fields = CRM_Core_BAO_UFGroup::getFields($id, FALSE, CRM_Core_Action::ADD,
-        NULL, NULL, FALSE, NULL,
-        FALSE, NULL, CRM_Core_Permission::CREATE,
-        'field_name', TRUE
-      );
+      try {
+        $fields = CRM_Core_BAO_UFGroup::getFields($id, FALSE, CRM_Core_Action::ADD,
+          NULL, NULL, FALSE, NULL,
+          FALSE, NULL, CRM_Core_Permission::CREATE,
+          'field_name', TRUE
+        );
+      } catch (Exception $e) {
+        CRM_Core_Error::debug_var('CRM_Gdpr_Form_UpdatePreference buildCustom', $e->getMessage());
+        CRM_Core_Error::debug_log_message('Error in retrieving the profile fields');
+        CRM_Core_Error::debug_log_message('Please ensure that the Profile you have selected in the GDPR settings page exists and is enabled');
+      }
 
       $addCaptcha = FALSE;
 
-      $this->assign($name, $fields);
-      if (is_array($fields)) {
+      if (!empty($fields) && is_array($fields)) {
+        $this->assign($name, $fields);
         foreach ($fields as $key => $field) {
           if ($viewOnly &&
             isset($field['data_type']) &&
