@@ -192,17 +192,19 @@ EOT;
     $url = '';
     $settings = CRM_Gdpr_Utils::getGDPRSettings();
     if (!empty($settings['sla_tc']) || !empty($settings['sla_tc_link'])) {
-      switch ($settings['sla_data_policy_option']) {
-        // File uploaded
-        case 1:
-        default:
-          $url = $settings['sla_tc'];
-          break;
+      if(array_key_exists('sla_data_policy_option', $settings)){
+        switch ($settings['sla_data_policy_option']) {
+          // File uploaded
+          case 1:
+          default:
+            $url = $settings['sla_tc'];
+            break;
 
-        // Web page link
-        case 2:
-          $url = $settings['sla_tc_link'];
-          break;
+          // Web page link
+          case 2:
+            $url = $settings['sla_tc_link'];
+            break;
+        }
       }
     }
 

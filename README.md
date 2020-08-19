@@ -35,6 +35,12 @@ support (at) vedaconsulting.co.uk
 
 ### Change Log ###
 
+v3.0
+Includes:
+* Value for 'is_deceased' of the contact is left unchanged while a contact is being Anonymized # 235
+* Check for the existence of the selected profile # 231
+* Fix for the Event Registration form # 211
+
 v2.9
 Includes:
 * Added the setting to choose whether exports should be tracked.
