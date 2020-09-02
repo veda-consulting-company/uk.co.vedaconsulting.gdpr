@@ -597,6 +597,17 @@ function gdpr_civicrm_permission(&$permissions) {
   );
 }
 
+function gdpr_civicrm_searchTasks( $objectName, &$tasks ){
+  if($objectName == 'contact'){
+    if(user_access('forget contact')) {
+      $tasks[] = [
+        'title' => 'Anonymize',
+        'class' => 'CRM_Gdpr_Form_Task_Contact'
+      ];
+    }
+  }
+}
+
 /**
  * Implements hook_civicrm_pageRun()
  */
