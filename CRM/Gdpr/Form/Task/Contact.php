@@ -23,8 +23,21 @@ class CRM_Gdpr_Form_Task_Contact extends CRM_Contact_Form_Task {
 
   public function postProcess() {
     foreach($this->_contactIds as $contactId) {
-      civicrm_api3('Contact', 'anonymize', ['id' => $contactId]);
+      $this->anonymize($contactId);
     }
   }
 
+  protected function anonymize($contactId) {
+    // Instantiate a forget me form
+    $form = new CRM_Gdpr_Form_Forgetme();
+    $form->controller = new CRM_Core_Controller_Simple(
+      'CRM_Gdpr_Form_Forgetme', 'Anonymize', NULL, FALSE, FALSE, TRUE);
+
+    // Pass the contact id to the new form
+    $_REQUEST['cid'] = $contactId;
+    $form->preProcess();
+
+    // Anonymize the contact record
+    $form->postProcess();
+  }
 }
