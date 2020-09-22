@@ -197,7 +197,9 @@ EOT;
           // File uploaded
           case 1:
           default:
-            $url = $settings['sla_tc'];
+            $config = & CRM_Core_Config::singleton();
+            $baseUrl = $config->userFrameworkBaseURL;
+            $url = $baseUrl.$settings['sla_tc'];
             break;
 
           // Web page link
