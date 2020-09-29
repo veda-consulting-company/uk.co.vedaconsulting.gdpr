@@ -111,7 +111,7 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
       '2' => E::ts('Web page link'),
     );
     $this->addRadio('sla_data_policy_option',
-      E::ts('Data Policy options'),
+      ts('Data Policy options'),
       $dataPolicyOptions,
       array(),
       '&nbsp;', FALSE
@@ -197,7 +197,7 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
       array('cols' => 50)
     );
     $this->addRadio('entity_tc_option',
-      E::ts('Terms and Conditions options'),
+    E::ts('Terms and Conditions options'),
       $dataPolicyOptions,
       array(),
       '&nbsp;', FALSE

@@ -276,15 +276,15 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
    */
   public function buildMailBlock() {
     $this->registerRule('emailList', 'callback', 'emailList', 'CRM_Utils_Rule');
-    $this->addYesNo('is_email_confirm', ts('Send Confirmation Email?'), NULL, NULL, ['onclick' => "return showHideByValue('is_email_confirm','','confirmEmail','block','radio',false);"]);
+    $this->addYesNo('is_email_confirm', E::ts('Send Confirmation Email?'), NULL, NULL, ['onclick' => "return showHideByValue('is_email_confirm','','confirmEmail','block','radio',false);"]);
     $this->add('textarea', 'confirm_email_text', ts('Text'));
-    $this->add('text', 'cc_confirm', ts('CC Confirmation To'));
-    $this->addRule('cc_confirm', ts('Please enter a valid list of comma delimited email addresses'), 'emailList');
-    $this->add('text', 'bcc_confirm', ts('BCC Confirmation To'));
-    $this->addRule('bcc_confirm', ts('Please enter a valid list of comma delimited email addresses'), 'emailList');
-    $this->add('text', 'confirm_from_name', ts('Confirm From Name'));
-    $this->add('text', 'confirm_from_email', ts('Confirm From Email'));
-    $this->addRule('confirm_from_email', ts('Email is not valid.'), 'email');
+    $this->add('text', 'cc_confirm', E::ts('CC Confirmation To'));
+    $this->addRule('cc_confirm', E::ts('Please enter a valid list of comma delimited email addresses'), 'emailList');
+    $this->add('text', 'bcc_confirm', E::ts('BCC Confirmation To'));
+    $this->addRule('bcc_confirm', E::ts('Please enter a valid list of comma delimited email addresses'), 'emailList');
+    $this->add('text', 'confirm_from_name', E::ts('Confirm From Name'));
+    $this->add('text', 'confirm_from_email', E::ts('Confirm From Email'));
+    $this->addRule('confirm_from_email', E::ts('Email is not valid.'), 'email');
   }
 
   public function setDefaultValues() {
