@@ -277,7 +277,7 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
   public function buildMailBlock() {
     $this->registerRule('emailList', 'callback', 'emailList', 'CRM_Utils_Rule');
     $this->addYesNo('is_email_confirm', E::ts('Send Confirmation Email?'), NULL, NULL, ['onclick' => "return showHideByValue('is_email_confirm','','confirmEmail','block','radio',false);"]);
-    $this->add('textarea', 'confirm_email_text', ts('Text'));
+    $this->add('textarea', 'confirm_email_text', E::ts('Text'));
     $this->add('text', 'cc_confirm', E::ts('CC Confirmation To'));
     $this->addRule('cc_confirm', E::ts('Please enter a valid list of comma delimited email addresses'), 'emailList');
     $this->add('text', 'bcc_confirm', E::ts('BCC Confirmation To'));
