@@ -142,7 +142,7 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
       $group_elems[] = HTML_QuickForm::createElement(
         'advcheckbox',
         'group_enable',
-        ts('Enable'),
+        E::ts('Enable'),
         '',
         array(
          'data-group-id' => $group['id'],
@@ -160,7 +160,7 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
       $group_elems[] = HTML_QuickForm::createElement(
         'select',
         'group_weight',
-        ts('Weight'),
+        E::ts('Weight'),
         $weight_opts
       );
       $group_elems[] = HTML_QuickForm::createElement(

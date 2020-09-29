@@ -647,7 +647,7 @@ WHERE url.time_stamp > '{$date}'";
       $xmlString = file_get_contents($file);
       $load = $dom->loadXML($xmlString);
       if (!$load) {
-        $status['error'][] = ts("Error loading {$fileName}.xml file while installing");
+        $status['error'][] = E::ts("Error loading {$fileName}.xml file while installing");
       }
       $dom->xinclude();
       $xml = simplexml_import_dom($dom);

@@ -36,7 +36,7 @@ function gdpr_civicrm_install() {
   ));
   if (empty($result['id'])) {
     $result = civicrm_api3('OptionValue', 'create', [
-      'label'           => ts('Contribution Page'),
+      'label'           => E::ts('Contribution Page'),
       'name'            => 'civicrm_contribution_page',
       'value'           => 'ContributionPage',
       'option_group_id' => 'cg_extend_objects',
