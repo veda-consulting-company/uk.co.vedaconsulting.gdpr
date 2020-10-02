@@ -243,7 +243,7 @@ class CRM_Gdpr_Upgrader extends CRM_Gdpr_Upgrader_Base {
     // Create 'GDPR Cancelled' membership status
     CRM_Gdpr_Utils::CiviCRMAPIWrapper('MembershipStatus', 'create', array(
       'name' => "GDPR_Cancelled",
-      'label' => "GDPR Cancelled",
+      'label' => E::ts("GDPR Cancelled"),
       'is_admin' => 1, // Is Admin Only
       'is_active' => 1,
       'is_reserved' => 1, // Is reserved, so that users cannot delete it
@@ -266,7 +266,7 @@ class CRM_Gdpr_Upgrader extends CRM_Gdpr_Upgrader_Base {
     if (empty($existing['count'])) {
       $optionGroup = civicrm_api3('OptionGroup', 'create', [
         'name' => "msg_tpl_workflow_gdpr",
-        'title' => "Message Template Workflow for GDPR",
+        'title' => E::ts("Message Template Workflow for GDPR"),
         'is_reserved' => 1,
         'is_active' => 1,
       ]);
@@ -281,7 +281,7 @@ class CRM_Gdpr_Upgrader extends CRM_Gdpr_Upgrader_Base {
     if (empty($existing['count'])) {
       $optionValue = civicrm_api3('OptionValue', 'create', [
         'name' => "gdpr_update_preferences",
-        'title' => "Update Communication Preferences",
+        'title' => E::ts("Update Communication Preferences"),
         'is_reserved' => 0,
         'is_active' => 1,
         'option_group_id' => $optionGroup['id'],

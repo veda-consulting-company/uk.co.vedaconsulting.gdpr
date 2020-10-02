@@ -667,7 +667,7 @@ WHERE url.time_stamp > '{$date}'";
             $customGroup = new $className();
             $customGroup->name = $entitiesXML->name;
             if (!$customGroup->find(TRUE)) {
-              $status['error'][] = ts("$entitiesXML->name {$entities} is not found.");
+              $status['error'][] = E::ts("$entitiesXML->name {$entities} is not found.");
             }
           }
         }

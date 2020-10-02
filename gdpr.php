@@ -489,7 +489,7 @@ function gdpr_civicrm_navigationMenu( &$params ) {
     $maxKey = max( array_keys($params[$contactsMenuId]['child']));
     $params[$contactsMenuId]['child'][$maxKey+1] =  array (
       'attributes' => array (
-        'label'      => 'GDPR Dashboard',
+        'label'      => E::ts('GDPR Dashboard'),
         'name'       => 'GDPR Dashboard',
         'url'        => 'civicrm/gdpr/dashboard?reset=1',
         'permission' => 'access GDPR',
@@ -570,7 +570,7 @@ function gdpr_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = array(
  */
 function gdpr_civicrm_summaryActions( &$actions, $contactID ) {
   $actions['comm_pref'] = array(
-    'title' => 'Communication Preferences Link',
+    'title' => E::ts('Communication Preferences Link'),
     //need a weight parameter here, Contact BAO looking for weight key and returning notice message.
     'weight' => 60,
     'ref' => 'comm_pref',
