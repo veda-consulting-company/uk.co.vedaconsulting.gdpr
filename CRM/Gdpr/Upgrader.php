@@ -144,7 +144,7 @@ class CRM_Gdpr_Upgrader extends CRM_Gdpr_Upgrader_Base {
       'name' => "CRM_Gdpr_Form_Search_ActivityContact",
       'is_active' => 1,
       'label' => "CRM_Gdpr_Form_Search_ActivityContact",
-      'description' => "Contacts without any activity for a period",
+      'description' => E::ts("Contacts without any activity for a period"),
     ));
     return TRUE;
   }
