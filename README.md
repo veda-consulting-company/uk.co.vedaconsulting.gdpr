@@ -18,7 +18,7 @@ Extension to support General Data Protection Regulation
   * Delete contact's email/address/phone/IM/website.
   * Cancel all active memberships and update to 'GDPR Cancelled' status using staus override.
 * Custom search 'Search Group Subscription by Date Range' which can be accessed from GDPR Dashboard.
-* Access list of contacts who have not had any activity for a set period of days from GDPR Dashboard and perform action on the contacts.
+* Access list of contacts who have not had any activity for a set period of days from GDPR Dashboard and perform action on the contacts. This will help to get a list of contacts who did not have a particular set of activities and can be deleted from GDPR Dashboard by clicking on "No of contacts".
 * Sitewide Data Policy acceptance can be configured from within GDPR Settings.
 * Event settings have a new tab to set Terms and Conditions which are added to the registration form.
 * A Communications Preferences page at civicrm/gdpr/comms-prefs/update allows contacts to update their channels and group subscriptions. The settings for this can be reached from the GDPR Dashboard. There are tokens and an action link available to generate personalized links (with checksum) to the Communications Preferences page.
