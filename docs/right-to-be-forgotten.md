@@ -6,7 +6,7 @@ Some of the examples include financial history including any tax related informa
 
 In order to allow a contact to be forgotten within CiviCRM, without comprising key meta data around the supporter, we have introduced a new button under the GDPR tab on each contact.
 
-![Communication Preferences Main](/images/forget-me-button-gdpr-tab.png)
+![Communication Preferences Main](images/forget-me-button-gdpr-tab.png)
 
 On pressing the button for a contact, the following actions will take place
 
