@@ -36,7 +36,7 @@ function gdpr_civicrm_install() {
   ));
   if (empty($result['id'])) {
     $result = civicrm_api3('OptionValue', 'create', [
-      'label'           => ts('Contribution Page'),
+      'label'           => E::ts('Contribution Page'),
       'name'            => 'civicrm_contribution_page',
       'value'           => 'ContributionPage',
       'option_group_id' => 'cg_extend_objects',
@@ -489,7 +489,7 @@ function gdpr_civicrm_navigationMenu( &$params ) {
     $maxKey = max( array_keys($params[$contactsMenuId]['child']));
     $params[$contactsMenuId]['child'][$maxKey+1] =  array (
       'attributes' => array (
-        'label'      => 'GDPR Dashboard',
+        'label'      => E::ts('GDPR Dashboard'),
         'name'       => 'GDPR Dashboard',
         'url'        => 'civicrm/gdpr/dashboard?reset=1',
         'permission' => 'access GDPR',
@@ -570,7 +570,7 @@ function gdpr_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = array(
  */
 function gdpr_civicrm_summaryActions( &$actions, $contactID ) {
   $actions['comm_pref'] = array(
-    'title' => 'Communication Preferences Link',
+    'title' => E::ts('Communication Preferences Link'),
     //need a weight parameter here, Contact BAO looking for weight key and returning notice message.
     'weight' => 60,
     'ref' => 'comm_pref',

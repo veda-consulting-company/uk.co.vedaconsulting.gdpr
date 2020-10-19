@@ -1,4 +1,5 @@
 <?php
+use CRM_Gdpr_ExtensionUtil as E;
 /**
  * @file
  *  Base class for Terms and Conditions relating to a particular entity.
@@ -242,7 +243,7 @@ class CRM_Gdpr_SLA_Entity {
     $params = array(
       'source_contact_id' => $contactId,
       'target_id' => $contactId,
-      'subject' => $this->type . ' Terms and Conditions accepted',
+      'subject' => $this->type . E::ts(' Terms and Conditions accepted'),
       'status_id' => 'Completed',
       'activity_type_id' => $this->activityType,
       'custom_' . $fields['Terms_Conditions']['id'] => $url,

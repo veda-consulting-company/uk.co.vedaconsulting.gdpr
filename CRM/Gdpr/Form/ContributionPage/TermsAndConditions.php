@@ -187,7 +187,7 @@ class CRM_Gdpr_Form_ContributionPage_TermsAndConditions extends CRM_Contribute_F
     
     // Calling parent::endPostProcess() will not direct to the right url since
     // this form is not included in the ContributionPage State Machine.
-    CRM_Core_Session::setStatus(ts("Terms & Conditions information has been saved."), ts('Saved'), 'success');
+    CRM_Core_Session::setStatus(E::ts("Terms & Conditions information has been saved."), E::ts('Saved'), 'success');
     $this->postProcessHook();
     CRM_Utils_System::redirect(CRM_Utils_System::url("civicrm/admin/contribute/terms_conditions",
     "action=update&reset=1&id={$this->_id}"

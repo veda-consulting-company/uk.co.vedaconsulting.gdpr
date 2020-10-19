@@ -41,7 +41,7 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
     );
 
     //Track Exports
-    $this->addElement('checkbox', 'track_exports', ts('Do you Want to track Exports?'), NULL);
+    $this->addElement('checkbox', 'track_exports', E::ts('Do you Want to track Exports?'), NULL);
 
     // Get all contact types
     $contactTypes = CRM_Gdpr_Utils::getAllContactTypes($parentOnly = TRUE);
@@ -107,8 +107,8 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
       array('class' => 'crm-select2')
     );
     $dataPolicyOptions = array(
-      '1' => ts('File Upload'),
-      '2' => ts('Web page link'),
+      '1' => E::ts('File Upload'),
+      '2' => E::ts('Web page link'),
     );
     $this->addRadio('sla_data_policy_option',
       ts('Data Policy options'),
@@ -197,7 +197,7 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
       array('cols' => 50)
     );
     $this->addRadio('entity_tc_option',
-      ts('Terms and Conditions options'),
+    E::ts('Terms and Conditions options'),
       $dataPolicyOptions,
       array(),
       '&nbsp;', FALSE
@@ -205,7 +205,7 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
     $this->add(
       'file',
       'entity_tc_upload',
-      ts('Default Terms and Conditions file')
+      E::ts('Default Terms and Conditions file')
     );
     $this->add(
       'text',
