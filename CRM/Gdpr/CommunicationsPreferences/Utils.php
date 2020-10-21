@@ -523,13 +523,16 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
     $form->assign('comm_pref_in_thankyou', $fieldsSettings['comm_pref_in_thankyou']);
     switch ($fieldsSettings['comm_pref_in_thankyou']) {
       case 'embed':
+
           $ajax_permission[] = array('access AJAX API', 'access CiviCRM');
           if (CRM_Core_Permission::check($ajax_permission)) {
+            $form->assign('noperm', 0);
             // Inject comms preference fields in contribution thank you page.
             self::injectCommPreferenceFieldsIntoForm($form);
           }
           else {
             $form->add('hidden', 'noperm', '1');
+            $form->assign('noperm', 1);
           }
         break;
 

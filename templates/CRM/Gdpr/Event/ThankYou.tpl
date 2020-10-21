@@ -26,7 +26,7 @@
   </script>
   {/literal}  
 {/if}
-{if $comm_pref_in_thankyou eq 'embed'}
+{if $comm_pref_in_thankyou eq 'embed' && !$noperm}
   <div id="comms_pref_form">
     {if $commPrefIntro }
     {$commPrefIntro}

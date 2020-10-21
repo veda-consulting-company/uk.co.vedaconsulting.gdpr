@@ -542,6 +542,7 @@ function gdpr_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = array(
     IN FUTURE or V3.0, WE CAN REMOVE THIS CHANGE ALONG WITH CONTACT CUSTOM TOKEN ABOVE.
     */
     $tokenValues = array();
+    $cids = isset($cids) ? $cids : [];
     if ($context == 'CRM_Core_BAO_ActionSchedule') {
       list($tokenValues) = CRM_Utils_Token::getTokenDetails($cids,
         array(),
