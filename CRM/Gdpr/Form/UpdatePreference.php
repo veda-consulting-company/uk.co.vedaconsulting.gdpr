@@ -267,48 +267,10 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
   public function setDefaultValues() {
     $defaults = array();
     if (!empty($this->_cid)) {
-      $contactDetails = civicrm_api3('Contact', 'getsingle', array( 'id' => $this->_cid));
+      $channelPrefs = U::getChannelPrefsForContact($this->_cid);
+      $groupPrefs = U::getGroupSelectionsForContact($this->_cid);
+      $defaults = array_merge($channelPrefs, $groupPrefs);
 
-      $lastAcceptance = CRM_Gdpr_SLA_Utils::getContactLastAcceptance($this->_cid);
-
-      //Set Channel default values
-      $communicationPreferenceMapperFields = U::getCommunicationPreferenceMapperField();
-      foreach ($this->commPrefSettings['channels'] as $key => $value) {
-        $name  = str_replace($this->containerPrefix, '', $key);
-        if (!$lastAcceptance) {
-          // No acceptance, and preferences are 0 then, set unknown, otherwise display yes/no
-          $defaults[$key] = '';
-        }
-        elseif ($value) {
-          $comPref = FALSE;
-          foreach ($communicationPreferenceMapperFields[$name] as $fieldName) {
-            if (!empty($contactDetails[$fieldName])) {
-              $comPref = TRUE;
-              break;
-            }
-          }
-          $defaults[$key] = $comPref ? 'NO' : 'YES';
-        }
-      }
-
-      //Set Group default values
-      $groups = U::getGroups();
-      foreach ($groups as $group) {
-        $container_name = 'group_' . $group['id'];
-        if (!empty($this->commPrefGroupsetting[$container_name]['group_enable'])) {
-          $contactGroupDetails = civicrm_api3('GroupContact'
-            , 'get'
-            , array( 'contact_id' => $this->_cid
-              , 'group_id' => $group['id']
-              , 'status' => 'Added',
-            )
-          );
-
-          if (!empty($contactGroupDetails['id'])) {
-            $defaults[$container_name] = 1;
-          }
-        }
-      }
 
       //Set Profile defaults
       $fields = array();
