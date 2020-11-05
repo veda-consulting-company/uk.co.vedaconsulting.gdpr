@@ -501,21 +501,62 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
     $fieldsSettings = $settings[self::SETTING_NAME];
     $groupSettings  = $settings[self::GROUP_SETTING_NAME];
     $commPrefMapper = self::getCommunicationPreferenceMapper();
-
+    $preferedCommOptn = CRM_Core_PseudoConstant::get('CRM_Contact_DAO_Contact', 'preferred_communication_method');
     //Prepare Comm pref params
     $commPref = array('id' => $contactId);
+
+    // get existing preferred communication methods
+    $existingPreferredMethod = NULL;
+    try {
+      $apiResult = civicrm_api3('Contact', 'getsingle', array(
+        'return' => array("preferred_communication_method"),
+        'id' => $contactId,
+      ));
+
+      $existingPreferredMethod = $apiResult['preferred_communication_method'];
+      $existingPreferredMethod = array_fill_keys($existingPreferredMethod, 1);
+    } catch (Exception $e) {
+      CRM_Core_Error::debug_var('updateCommsPrefByFormValues', $e);
+    }
 
     //FIXME, this must go under constant file
     $containerPrefix = 'enable_';
 
     //Update contact communication preference based on channels selected
+    $selectedPreferredOptns = $preferredComm = array();
     foreach ($fieldsSettings['channels'] as $key => $value) {
       $name  = str_replace($containerPrefix, '', $key);
       if (!empty($submittedValues[$key])) {
         $channelValue = $submittedValues[$key];
         $commPref = array_merge($commPref, $commPrefMapper[$name][$channelValue]);
+
+        if ($name == 'post') {
+          $name = 'postal mail';
+        }
+
+        $prefComm = array_search($name, array_map('strtolower', $preferedCommOptn));
+        if (strtolower($channelValue) == 'yes') {
+          $selectedPreferredOptns[$prefComm] = 1;
+        }
+        elseif (strtolower($channelValue) == 'no') {
+          $selectedPreferredOptns[$prefComm] = 0;
+        }
       }
     }
+
+    // Format preferred communication method
+    if (!empty($selectedPreferredOptns)) {
+      // don't want to lose exising methods which is not in communication preferences ex:Fax
+      if (!empty($existingPreferredMethod)) {
+        $selectedPreferredOptns = $selectedPreferredOptns + $existingPreferredMethod;
+      }
+
+      CRM_Utils_Array::formatArrayKeys($selectedPreferredOptns);
+      if (!empty($selectedPreferredOptns)) {
+        $commPref['preferred_communication_method'] = CRM_Utils_Array::implodePadded($selectedPreferredOptns);
+      }
+    }
+
     //Using API to update contact
     $contact = civicrm_api3('Contact', 'create', $commPref);
 
