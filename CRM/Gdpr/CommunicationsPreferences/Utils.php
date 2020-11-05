@@ -553,7 +553,8 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
 
       CRM_Utils_Array::formatArrayKeys($selectedPreferredOptns);
       if (!empty($selectedPreferredOptns)) {
-        $commPref['preferred_communication_method'] = CRM_Utils_Array::implodePadded($selectedPreferredOptns);
+        $prefOptn  = array_intersect_key($preferedCommOptn, array_flip($selectedPreferredOptns));
+        $commPref['preferred_communication_method'] = array_values($prefOptn);
       }
     }
 
