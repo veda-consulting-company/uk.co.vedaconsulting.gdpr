@@ -491,7 +491,7 @@ function gdpr_civicrm_navigationMenu( &$params ) {
       'attributes' => array (
         'label'      => E::ts('GDPR Dashboard'),
         'name'       => 'GDPR Dashboard',
-        'url'        => 'civicrm/gdpr/dashboard?reset=1',
+        'url'        => CRM_Utils_System::url('civicrm/gdpr/dashboard', 'reset=1'),
         'permission' => 'access GDPR',
         'operator'   => NULL,
         'separator'  => FALSE,
