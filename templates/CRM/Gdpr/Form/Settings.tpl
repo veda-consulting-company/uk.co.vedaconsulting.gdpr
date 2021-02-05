@@ -78,6 +78,32 @@
 </div>
 </div>
 
+<h3>{ts}Addresses{/ts}</h3>
+
+<div class="crm-block crm-form-block crm-gdpr-settings-form-block">
+
+  <div class="crm-section">
+    <div class="label">{$form.address_action.label}</div>
+    <div class="content">
+      {$form.address_action.html}
+      <br />
+      <span class="description"><i>{ts}Choose if you want to remove addresses at all or only clean out selected fields of address.{/ts}</i></span>
+    </div>
+    <div class="clear"></div>
+  </div>
+
+  <div class="crm-section">
+    <div class="label">{$form.clean_field_address.label}</div>
+    <div class="content">
+      {$form.clean_field_address.html}
+      <br />
+      <span class="description"><i>{ts}Choose fields of address which will be clean out but rest of them remain.{/ts}</i></span>
+    </div>
+    <div class="clear"></div>
+  </div>
+
+</div>
+
 <h3>{ts}Data Export{/ts}</h3>
 
 <div class="crm-block crm-form-block crm-gdpr-settings-form-block">

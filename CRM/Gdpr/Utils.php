@@ -89,6 +89,36 @@ class CRM_Gdpr_Utils {
   }
 
   /**
+   * Get all fields of address entity
+   *
+   * @return array of name => title
+   */
+  public static function getAddressFields() {
+    $fields = [];
+    $forbidden = [
+      'id',
+      'contact_id',
+      'master_id',
+      'location_type_id',
+      'is_primary',
+      'is_billing',
+      'name',
+    ];
+
+    $result = self::CiviCRMAPIWrapper('Address',  'getfields', [
+      'sequential' => 1,
+      'api_action' => "get",
+    ]);
+    foreach ($result['values'] as $field) {
+      if (!in_array($field['name'], $forbidden)) {
+        $fields[$field['name']] = $field['title'];
+      }
+    }
+
+    return $fields;
+  }
+
+  /**
    * Function to get all group subscription
    *
    * @return array()
