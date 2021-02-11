@@ -600,7 +600,7 @@ function gdpr_civicrm_permission(&$permissions) {
 
 function gdpr_civicrm_searchTasks( $objectName, &$tasks ){
   if($objectName == 'contact'){
-    if(user_access('forget contact')) {
+    if(CRM_Core_Permission::check('forget contact')) {
       $tasks[] = [
         'title' => 'GDPR forget',
         'class' => 'CRM_Gdpr_Form_Task_Contact'
