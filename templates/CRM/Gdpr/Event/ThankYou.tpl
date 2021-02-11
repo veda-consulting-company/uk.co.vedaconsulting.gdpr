@@ -31,7 +31,20 @@
     {if $commPrefIntro }
     {$commPrefIntro}
     {/if}
-  <!-- Groups Fieldset -->
+
+  <!-- channels fieldset -->
+  <fieldset id="comm_pref_fields">
+    <div class="section-description">{$channels_intro}</div>
+    {foreach from=$channelEleNames item=elementName}
+      <div class="crm-section">
+        <div class="label">{$form.$elementName.label}</div>
+        <div class="content">{$form.$elementName.html}</div>
+        <div class="clear"></div>
+      </div>
+    {/foreach}
+  </fieldset>
+  
+    <!-- Groups Fieldset -->
   <fieldset id="comm_pref_groups" class="groups-fieldset">
     {if $groups_intro}
       <div class="section-description">
@@ -63,21 +76,10 @@
       </div>
     {/foreach}
   </fieldset>
-
-  <!-- channels fieldset -->
-  <fieldset id="comm_pref_fields">
-    <div class="section-description">{$channels_intro}</div>
-    {foreach from=$channelEleNames item=elementName}
-      <div class="crm-section">
-        <div class="label">{$form.$elementName.label}</div>
-        <div class="content">{$form.$elementName.html}</div>
-        <div class="clear"></div>
-      </div>
-    {/foreach}
-  </fieldset>
-  <div class="submit-buttons">
+    <div class="submit-buttons">
     <input type="button" name="comm_pref_submit" id="comm_pref_submit" value="Submit" class="crm-button" />
   </div>
+  
   </div>
 
 
