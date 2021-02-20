@@ -20,7 +20,7 @@ Use the following steps to install GDPR.
 ## Permissions {:#permissions}
 
 The GDPR extension adds 3 new permissions which should be configured within your CMS before the extension can be used.
-See [Permissions and access control](https://docs.civicrm.org/user/en/latest/initial-set-up/permissions-and-access-control) the CiviCRM User Guide for more information.
+See [Permissions and access control](/user/en/latest/initial-set-up/permissions-and-access-control) the CiviCRM User Guide for more information.
 
 
 ## Discovering features after installing {:#discovery}
