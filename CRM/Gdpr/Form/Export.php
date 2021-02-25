@@ -72,8 +72,8 @@ class CRM_Gdpr_Form_Export extends CRM_Core_Form {
       E::ts('Format'),
       array(
         1 => E::ts('CSV'),
-        2 => E::ts('PDF')
-      ),
+        2 => E::ts('PDF'),
+      )
     );
 
     $this->addButtons(array(
