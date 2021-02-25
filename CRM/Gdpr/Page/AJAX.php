@@ -73,7 +73,7 @@ ORDER BY lca.log_date DESC";
         <thead>
           <tr>
             <th>
-              Date <small>(dd-mm-yyyy)</small>
+              Date
             </th>
             <th>
               Action
@@ -97,7 +97,7 @@ TABLE;
 
     foreach ($data as $row) {
       $table .= "<tr> ";
-      $table .= "<td valign='top' data-order=" . strtotime($row['log_date']) . "> " . CRM_Utils_Date::customFormat($row['log_date'], '%d-%m-%Y') . "</td> ";
+      $table .= "<td valign='top' data-order=" . strtotime($row['log_date']) . "> " . CRM_Utils_Date::customFormat($row['log_date'], Civi::settings()->get('dateformatDatetime')) . "</td> ";
       $table .= "<td valign='top'> " . $row['log_action'] . "</td> ";
       $table .= "<td valign='top'> " . $row['location_type'] . "</td> ";
       $table .= "<td valign='top'> " . $row['street'];
