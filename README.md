@@ -17,6 +17,10 @@ Extension to support General Data Protection Regulation
   * Anonymize/Update contact's last name based on GDPR settings.
   * Delete contact's email/address/phone/IM/website.
   * Cancel all active memberships and update to 'GDPR Cancelled' status using staus override.
+* 'Export' button in GDPR tab.
+  * You can export contact, activities, contributions, memberships, particpant & case records of the contact.
+  * You can export in CSV or PDF format.
+  * Highly recommended to install wkhtmltopdf if you are exporting the data in PDF format, as wkhtmltopdf provides better performance than dompdf.
 * Custom search 'Search Group Subscription by Date Range' which can be accessed from GDPR Dashboard.
 * Access list of contacts who have not had any activity for a set period of days from GDPR Dashboard and perform action on the contacts. This will help to get a list of contacts who did not have a particular set of activities and can be deleted from GDPR Dashboard by clicking on numaric value of "No of contacts".
 * Sitewide Data Policy acceptance can be configured from within GDPR Settings.
@@ -34,6 +38,11 @@ https://docs.civicrm.org/.
 support (at) vedaconsulting.co.uk
 
 ### Change Log ###
+
+v3.1
+
+Includes:
+* Export option in GDPR tab https://github.com/veda-consulting-company/uk.co.vedaconsulting.gdpr/issues/85 (See notes about Exporting data in Usage section above. Also you need to rebuild menu if you are upgrading from previous versions)
 
 v3.0
 Includes:
