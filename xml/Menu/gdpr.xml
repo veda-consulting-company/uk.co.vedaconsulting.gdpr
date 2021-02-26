@@ -37,6 +37,13 @@
     <access_arguments>forget contact</access_arguments>
   </item>
   <item>
+    <path>civicrm/gdpr/export</path>
+    <path_arguments>cid=%%cid%%</path_arguments>
+    <page_callback>CRM_Gdpr_Form_Export</page_callback>
+    <title>Export</title>
+    <access_arguments>forget contact</access_arguments>
+  </item>
+  <item>
     <path>civicrm/terms/accept</path>
     <page_callback>CRM_Gdpr_Form_SLAAccept</page_callback>
     <title>SLAAccept</title>
