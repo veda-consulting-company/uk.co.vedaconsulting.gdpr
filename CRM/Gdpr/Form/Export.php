@@ -244,7 +244,9 @@ class CRM_Gdpr_Form_Export extends CRM_Core_Form {
             'end_date',
           );
           foreach ($participantFields as $participantField) {
-            $row_value[$participantField] = $eventData[$participantField];
+            if (isset($eventData[$participantField])) {
+              $row_value[$participantField] = $eventData[$participantField];
+            }
           }
         }
 
@@ -263,18 +265,25 @@ class CRM_Gdpr_Form_Export extends CRM_Core_Form {
             if (is_array($entity_field_value)) {
               $multivalue_data = array();
               foreach ($entity_field_value as $multivalue) {
-                $multivalue_data[] = $options[$multivalue];
+                if (isset($options[$multivalue])) {
+                  $multivalue_data[] = $options[$multivalue];
+                }
               }
               $exportRow[$entity_field_key] = @implode(CRM_Core_DAO::VALUE_SEPARATOR, $multivalue_data);
-            } else {
+            } else if (isset($options[$entity_field_value])){
               // Single value select/checkbox/radio, etc
               $exportRow[$entity_field_key] = $options[$entity_field_value];
             }
           } else {
             // This is text field or similar
-            // Strip html tags if any
+            // FIXME: If this is array, convert it into string
+            if (is_array($entity_field_value)) {
+              $entity_field_value = @implode(',', $entity_field_value);
+            }
+            // Strip html tags if found in any strings
             $entity_field_value = strip_tags($entity_field_value);
             // Enclose text string in quotes if CSV
+            // as data with comma will break CSV format
             if ($values['export_format'] == 1) {
               $exportRow[$entity_field_key] = '"'.$entity_field_value.'"';
             }
