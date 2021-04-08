@@ -12,7 +12,6 @@
       <help_post></help_post>
       <weight>5</weight>
       <is_active>1</is_active>
-      <table_name>civicrm_value_event_terms_and_conditions_7</table_name>
       <is_multiple>0</is_multiple>
       <collapse_adv_display>0</collapse_adv_display>
       <created_date>20180308131240</created_date>
@@ -31,7 +30,6 @@
       <help_post></help_post>
       <weight>7</weight>
       <is_active>1</is_active>
-      <table_name>civicrm_value_event_terms_and_conditions_acceptance_9</table_name>
       <is_multiple>0</is_multiple>
       <collapse_adv_display>1</collapse_adv_display>
       <created_date>20180311184817</created_date>
@@ -48,7 +46,6 @@
       <help_post></help_post>
       <weight>8</weight>
       <is_active>1</is_active>
-      <table_name>civicrm_value_contribution_page_terms_and_conditions_7</table_name>
       <is_multiple>0</is_multiple>
       <collapse_adv_display>0</collapse_adv_display>
       <created_date>20180406172110</created_date>
@@ -67,7 +64,6 @@
       <help_post></help_post>
       <weight>9</weight>
       <is_active>1</is_active>
-      <table_name>civicrm_value_contribution_terms_and_conditions_acceptan_8</table_name>
       <is_multiple>0</is_multiple>
       <collapse_adv_display>1</collapse_adv_display>
       <created_date>20180408211050</created_date>
@@ -91,7 +87,6 @@
       <text_length>255</text_length>
       <note_columns>60</note_columns>
       <note_rows>4</note_rows>
-      <column_name>enable_terms_and_conditions_acce_16</column_name>
       <in_selector>0</in_selector>
       <custom_group_name>Event_terms_and_conditions</custom_group_name>
     </CustomField>
@@ -109,7 +104,6 @@
       <text_length>255</text_length>
       <note_columns>60</note_columns>
       <note_rows>4</note_rows>
-      <column_name>terms_and_conditions_file_20</column_name>
       <in_selector>0</in_selector>
       <custom_group_name>Event_terms_and_conditions</custom_group_name>
     </CustomField>
@@ -128,7 +122,6 @@
       <text_length>255</text_length>
       <note_columns>60</note_columns>
       <note_rows>4</note_rows>
-      <column_name>checkbox_text_22</column_name>
       <in_selector>0</in_selector>
       <custom_group_name>Event_terms_and_conditions</custom_group_name>
     </CustomField>
@@ -148,7 +141,6 @@
       <text_length>255</text_length>
       <note_columns>60</note_columns>
       <note_rows>4</note_rows>
-      <column_name>checkbox_position_23</column_name>
       <in_selector>0</in_selector>
       <option_group_name>checkbox_position_20180311180849</option_group_name>
       <custom_group_name>Event_terms_and_conditions</custom_group_name>
@@ -169,7 +161,6 @@
       <text_length>255</text_length>
       <note_columns>60</note_columns>
       <note_rows>4</note_rows>
-      <column_name>link_label_24</column_name>
       <in_selector>0</in_selector>
       <custom_group_name>Event_terms_and_conditions</custom_group_name>
     </CustomField>
@@ -189,7 +180,6 @@
       <is_view>0</is_view>
       <note_columns>60</note_columns>
       <note_rows>4</note_rows>
-      <column_name>introduction_25</column_name>
       <in_selector>0</in_selector>
       <custom_group_name>Event_terms_and_conditions</custom_group_name>
     </CustomField>
@@ -207,7 +197,6 @@
       <text_length>255</text_length>
       <note_columns>60</note_columns>
       <note_rows>4</note_rows>
-      <column_name>terms_conditions_26</column_name>
       <in_selector>0</in_selector>
       <custom_group_name>Event_terms_and_conditions_acceptance</custom_group_name>
     </CustomField>
@@ -225,7 +214,6 @@
       <text_length>255</text_length>
       <note_columns>60</note_columns>
       <note_rows>4</note_rows>
-      <column_name>source_28</column_name>
       <in_selector>0</in_selector>
       <custom_group_name>Event_terms_and_conditions_acceptance</custom_group_name>
     </CustomField>
@@ -244,7 +232,6 @@
       <text_length>255</text_length>
       <note_columns>60</note_columns>
       <note_rows>4</note_rows>
-      <column_name>enable_terms_and_conditions_acce_13</column_name>
       <in_selector>0</in_selector>
       <custom_group_name>Contribution_Page_terms_and_conditions</custom_group_name>
     </CustomField>
@@ -263,7 +250,6 @@
       <text_length>255</text_length>
       <note_columns>60</note_columns>
       <note_rows>4</note_rows>
-      <column_name>checkbox_position_14</column_name>
       <in_selector>0</in_selector>
       <option_group_name>checkbox_position_20180311180849</option_group_name>
       <custom_group_name>Contribution_Page_terms_and_conditions</custom_group_name>
@@ -283,7 +269,6 @@
       <text_length>255</text_length>
       <note_columns>60</note_columns>
       <note_rows>4</note_rows>
-      <column_name>checkbox_text_15</column_name>
       <in_selector>0</in_selector>
       <custom_group_name>Contribution_Page_terms_and_conditions</custom_group_name>
     </CustomField>
@@ -301,7 +286,6 @@
       <text_length>255</text_length>
       <note_columns>60</note_columns>
       <note_rows>4</note_rows>
-      <column_name>terms_and_conditions_file_16</column_name>
       <in_selector>0</in_selector>
       <custom_group_name>Contribution_Page_terms_and_conditions</custom_group_name>
     </CustomField>
@@ -320,7 +304,6 @@
       <text_length>255</text_length>
       <note_columns>60</note_columns>
       <note_rows>4</note_rows>
-      <column_name>link_label_17</column_name>
       <in_selector>0</in_selector>
       <custom_group_name>Contribution_Page_terms_and_conditions</custom_group_name>
     </CustomField>
@@ -338,7 +321,6 @@
       <text_length>255</text_length>
       <note_columns>60</note_columns>
       <note_rows>4</note_rows>
-      <column_name>terms_conditions_21</column_name>
       <in_selector>0</in_selector>
       <custom_group_name>Contribution_terms_and_conditions_acceptance</custom_group_name>
     </CustomField>
@@ -356,7 +338,6 @@
       <text_length>255</text_length>
       <note_columns>60</note_columns>
       <note_rows>4</note_rows>
-      <column_name>source_22</column_name>
       <in_selector>0</in_selector>
       <custom_group_name>Contribution_terms_and_conditions_acceptance</custom_group_name>
     </CustomField>
