@@ -84,10 +84,8 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
     }
 
     //Include reCAPTCHA?
-    if ($addCaptcha = $this->commPrefSettings['add_captcha']) {
-      $captcha = CRM_Utils_ReCAPTCHA::singleton();
-      $captcha->add($this);
-      $this->assign('isCaptcha', TRUE);
+    if ($this->commPrefSettings['add_captcha']) {
+      CRM_Utils_ReCAPTCHA::enableCaptchaOnForm($this);
     }
 
     //Inject channels and groups into comms preferenec form.
@@ -228,9 +226,7 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
       }
 
       if ($addCaptcha && !$viewOnly) {
-        $captcha = CRM_Utils_ReCAPTCHA::singleton();
-        $captcha->add($this);
-        $this->assign('isCaptcha', TRUE);
+        CRM_Utils_ReCAPTCHA::enableCaptchaOnForm($this);
       }
     }
   }
