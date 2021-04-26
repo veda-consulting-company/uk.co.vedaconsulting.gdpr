@@ -240,15 +240,6 @@ EOD;
 }
 
 /**
- * Implements hook_civicrm_preProcess().
- */
-function gdpr_civicrm_preProcess($formName, $form) {
-  if ($formName == 'CRM_Contribute_Form_Contribution_ThankYou') {
-    $form->setVar('_contactID', $form->get('contactID'));
-  }
-}
-
-/**
  * Implements hook_civicrm_buildForm().
  */
 function gdpr_civicrm_buildForm($formName, $form) {
@@ -666,4 +657,53 @@ function gdpr_includeShoreditchStylingIfEnabled () {
 
   CRM_Core_Resources::singleton()->
     addStyleFile('uk.co.vedaconsulting.gdpr', 'css/shoreditch-only.min.css', 10);
+}
+
+/**
+ * Wordpress filters to expose GDPR pages as shortcode.
+ */
+if (function_exists('add_filter')) {
+    add_filter('civicrm_shortcode_preprocess_atts', 'gdpr_amend_args', 10, 2);
+}
+
+/**
+ * Modify attributes of GDPR shortcodes for CiviCRM.
+ *
+ * @param $args
+ * @param $shortcode_atts
+ * @return mixed
+ */
+function gdpr_amend_args($args, $shortcode_atts) {
+  if ($shortcode_atts['component'] == 'gdpr') {
+    if ($shortcode_atts['action'] == 'update-preferences') {
+      $args['q'] = 'civicrm/gdpr/comms-prefs/update';
+    }
+  }
+  return $args;
+}
+
+/**
+ * Implements hook_civicrm_preProcess().
+ *
+ * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_preProcess
+ *
+ */
+function gdpr_civicrm_preProcess($formName, &$form) {
+  if ($formName == 'CRM_Contribute_Form_Contribution_ThankYou') {
+    $form->setVar('_contactID', $form->get('contactID'));
+  }
+
+  if ($formName == 'CRM_Core_Form_ShortCode') {
+    $form->components['gdpr'] = array(
+      'label'  => 'GDPR',
+      'select' => array(),
+    );
+    $form->options[] = array(
+      'key' => 'action',
+      'components' => array('gdpr'),
+      'options' => array(
+        'update-preferences' => 'Update preferences',
+      ),
+    );
+  }
 }
