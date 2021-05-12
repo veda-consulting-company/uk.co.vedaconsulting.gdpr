@@ -40,6 +40,16 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
       array('class' => 'crm-select2 huge', 'multiple' => 'multiple',)
     );
 
+    $addressFields = CRM_Gdpr_Utils::getAddressFields();
+    $this->add(
+      'select',
+      'clean_field_address',
+      E::ts('Fields of address for cleaning out'),
+      array('' => E::ts('- select -')) + $addressFields, // list of options
+      TRUE,
+      array('class' => 'crm-select2 huge', 'multiple' => 'multiple',)
+    );
+
     //Track Exports
     $this->addElement('checkbox', 'track_exports', E::ts('Do you Want to track Exports?'), NULL);
 
@@ -115,6 +125,17 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
       $dataPolicyOptions,
       array(),
       '&nbsp;', FALSE
+    );
+    $addressAction = array(
+      '1' => E::ts('Remove all'),
+      '2' => E::ts('Clean out selected fields'),
+    );
+    $this->addRadio('address_action',
+      ts('Action on adresses'),
+      $addressAction,
+      array(),
+      '&nbsp;',
+      TRUE
     );
     $this->add(
       'file',
@@ -301,6 +322,8 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
     $settings = array();
     $settings['data_officer'] = $values['data_officer'];
     $settings['activity_type'] = $values['activity_type'];
+    $settings['address_action'] = $values['address_action'];
+    $settings['clean_field_address'] = $values['clean_field_address'];
     $settings['activity_period'] = $values['activity_period'];
     $settings['contact_type'] = $values['contact_type'];
     $settings['forgetme_name'] = $values['forgetme_name'];

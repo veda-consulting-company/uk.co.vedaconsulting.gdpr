@@ -64,12 +64,23 @@ class CRM_Gdpr_Form_Forgetme extends CRM_Core_Form {
     );
     self::removeEntityRecords('Relationship', $params);
 
-    // Remove all the address records of this contact
-    $params = array(
-      'sequential' => 1,
-      'contact_id' => $this->_contactID,
-    );
-    self::removeEntityRecords('Address', $params);
+    $settings = CRM_Gdpr_Utils::getGDPRSettings();
+    $addressAction = CRM_Utils_Array::value('address_action', $settings, 1);
+    switch ($addressAction) {
+      case 1:
+        // Remove all the address records of this contact
+        $params = array(
+          'sequential' => 1,
+          'contact_id' => $this->_contactID,
+        );
+        self::removeEntityRecords('Address', $params);
+        break;
+
+      case 2:
+        // Clean out only selected fields of address
+        $this->cleanOutAddressesPartially();
+        break;
+    }
 
     // Remove all the IM records of this contact
     // On Civi 4.6,
@@ -119,6 +130,35 @@ class CRM_Gdpr_Form_Forgetme extends CRM_Core_Form {
       ));
     }
 
+  }
+
+  private function cleanOutAddressesPartially() {
+    if (!$this->_contactID) {
+      CRM_Core_Error::fatal(E::ts("Something went wrong. Please contact Admin."));
+    }
+
+    $fieldsToCleanOut = [];
+    $settings = CRM_Gdpr_Utils::getGDPRSettings();
+    $cleanFieldAddress = CRM_Utils_Array::value('clean_field_address', $settings, []);
+    foreach ($cleanFieldAddress as $field) {
+      $fieldsToCleanOut[$field] = '';
+    }
+
+    if ($fieldsToCleanOut) {
+      $params = [
+        'sequential' => 1,
+        'contact_id' => $this->_contactID,
+      ];
+      $addressesResult = CRM_Gdpr_Utils::CiviCRMAPIWrapper('Address', 'get', $params);
+      if ($addressesResult && !empty($addressesResult['values'])) {
+        foreach ($addressesResult['values'] as $address) {
+          $params = [
+              'id' => $address['id'],
+            ] + $fieldsToCleanOut;
+          CRM_Gdpr_Utils::CiviCRMAPIWrapper('Address', 'create', $params);
+        }
+      }
+    }
   }
 
   private function makeContactAnonymous() {
