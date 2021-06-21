@@ -1,4 +1,6 @@
 <?php
+
+use Civi\Api4\Activity;
 use CRM_Gdpr_ExtensionUtil as E;
 
 class CRM_Gdpr_CommunicationsPreferences_Utils {
@@ -587,35 +589,31 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
     }//end foreach groups
   }
 
+  /**
+   * @param int $contactID
+   * @param array $submittedValues
+   *
+   * @return array|false|null
+   * @throws \API_Exception
+   * @throws \Civi\API\Exception\UnauthorizedException
+   */
   public static function createCommsPrefActivity($contactID, $submittedValues = []) {
     if (empty($contactID)) {
       return FALSE;
     }
 
-    //Incase of offline communication preference update, Update logged in user as source contact,
-    $sourceContactID = $contactID;
-    $session = CRM_Core_Session::singleton();
-    if($userID = $session->get('userID')){
-      $sourceContactID = $userID;
+    // Create Activity for communication preference updated
+    $activity = Activity::create(FALSE)
+      ->addValue('activity_type_id:name', 'Update_Communication_Preferences')
+      ->addValue('source_contact_id', CRM_Core_Session::getLoggedInContactID() ?? $contactID)
+      ->addValue('target_contact_id', $contactID)
+      ->addValue('subject', $submittedValues['subject'] ?? E::ts('Communication Preferences updated'))
+      ->addValue('activity_date_time', date('Y-m-d H:i:s'))
+      ->addValue('status_id:name', 'Completed');
+    if (!empty($submittedValues['activity_source'])) {
+      $activity->addValue('details', $submittedValues['activity_source']);
     }
-
-    //Create Activity for communication preference updated
-    $activityTypeIds = array_flip(CRM_Core_PseudoConstant::activityType(TRUE, FALSE, FALSE, 'name'));
-    if (!empty($activityTypeIds[self::COMM_PREF_ACTIVITY_TYPE])) {
-      $activityParams = [
-        'activity_type_id'  => $activityTypeIds[self::COMM_PREF_ACTIVITY_TYPE],
-        'source_contact_id' => $sourceContactID,
-        'target_id'         => $contactID,
-        'subject'           => E::ts('Communication Preferences updated'),
-        'activity_date_time'=> date('Y-m-d H:i:s'),
-        'status_id'         => "Completed",
-      ];
-      if (!empty($submittedValues['activity_source'])) {
-        $activityParams['details'] = $submittedValues['activity_source'];
-      }
-      return civicrm_api3('Activity', 'Create', $activityParams);
-    }
-    return FALSE;
+    return $activity->execute()->first();
   }
 
   /**

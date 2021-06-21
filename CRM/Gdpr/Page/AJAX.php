@@ -9,6 +9,8 @@
  +--------------------------------------------------------------------+
  */
 
+use CRM_Gdpr_ExtensionUtil as E;
+
 /**
  *  Class used to get historic addresses
  */
@@ -207,6 +209,7 @@ TABLE;
     CRM_Gdpr_CommunicationsPreferences_Utils::updateCommsPrefByFormValues($iContactId, $submittedValues);
 
     //Create comms preference activity
+    $submittedValues['subject'] = E::ts('Event/Contribution ThankYou Page');
     CRM_Gdpr_CommunicationsPreferences_Utils::createCommsPrefActivity($iContactId, $submittedValues);
 
     //Get completion msg from settings
