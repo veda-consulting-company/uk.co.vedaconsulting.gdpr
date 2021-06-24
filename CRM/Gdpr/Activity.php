@@ -75,11 +75,11 @@ class CRM_Gdpr_Activity {
    * @return int
    */
   private static function set($optionGroupName, $name, $options = []) {
-    $params = array(
+    $params = [
       'sequential' => 1,
       'option_group_id' => $optionGroupName,
       'name' => $name,
-    );
+    ];
     $result = CRM_Gdpr_Utils::CiviCRMAPIWrapper('OptionValue', 'get', $params);
     if ($result['count'] == 0) {
       $params['is_active'] = 1;

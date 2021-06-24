@@ -5,17 +5,17 @@
 // http://wiki.civicrm.org/confluence/display/CRMDOC42/Hook+Reference
 use CRM_Gdpr_ExtensionUtil as E;
 
-return array (
+return [
   0 => 
-  array (
+  [
     'name' => 'CRM_Gdpr_Form_Search_ActivityContact',
     'entity' => 'CustomSearch',
     'params' => 
-    array (
+    [
       'version' => 3,
       'label' => 'ActivityContact',
       'description' => E::ts('Contacts without Activity for a period (GDPR)'),
       'class_name' => 'CRM_Gdpr_Form_Search_ActivityContact',
-    ),
-  ),
-);
+    ],
+  ],
+];

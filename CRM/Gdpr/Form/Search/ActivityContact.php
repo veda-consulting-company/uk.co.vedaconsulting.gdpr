@@ -26,15 +26,15 @@ class CRM_Gdpr_Form_Search_ActivityContact extends CRM_Contact_Form_Search_Custo
     );
 
     // Optionally define default search values
-    $form->setDefaults(array(
+    $form->setDefaults([
       'contact_name' => '',
-    ));
+    ]);
 
     /**
      * if you are using the standard template, this array tells the template what elements
      * are part of the search criteria
      */
-    $form->assign('elements', array('contact_name'));
+    $form->assign('elements', ['contact_name']);
 
     // Get GDPR settings
     $settings = CRM_Gdpr_Utils::getGDPRSettings();
@@ -64,11 +64,11 @@ class CRM_Gdpr_Form_Search_ActivityContact extends CRM_Contact_Form_Search_Custo
    */
   function &columns() {
     // return by reference
-    $columns = array(
+    $columns = [
       E::ts('Contact Id') => 'contact_id',
       E::ts('Contact Type') => 'contact_type',
       E::ts('Contact Name') => 'sort_name',
-    );
+    ];
     return $columns;
   }
 
@@ -118,16 +118,16 @@ class CRM_Gdpr_Form_Search_ActivityContact extends CRM_Contact_Form_Search_Custo
    * @return string, sql fragment with conditional expressions
    */
   function where($includeContactIDs = FALSE) {
-    $params = $gdprParams = array();
+    $params = $gdprParams = [];
 
     $count  = 1;
-    $clause = array();
+    $clause = [];
     $where = "(1)";
     $name   = CRM_Utils_Array::value('contact_name',
       $this->_formValues
     );
     if (!empty($name)) {
-      $gdprParams = array('contact_name' => $name);
+      $gdprParams = ['contact_name' => $name];
     }
     $clause[] = CRM_Gdpr_Utils::getActivityContactSQL($gdprParams, FALSE, TRUE, TRUE);
 

@@ -30,18 +30,18 @@ class CRM_Gdpr_Form_Forgetme extends CRM_Core_Form {
 
   public function buildQuickForm() {
 
-    $this->addButtons(array(
-      array(
+    $this->addButtons([
+      [
         'type' => 'next',
         'name' => E::ts('Forget me'),
         'spacing' => '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
         'isDefault' => TRUE,
-      ),
-      array(
+      ],
+      [
         'type' => 'cancel',
         'name' => E::ts('Cancel'),
-      ),
-    ));
+      ],
+    ]);
     $currentVer = CRM_Core_BAO_Domain::version(TRUE);
     if (version_compare($currentVer, '4.7') < 0) {
       $this->assign('lowerVersion', TRUE);
@@ -56,19 +56,19 @@ class CRM_Gdpr_Form_Forgetme extends CRM_Core_Form {
     }
 
     // Remove all the linked relationship records of this contact
-    $params = array(
+    $params = [
       'sequential' => 1,
       'contact_id_a' => $this->_contactID,
       'contact_id_b' => $this->_contactID,
-      'options' => array('or' => array(array("contact_id_a", "contact_id_b"))),
-    );
+      'options' => ['or' => [["contact_id_a", "contact_id_b"]]],
+    ];
     self::removeEntityRecords('Relationship', $params);
 
     // Remove all the address records of this contact
-    $params = array(
+    $params = [
       'sequential' => 1,
       'contact_id' => $this->_contactID,
-    );
+    ];
     self::removeEntityRecords('Address', $params);
 
     // Remove all the IM records of this contact
@@ -78,10 +78,10 @@ class CRM_Gdpr_Form_Forgetme extends CRM_Core_Form {
     // check civi Version if its below than 4.7 then skip executing IM API.
     $currentVer = CRM_Core_BAO_Domain::version(TRUE);
     if (version_compare($currentVer, '4.7') >= 0) {
-      $params = array(
+      $params = [
         'sequential' => 1,
         'contact_id' => $this->_contactID,
-      );
+      ];
       self::removeEntityRecords('Im', $params);
     }
 
@@ -92,7 +92,7 @@ class CRM_Gdpr_Form_Forgetme extends CRM_Core_Form {
   }
 
   // Function to get stored entity records of a given type and remove them
-  private function removeEntityRecords($entity = NULL, $params = array()) {
+  private function removeEntityRecords($entity = NULL, $params = []) {
 
     // return, if entity or params are not passed
     if (!$entity || empty($params)) {
@@ -100,7 +100,7 @@ class CRM_Gdpr_Form_Forgetme extends CRM_Core_Form {
       return;
     }
 
-    $recordIds = array();
+    $recordIds = [];
 
      // Get all records of the given entity
     $records = CRM_Gdpr_Utils::CiviCRMAPIWrapper($entity, 'get', $params);
@@ -113,10 +113,10 @@ class CRM_Gdpr_Form_Forgetme extends CRM_Core_Form {
 
     // delete all the records
     foreach ($recordIds as $key => $recordId) {
-      $result = CRM_Gdpr_Utils::CiviCRMAPIWrapper($entity, 'delete', array(
+      $result = CRM_Gdpr_Utils::CiviCRMAPIWrapper($entity, 'delete', [
         'sequential' => 1,
         'id' => $recordId,
-      ));
+      ]);
     }
 
   }
@@ -125,7 +125,7 @@ class CRM_Gdpr_Form_Forgetme extends CRM_Core_Form {
     if (!$this->_contactID) {
       CRM_Core_Error::fatal(E::ts("Something went wrong. Please contact Admin."));
     }
-    $params = array('id' => $this->_contactID);
+    $params = ['id' => $this->_contactID];
     // Update contact Record
     $updateResult = CRM_Gdpr_Utils::CiviCRMAPIWrapper('Contact', 'anonymize', $params);
 
@@ -160,14 +160,14 @@ class CRM_Gdpr_Form_Forgetme extends CRM_Core_Form {
         $sourceContactID = $loggedinUser;
       }
       $subject = E::ts('GDPR - Contact has been made anonymous');
-      $params = array(
+      $params = [
         'activity_type_id'  => $activityTypeId,
         'source_contact_id' => $sourceContactID,
         'target_id'         => $contactID,
         'activity_date_time'=> date('Y-m-d H:i:s'),
         'subject'           => $subject,
         'status_id'         => 2, //COMPLETED
-      );
+      ];
 
       CRM_Gdpr_Utils::CiviCRMAPIWrapper('Activity', 'create', $params);
     }
@@ -188,11 +188,11 @@ class CRM_Gdpr_Form_Forgetme extends CRM_Core_Form {
 
     //Get Data protection Officer email address
     if ($dpoContactId) {
-      $apiParams = array(
+      $apiParams = [
         'contact_id' => $dpoContactId,
         'is_primary' => 1,
         'sequential' => 1,
-      );
+      ];
       $apiResult = CRM_Gdpr_Utils::CiviCRMAPIWrapper('Email', 'get', $apiParams);
       $emailDetails = $apiResult['values'][0];
       $dpoContactEmail = !empty($emailDetails['email']) ? $emailDetails['email'] : FALSE;
@@ -208,14 +208,14 @@ class CRM_Gdpr_Form_Forgetme extends CRM_Core_Form {
       list($domainEmailName, $domainEmailAddress) = CRM_Core_BAO_Domain::getNameAndEmail();
 
       $subject = !empty($settings['email_dpo_subject']) ? $settings['email_dpo_subject'] : $defaultSubject;
-      $mailParams = array(
+      $mailParams = [
         'subject' => $subject,
         'text'    => NULL,
         'html'    => $msg,
         'toName'  => CRM_Core_DAO::getFieldValue('CRM_Contact_DAO_Contact', $dpoContactId, 'display_name'),
         'toEmail' => $dpoContactEmail,
         'from' => "\"{$domainEmailName}\" <{$domainEmailAddress}>",
-      );
+      ];
 
       $sent = CRM_Utils_Mail::send($mailParams);
     }

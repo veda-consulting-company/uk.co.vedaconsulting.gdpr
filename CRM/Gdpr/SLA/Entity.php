@@ -8,13 +8,13 @@ class CRM_Gdpr_SLA_Entity {
 
   protected $id = NULL;
 
-  protected $entity = array();
+  protected $entity = [];
 
   protected $type = '';
 
   protected $customGroup = '';
 
-  protected $customFields = array();
+  protected $customFields = [];
 
   protected $activityType = '';
 
@@ -30,7 +30,7 @@ class CRM_Gdpr_SLA_Entity {
   /**
    * Default values are provided in the GDPR settings.
    */
-  protected $settings = array();
+  protected $settings = [];
 
 
   /**
@@ -75,30 +75,30 @@ class CRM_Gdpr_SLA_Entity {
   }
 
   public function getLinks() {
-    $links = array();
+    $links = [];
     $url = $this->getUrl();
     $label = $this->getValue('Link_Label');
     if ($url) {
-      $links['entity'] = array(
+      $links['entity'] = [
         'url' => $url,
         'label' => $label,
-      );
+      ];
     }
     $global_link_url = CRM_Gdpr_SLA_Utils::getTermsConditionsUrl();
     $global_link_label = CRM_Gdpr_SLA_Utils::getLinkLabel();
     $global_checkbox_text = CRM_Gdpr_SLA_Utils::getCheckboxText();
     if ($global_link_url) {
-    $links['global'] = array(
+    $links['global'] = [
         'url' => $global_link_url,
         'label' => $global_link_label,
-      );
+      ];
     }
     return $links;
   }
 
   public function getValue($field_name) {
     $fields = $this->getCustomFields($this->customGroup);
-    $field = !empty($fields[$field_name]) ? $fields[$field_name] : array();
+    $field = !empty($fields[$field_name]) ? $fields[$field_name] : [];
     if (!$field) {
       return;
     }
@@ -112,12 +112,12 @@ class CRM_Gdpr_SLA_Entity {
 
   protected function getCustomFields($group) {
     if (empty($this->customFields[$group])) {
-      $result = civicrm_api3('CustomField', 'get', array(
+      $result = civicrm_api3('CustomField', 'get', [
         'sequential' => 1,
         'custom_group_id' => $group,
-      ));
+      ]);
       if (!empty($result['values'])) {
-        $fields = array();
+        $fields = [];
         //Index them by name for easier lookups.
         foreach ($result['values'] as $value) {
           $fields[$value['name']] = $value;
@@ -136,10 +136,10 @@ class CRM_Gdpr_SLA_Entity {
 
   public function getEntity() {
     if (!$this->entity) {
-      $params = array(
+      $params = [
         'sequential' => FALSE,
         'id' => $this->id,
-      );
+      ];
       $result = civicrm_api3($this->type, 'get', $params);
       if (!empty($result['values'][$this->id])) {
         $this->entity = $result['values'][$this->id];
@@ -196,7 +196,7 @@ class CRM_Gdpr_SLA_Entity {
         'Terms & Conditions',
         $text,
         TRUE,
-        array()
+        []
       );
     }
     if (!empty($links['global'])) {
@@ -207,21 +207,21 @@ class CRM_Gdpr_SLA_Entity {
         'Terms & Conditions',
         $text,
         TRUE,
-        array()
+        []
       );
     }
     if (!empty($links)) {
-      $tc_vars = array(
+      $tc_vars = [
         'element' => 'accept_tc',
         'links' => $links,
         'intro' => $intro,
         'position' => $position,
-      );
+      ];
       $form->assign('terms_conditions', $tc_vars);
       $template_path = realpath(dirname(__FILE__) . '/templates/CRM/Gdpr');
-      CRM_Core_Region::instance('page-body')->add(array(
+      CRM_Core_Region::instance('page-body')->add([
         'template' => "CRM/Gdpr/TermsConditionsField.tpl"
-      ));
+      ]);
     }
   }
 
@@ -240,7 +240,7 @@ class CRM_Gdpr_SLA_Entity {
     $url = $this->getUrl();
     $entity = $this->getEntity();
     $source = $this->type . ': ' .  $entity['title'] . ' (' . $entity['id'] . ')';
-    $params = array(
+    $params = [
       'source_contact_id' => $contactId,
       'target_id' => $contactId,
       'subject' => $this->type . E::ts(' Terms and Conditions accepted'),
@@ -248,7 +248,7 @@ class CRM_Gdpr_SLA_Entity {
       'activity_type_id' => $this->activityType,
       'custom_' . $fields['Terms_Conditions']['id'] => $url,
       'custom_' . $fields['Source']['id'] => $source,
-    );
+    ];
     $result = civicrm_api3('Activity', 'create', $params);
   }
 }

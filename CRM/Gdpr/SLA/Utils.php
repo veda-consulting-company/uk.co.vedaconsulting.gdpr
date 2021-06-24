@@ -83,7 +83,7 @@ EOT;
    * @return array
    */
   static function getSettings() {
-    static $settings = array();
+    static $settings = [];
     if (!$settings) {
       $settings = CRM_Gdpr_Utils::getGDPRSettings();
     }
@@ -106,24 +106,24 @@ EOT;
    * Gets the last Acceptance activity for a contact.
    */
   static function getContactLastAcceptance($contactId) {
-    static $cache = array();
+    static $cache = [];
     if (empty($cache[$contactId])) {
       $field = CRM_Gdpr_SLA_Utils::getTermsConditionsField();
-      $result = civicrm_api3('Activity', 'get', array(
+      $result = civicrm_api3('Activity', 'get', [
         'sequential' => 1,
         'return' => ['subject', 'activity_date_time', "custom_{$field['id']}"],
         'activity_type_id' => self::$activityTypeName,
         'target_contact_id' => $contactId,
-        'options' => array(
+        'options' => [
           'sort' => 'activity_date_time desc',
           'limit' => 1,
-        ),
-      ));
+        ],
+      ]);
       if (!empty($result['values'])) {
         $cache[$contactId] = $result['values'][0];
       }
       else {
-        $cache[$contactId] = array();
+        $cache[$contactId] = [];
       }
     }
     return $cache[$contactId];
@@ -142,14 +142,14 @@ EOT;
     $termsConditionsField = self::getTermsConditionsField();
     //MV 11Oct2018 Incase of offline Data policy acceptance, Update logged in user as source contact
     $sourceContactID = $userID ? $userID : $contactId;
-    $params = array(
+    $params = [
       'source_contact_id' => $sourceContactID,
       'target_id' => $contactId,
       'subject' => E::ts('Data Policy accepted'),
       'status_id' => 'Completed',
       'activity_type_id' => self::$activityTypeName,
       'custom_' . $termsConditionsField['id'] => $termsConditionsUrl,
-    );
+    ];
     civicrm_api3('Activity', 'create', $params);
   }
 
@@ -290,14 +290,14 @@ EOT;
     if (!$fieldName || !$groupName) {
       return;
     }
-    $result = civicrm_api3('CustomGroup', 'get', array(
+    $result = civicrm_api3('CustomGroup', 'get', [
   	  'sequential' => 1,
       'name' => $groupName,
-      'api.CustomField.get' => array(
+      'api.CustomField.get' => [
         'custom_group_id' => "\$value.id",
         'name' => $fieldName
-      ),
-    ));
+      ],
+    ]);
     if (!empty($result['values'][0]['api.CustomField.get']['values'])) {
       return $result['values'][0]['api.CustomField.get']['values'][0];
     }
@@ -307,7 +307,7 @@ EOT;
    * Get definition for the field holding Terms and Conditions.
    */
   static function getTermsConditionsField() {
-    static $field = array();
+    static $field = [];
     if (!$field) {
       $field = self::getCustomField('Terms_Conditions', 'SLA_Acceptance');
     }
