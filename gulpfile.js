@@ -13,10 +13,9 @@
 'use strict';
 
 const gulp = require('gulp');
-const sass = require('gulp-sass');
+const sass = require('gulp-sass')(require('sass'));
 const civicrmScssRoot = require('civicrm-scssroot')();
-const stripCssComments = require('gulp-strip-css-comments');
-const cssmin = require('gulp-cssmin');
+const cleanCSS = require('gulp-clean-css');
 const rename = require('gulp-rename');
 
 /**
@@ -30,8 +29,7 @@ gulp.task('sass', () => {
         includePaths: civicrmScssRoot.getPath(),
         precision: 10
       }).on('error', sass.logError))
-      .pipe(stripCssComments({ preserve: false }))
-      .pipe(cssmin())
+      .pipe(cleanCSS({level: {1: { specialComments: '0'}}}))
       .pipe(rename({ suffix: '.min' }))
       .pipe(gulp.dest('css/'));
   });

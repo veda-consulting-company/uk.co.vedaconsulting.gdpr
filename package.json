@@ -1,22 +1,23 @@
 {
-  "name": "uk.co.compucorp.civicrm.pivotreport",
+  "name": "uk.co.vedaconsulting.gdpr",
   "version": "1.0.0",
-  "description": "Pivot Report extension",
+  "description": "CiviCRM GDPR extension by Veda Consulting",
   "engines": {
-    "node": "8.9.4",
-    "npm": "6.4.0"
+    "node": ">=12",
+    "npm": ">=7"
   },
   "devDependencies": {
     "civicrm-scssroot": "github:totten/civicrm-scssroot",
-    "gulp": "^4.0.0",
-    "gulp-cssmin": "^0.2.0",
-    "gulp-sass": "^4.0.2",
-    "gulp-strip-css-comments": "^2.0.0",
-    "husky": "^1.3.1",
-    "lint-staged": "^8.1.4",
-    "stylelint": "^9.10.1",
-    "stylelint-config-sass-guidelines": "^5.3.0",
-    "stylelint-order": "^2.0.0",
-    "stylelint-scss": "^3.5.4"
+    "gulp": "^4.0.2",
+    "gulp-clean-css": "^4.3.0",
+    "gulp-rename": "^2.0.0",
+    "gulp-sass": "^5.0.0",
+    "husky": "^6.0.0",
+    "lint-staged": "^11.0.0",
+    "sass": "^1.35.1",
+    "stylelint": "^13.13.1",
+    "stylelint-config-sass-guidelines": "^8.0.0",
+    "stylelint-order": "^4.1.0",
+    "stylelint-scss": "^3.19.0"
   }
 }
