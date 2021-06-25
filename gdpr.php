@@ -666,16 +666,16 @@ function gdpr_civicrm_preProcess($formName, &$form) {
   }
 
   if ($formName == 'CRM_Core_Form_ShortCode') {
-    $form->components['gdpr'] = array(
+    $form->components['gdpr'] = [
       'label'  => 'GDPR',
-      'select' => array(),
-    );
-    $form->options[] = array(
-      'key' => 'action',
-      'components' => array('gdpr'),
-      'options' => array(
+      'select' => [],
+    ];
+    $form->options[] = [
+      'key' => 'action', 
+      'components' => ['gdpr'],
+      'options' => [
         'update-preferences' => 'Update preferences',
-      ),
-    );
+      ],
+    ];
   }
 }
