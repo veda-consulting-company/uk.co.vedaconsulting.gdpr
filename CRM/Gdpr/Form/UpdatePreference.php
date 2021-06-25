@@ -14,7 +14,7 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
   protected $commPrefGroupsetting;
   public $channelEleNames;
   public $groupEleNames;
-  protected $_fields = array();
+  protected $_fields = [];
 
   public $containerPrefix = 'enable_';
 
@@ -37,13 +37,13 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
     if (!empty($this->_cid)) {
       $contactID = $this->_cid;
     }
-    elseif (!empty($this->_id)) {
-      $contactID = $this->_id;
+    elseif (!empty($this->_cid)) {
+      $contactID = $this->_cid;
     }
     else {
       $contactID = parent::getContactID();
     }
-    $this->_cid = $this->_id = $contactID;
+    $this->_cid = $this->_cid = $contactID;
     return $contactID;
   }
 
@@ -118,7 +118,7 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
       $termsConditionsField = $this->getTermsAndConditionFieldId();
 
       $tcFieldName  = 'custom_'.$termsConditionsField;
-      $tcLink = E::ts("<a href='%1' target='_blank'>%2</a>", array(1 => $gdprTermsConditionsUrl, 2 => $gdprTermsConditionslabel));
+      $tcLink = E::ts("<a href='%1' target='_blank'>%2</a>", [1 => $gdprTermsConditionsUrl, 2 => $gdprTermsConditionslabel]);
       $this->assign('tcLink', $tcLink);
       $this->assign('tcIntro', CRM_Gdpr_SLA_Utils::getIntro());
       $tcFieldlabel = CRM_Gdpr_SLA_Utils::getCheckboxText();
@@ -136,11 +136,11 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
       }
 
       $tcFieldlabel = E::ts("Here is our <a href='%1' target='_blank'>%2</a>, which you agreed to on %3.",
-        array(
+        [
           1 => $gdprTermsConditionsUrl,
           2 => $gdprTermsConditionslabel,
           3 => $accept_date,
-        )
+        ]
       );
       $this->assign('tcFieldlabel', $tcFieldlabel);
     }
@@ -150,21 +150,21 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
       $this->add('text', 'activity_source', E::ts('Source of Communication Preferences'));
     }
 
-    $this->addButtons(array(
-      array(
+    $this->addButtons([
+      [
         'type' => 'submit',
         'name' => E::ts('Save'),
         'isDefault' => TRUE,
-      ),
-    ));
+      ],
+    ]);
 
     // export form elements
     $this->assign('groupEleNames', $this->groupEleNames);
 
     //add form rule
-    $this->addFormRule(array('CRM_Gdpr_Form_UpdatePreference', 'formRule'), $this);
+    $this->addFormRule(['CRM_Gdpr_Form_UpdatePreference', 'formRule'], $this);
     if (!empty($this->commPrefSettings['profile'])) {
-      $this->addFormRule(array('CRM_Profile_Form', 'formRule'), $this);
+      $this->addFormRule(['CRM_Profile_Form', 'formRule'], $this);
     }
 
     parent::buildQuickForm();
@@ -225,12 +225,12 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
   }
 
   public static function formRule($fields, $files, $form){
-    $errors = array();
+    $errors = [];
 
     if (!empty($form->groupEleNames)) {
       foreach ($form->groupEleNames as $groupName => $groupEleName) {
         //get the channel array and group channel array
-        $groupChannelArray = array();
+        $groupChannelArray = [];
         foreach ($form->channelEleNames as $channel) {
           $groupChannel = str_replace($form->containerPrefix, '', $channel);
           $channelSettingValue = $form->commPrefGroupsetting[$groupEleName][$groupChannel];
@@ -254,7 +254,7 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
   }
 
   public function setDefaultValues() {
-    $defaults = array();
+    $defaults = [];
     if (!empty($this->_cid)) {
       $channelPrefs = U::getChannelPrefsForContact($this->_cid);
       $groupPrefs = U::getGroupSelectionsForContact($this->_cid);
@@ -262,8 +262,8 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
 
 
       //Set Profile defaults
-      $fields = array();
-      $removeCustomFieldTypes = array('Contribution', 'Membership');
+      $fields = [];
+      $removeCustomFieldTypes = ['Contribution', 'Membership'];
       $contribFields = CRM_Contribute_BAO_Contribution::getContributionFields();
 
       foreach ($this->_fields as $name => $field) {
@@ -382,14 +382,14 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
   /**
    * Get the fields/elements defined in this form.
    *
-   * @return array (string)
+   * @return [string]
    */
   public function getRenderableElementNames() {
     // The _elements list includes some items which should not be
     // auto-rendered in the loop -- such as "qfKey" and "buttons".  These
     // items don't have labels.  We'll identify renderable by filtering on
     // the 'label'.
-    $elementNames = array();
+    $elementNames = [];
     foreach ($this->_elements as $element) {
       /** @var HTML_QuickForm_Element $element */
       $label = $element->getLabel();

@@ -24,10 +24,10 @@ class CRM_Gdpr_Page_Tab extends CRM_Core_Page {
   }
 
   public function getDataPolicyDetails($contactId) {
-    $details = array(
+    $details = [
       'title' => E::ts('Data Policy acceptance.'),
       'details' => E::ts('Not yet accepted by the contact.'),
-    );
+    ];
     $activity = CRM_Gdpr_SLA_Utils::getContactLastAcceptance($contactId);
     $isDue = CRM_Gdpr_SLA_Utils::isContactDueAcceptance($contactId);
     if ($activity) {
@@ -50,10 +50,10 @@ class CRM_Gdpr_Page_Tab extends CRM_Core_Page {
   }
 
   public function getCommunicationsPreferencesDetails($contactId) {
-    $details = array(
+    $details = [
       'title' => E::ts('Communications Preferences'),
       'details' => E::ts('Not yet updated by the contact.'),
-    );
+    ];
     $activity = CRM_Gdpr_CommunicationsPreferences_Utils::getLastUpdatedForContact($contactId);
     if ($activity) {
       $details['details'] = $activity['subject'];

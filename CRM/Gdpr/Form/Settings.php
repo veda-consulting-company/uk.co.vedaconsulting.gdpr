@@ -22,10 +22,10 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
   function buildQuickForm() {
     CRM_Utils_System::setTitle(E::ts('GDPR - Settings'));
 
-    $this->addEntityRef('data_officer', E::ts('Point of Contact'), array(
+    $this->addEntityRef('data_officer', E::ts('Point of Contact'), [
         'create' => TRUE,
-        'api' => array('extra' => array('email')),
-      ), TRUE);
+        'api' => ['extra' => ['email']],
+      ], TRUE);
 
     // Get all activity types
     $actTypes = CRM_Gdpr_Utils::getAllActivityTypes();
@@ -35,9 +35,9 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
       'select',
       'activity_type',
       E::ts('Activity Types'),
-      array('' => E::ts('- select -')) + $actTypes, // list of options
+      ['' => E::ts('- select -')] + $actTypes, // list of options
       TRUE,
-      array('class' => 'crm-select2 huge', 'multiple' => 'multiple',)
+      ['class' => 'crm-select2 huge', 'multiple' => 'multiple',]
     );
 
     //Track Exports
@@ -49,9 +49,9 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
       'select',
       'contact_type',
       E::ts('Contact Types'),
-      array('' => E::ts('- select -')) + $contactTypes, // list of options
+      ['' => E::ts('- select -')] + $contactTypes, // list of options
       TRUE,
-      array('class' => 'crm-select2 huge', 'multiple' => 'multiple',)
+      ['class' => 'crm-select2 huge', 'multiple' => 'multiple',]
     );
 
     // Forget me action
@@ -63,9 +63,9 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
       'select',
       'forgetme_activity_type',
       E::ts('Delete Activities of Types'),
-      array('' => E::ts('- select -')) + $actTypes, // list of options
+      ['' => E::ts('- select -')] + $actTypes, // list of options
       FALSE,
-      array('class' => 'crm-select2 huge', 'multiple' => 'multiple',)
+      ['class' => 'crm-select2 huge', 'multiple' => 'multiple',]
     );
 
     $customGroups = CRM_Gdpr_Utils::getCustomGroups();
@@ -73,9 +73,9 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
       'select',
       'forgetme_custom_groups',
       E::ts('Custom groups'),
-      array('' => E::ts('- select -')) + $customGroups,
+      ['' => E::ts('- select -')] + $customGroups,
       FALSE,
-      array('class' => 'crm-select2 huge', 'multiple' => 'multiple',)
+      ['class' => 'crm-select2 huge', 'multiple' => 'multiple',]
     );
 
     //Email to Point of Contact/DPO when someone access forget me.
@@ -86,7 +86,7 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
       'text',
       'activity_period',
       E::ts('Period'),
-      array('size' => 4),
+      ['size' => 4],
       TRUE
     );
 
@@ -102,18 +102,18 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
       'select',
       'sla_period',
       E::ts('Acceptance period (months)'),
-      array('' => E::ts('- select -')) + $slaPeriodOptions, // list of options
+      ['' => E::ts('- select -')] + $slaPeriodOptions, // list of options
       TRUE,
-      array('class' => 'crm-select2')
+      ['class' => 'crm-select2']
     );
-    $dataPolicyOptions = array(
+    $dataPolicyOptions = [
       '1' => E::ts('File Upload'),
       '2' => E::ts('Web page link'),
-    );
+    ];
     $this->addRadio('sla_data_policy_option',
       ts('Data Policy options'),
       $dataPolicyOptions,
-      array(),
+      [],
       '&nbsp;', FALSE
     );
     $this->add(
@@ -125,7 +125,7 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
       'text',
       'sla_tc_link',
       E::ts('Data Policy link'),
-      array('class' => 'huge')
+      ['class' => 'huge']
     );
     $this->add(
       'checkbox',
@@ -154,7 +154,7 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
       'textarea',
       'sla_agreement_text',
       E::ts('Introductory text'),
-      array('cols' => 50)
+      ['cols' => 50]
     );
     // Entity (Event/Contribution) terms and conditions.
     $this->add(
@@ -173,12 +173,12 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
       'select',
       'entity_tc_position',
       E::ts('Checkbox Position'),
-      array(
+      [
         'customPre' => E::ts('Top profile'),
         'customPost' => E::ts('Bottom profile'),
         'formTop' => E::ts('Top of form'),
         'formBottom' => E::ts('Bottom of form')
-      )
+      ]
     );
     $this->add(
       'text',
@@ -194,12 +194,12 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
       'textarea',
       'entity_tc_intro',
       E::ts('Introduction'),
-      array('cols' => 50)
+      ['cols' => 50]
     );
     $this->addRadio('entity_tc_option',
     E::ts('Terms and Conditions options'),
       $dataPolicyOptions,
-      array(),
+      [],
       '&nbsp;', FALSE
     );
     $this->add(
@@ -211,37 +211,37 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
       'text',
       'entity_tc_link',
       E::ts('Default Terms and Conditions link'),
-      array('class' => 'huge')
+      ['class' => 'huge']
     );
     $this->add(
       'hidden',
       'entity_tc'
     );
-    $entity_tc_elements = array(
+    $entity_tc_elements = [
       'event_tc_enable',
       'cp_tc_enable',
       'entity_tc_position',
       'entity_tc_link_label',
       'entity_tc_checkbox_text',
       'entity_tc_intro',
-    );
+    ];
     $this->assign('entity_tc_elements', $entity_tc_elements);
-    $this->addButtons(array(
-      array(
+    $this->addButtons([
+      [
         'type' => 'submit',
         'name' => E::ts('Save'),
         'isDefault' => TRUE,
-      ),
-    ));
+      ],
+    ]);
 
-    $bare_defaults = array(
+    $bare_defaults = [
       'sla_link_label' => E::ts('Data Policy'),
       'sla_checkbox_text' => E::ts('I accept the Data Policy.'),
       'sla_tc_new_version' => FALSE,
       'entity_tc_link_label' => E::ts('Terms &amp; Conditions'),
       'entity_tc_checkbox_text' => E::ts('I accept the Terms &amp; Conditions'),
       'entity_tc_intro' => E::ts('Please read and accept the Terms &amp; Conditions and Data Policy.'),
-    );
+    ];
 
     // Get GDPR settings, for setting defaults
     $defaults = CRM_Gdpr_Utils::getGDPRSettings();
@@ -298,7 +298,7 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
   function postProcess() {
     $values = $this->exportValues();
 
-    $settings = array();
+    $settings = [];
     $settings['data_officer'] = $values['data_officer'];
     $settings['activity_type'] = $values['activity_type'];
     $settings['activity_period'] = $values['activity_period'];
@@ -332,10 +332,10 @@ class CRM_Gdpr_Form_Settings extends CRM_Core_Form {
       $settings['entity_tc_link'] = $values['entity_tc_link'];
     }
     // Map the upload file element to setting name.
-    $upload_elems = array(
+    $upload_elems = [
       'sla_tc_upload' => 'sla_tc',
       'entity_tc_upload' => 'entity_tc',
-    );
+    ];
     foreach ($upload_elems as $elem => $setting) {
       $uploadFile = $this->saveTCFile($elem);
       if ($uploadFile) {
