@@ -84,10 +84,21 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
     }
 
     //Include reCAPTCHA?
-    if ($addCaptcha = $this->commPrefSettings['add_captcha']) {
-      $captcha = CRM_Utils_ReCAPTCHA::singleton();
-      $captcha->add($this);
-      $this->assign('isCaptcha', TRUE);
+    if ($this->commPrefSettings['add_captcha']) {
+      if (is_callable(['CRM_Utils_ReCAPTCHA', 'enableCaptchaOnForm'])) {
+        $button = substr($this->controller->getButtonName(), -4);
+        // We show reCAPTCHA for anonymous user if enabled.
+        // 'skip' button is on additional participant forms, we only show reCAPTCHA on the primary form.
+        if (!CRM_Core_Session::getLoggedInContactID() && ($button !== 'skip')) {
+          if (\Civi\Api4\UFGroup::get(FALSE)
+            ->addWhere('id', '=', $this->commPrefSettings['profile'])
+            ->execute()
+            ->first()['add_captcha']
+          ) {
+            CRM_Utils_ReCAPTCHA::enableCaptchaOnForm($this);
+          }
+        }
+      }
     }
 
     //Inject channels and groups into comms preferenec form.
@@ -162,20 +173,18 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
   /**
    * Add the custom fields.
    *
-   * @param int $id
+   * @param int $ufGroupID
    * @param string $name
    * @param bool $viewOnly
    */
-  public function buildCustom($id, $name = 'custom_pre', $viewOnly = FALSE) {
-    if ($id) {
+  public function buildCustom($ufGroupID, $name = 'custom_pre') {
+    if ($ufGroupID) {
       //For Profile form validation
-      $this->_gid = $id;
+      $this->_gid = $ufGroupID;
       $dao = new CRM_Core_DAO_UFGroup();
-      $dao->id = $id;
+      $dao->id = $ufGroupID;
       if ($dao->find(TRUE)) {
         $this->_isUpdateDupe = $dao->is_update_dupe; // Profile duplicate match option
-        // $this->_isUpdateDupe = $dao->is_update_dupe;
-        $this->_isAddCaptcha = $dao->add_captcha;
         $this->_ufGroup = (array) $dao;
       }
 
@@ -183,11 +192,11 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
       $contactID = $this->_cid;
 
       if ($contactID) {
-        CRM_Core_BAO_UFGroup::filterUFGroups($id, $contactID);
+        CRM_Core_BAO_UFGroup::filterUFGroups($ufGroupID, $contactID);
       }
 
       try {
-        $fields = CRM_Core_BAO_UFGroup::getFields($id, FALSE, CRM_Core_Action::ADD,
+        $fields = CRM_Core_BAO_UFGroup::getFields($ufGroupID, FALSE, CRM_Core_Action::ADD,
           NULL, NULL, FALSE, NULL,
           FALSE, NULL, CRM_Core_Permission::CREATE,
           'field_name', TRUE
@@ -198,39 +207,19 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
         CRM_Core_Error::debug_log_message('Please ensure that the Profile you have selected in the GDPR settings page exists and is enabled');
       }
 
-      $addCaptcha = FALSE;
-
       if (!empty($fields) && is_array($fields)) {
         $this->assign($name, $fields);
         foreach ($fields as $key => $field) {
-          if ($viewOnly &&
-            isset($field['data_type']) &&
-            $field['data_type'] == 'File' || ($viewOnly && $field['name'] == 'image_URL')
-          ) {
-            // ignore file upload fields
-            continue;
-          }
           //make the field optional if primary participant
           //have been skip the additional participant.
           if ($button == 'skip') {
             $field['is_required'] = FALSE;
-          }
-          // CRM-11316 Is ReCAPTCHA enabled for this profile AND is this an anonymous visitor
-          elseif ($field['add_captcha'] && !$contactID) {
-            // only add captcha for first page
-            $addCaptcha = TRUE;
           }
           $this->_mode = $contactID ? CRM_Profile_Form::MODE_EDIT : CRM_Profile_Form::MODE_CREATE;
           CRM_Core_BAO_UFGroup::buildProfile($this, $field, $this->_mode, $contactID, TRUE);
 
           $this->_fields[$key] = $field;
         }
-      }
-
-      if ($addCaptcha && !$viewOnly) {
-        $captcha = CRM_Utils_ReCAPTCHA::singleton();
-        $captcha->add($this);
-        $this->assign('isCaptcha', TRUE);
       }
     }
   }
