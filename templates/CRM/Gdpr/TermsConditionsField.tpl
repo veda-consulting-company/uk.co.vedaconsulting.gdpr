@@ -14,7 +14,7 @@
   </div>{* end crm-section *}
   <div class="clear"></div>
   {if $terms_conditions.links.global}
-   <div class="crm-section">
+   <div class="crm-section" id='editrow-accept_tc'>
     {assign var="link" value=$terms_conditions.links.global}
       <div class="label"><label></label></div>
       <div class="content terms-conditions-item">
@@ -28,7 +28,7 @@
   {/if}
   {if $terms_conditions.links.entity}
     {assign var="link" value=$terms_conditions.links.entity}
-    <div class="crm-section">
+    <div class="crm-section" id='editrow-accept_entity_tc'>
       <div class="label"><label></label></div>
       <div class="content terms-conditions-item">
         <a href="{$link.url}" class="terms-conditions-link" target="blank">{$link.label}</a>

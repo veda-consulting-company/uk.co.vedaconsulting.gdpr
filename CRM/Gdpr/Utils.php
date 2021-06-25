@@ -681,7 +681,12 @@ WHERE url.time_stamp > '{$date}'";
     $import = new CRM_Utils_Migrate_Import();
     foreach (array('CustomData_v1', 'CustomGroupData') as $fileName) {
       $file = E::path("xml/{$fileName}.xml");
-      $import->run($file);
+      try {
+        $import->run($file);
+      }
+      catch (Exception $e) {
+        // Do nothing, sometimes it fails with "already exists"
+      }
     }
   }
 

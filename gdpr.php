@@ -29,19 +29,18 @@ function gdpr_civicrm_xmlMenu(&$files) {
  */
 function gdpr_civicrm_install() {
   // #188 - use install instead of managed entities hook to avoid fatal
-  $result = civicrm_api3('OptionValue', 'get', array(
+  $result = civicrm_api3('OptionValue', 'get', [
     'sequential'      => 1,
     'option_group_id' => "cg_extend_objects",
     'value'           => "ContributionPage",
-  ));
+  ]);
   if (empty($result['id'])) {
-    $result = civicrm_api3('OptionValue', 'create', [
+    civicrm_api3('OptionValue', 'create', [
       'label'           => E::ts('Contribution Page'),
       'name'            => 'civicrm_contribution_page',
       'value'           => 'ContributionPage',
       'option_group_id' => 'cg_extend_objects',
       'is_active'       => 1,
-      'version'         => 3,
     ]);
   }
   _gdpr_civix_civicrm_install();
@@ -62,20 +61,20 @@ function gdpr_civicrm_postInstall() {
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_uninstall
  */
 function gdpr_civicrm_uninstall() {
-  $result = civicrm_api3('CustomGroup', 'get', array(
+  $result = civicrm_api3('CustomGroup', 'get', [
     'sequential' => 1,
     'extends'    => "ContributionPage",
-  ));
+  ]);
   if (!$result['is_error'] && $result['count'] <= 0) {
-    $result = civicrm_api3('OptionValue', 'get', array(
+    $result = civicrm_api3('OptionValue', 'get', [
       'sequential'      => 1,
       'option_group_id' => "cg_extend_objects",
       'value'           => "ContributionPage",
-    ));
+    ]);
     if (!empty($result['id'])) {
-      $result = civicrm_api3('OptionValue', 'delete', array(
+      civicrm_api3('OptionValue', 'delete', [
         'id' => $result['id'],
-      ));
+      ]);
     }
   }
   _gdpr_civix_civicrm_uninstall();
@@ -267,9 +266,9 @@ function gdpr_civicrm_buildForm($formName, $form) {
     if (!empty($cid)) {
       $templatePath = realpath(dirname(__FILE__).'/templates');
       CRM_Core_Region::instance('page-body')->add(
-        array(
+        [
           'template' => "{$templatePath}/CRM/Gdpr/Event/ThankYou.tpl"
-        )
+        ]
       );
 
       //amend communication preference link/embed form in thank you page
@@ -289,9 +288,9 @@ function gdpr_civicrm_buildForm($formName, $form) {
     if ($cid) {
       $templatePath = realpath(dirname(__FILE__) . '/templates');
       CRM_Core_Region::instance('page-body')->add(
-        array(
+        [
           'template' => "{$templatePath}/CRM/Gdpr/Event/ThankYou.tpl"
-        )
+        ]
       );
       //amend communication preference link/embed form in thank you page
       CRM_Gdpr_CommunicationsPreferences_Utils::commsPreferenceInThankyouPage($cid, $form, 'ContributionPage');
@@ -304,7 +303,7 @@ function gdpr_civicrm_buildForm($formName, $form) {
       $nullRef = NULL;
       $cs = CRM_Utils_Request::retrieve('cs', 'String', $nullRef, FALSE, NULL, 'GET');
       $cid = CRM_Utils_Request::retrieve('cid', 'Int', $nullRef, FALSE, NULL, 'GET');
-      $urlParams = array('reset' => 1);
+      $urlParams = ['reset' => 1];
       if ($cid && $cs) {
         $urlParams['cid'] = $cid;
         $urlParams['cs'] = $cs;
@@ -332,8 +331,8 @@ function gdpr_civicrm_postProcess($formName, $form) {
       $tc = new CRM_Gdpr_SLA_ContributionPage($contribution_page_id);
       if ($tc->isEnabled(TRUE)) {
         $tc->recordAcceptance($contact_id);
-	CRM_Gdpr_SLA_Utils::recordSLAAcceptance($contact_id);
-	$form->_params['gdprAccepted'] = TRUE;
+        CRM_Gdpr_SLA_Utils::recordSLAAcceptance($contact_id);
+        $form->_params['gdprAccepted'] = TRUE;
       }
     }
   }
@@ -406,30 +405,30 @@ function gdpr_civicrm_export($exportTempTable, $headerRows, $sqlColumns, $export
 function _gdpr_addTermsConditionsTab(&$tabs, $entityType, $id) {
   switch ($entityType) {
     case 'event' :
-      $urlParams = array(
+      $urlParams = [
         'path' => 'civicrm/event/manage/terms_conditions',
         'qs' => 'reset=1&id=' . $id,
-      );
-    break;
+      ];
+      break;
 
     case 'contribution_page' :
-      $urlParams = array(
+      $urlParams = [
         'path' => 'civicrm/admin/contribute/terms_conditions',
         'qs' => 'reset=1&action=update&id=' . $id,
-      );
-    break;
+      ];
+      break;
 
     default:
       return;
   }
 
   $url = CRM_Utils_System::url($urlParams['path'], $urlParams['qs']);
-  $tabs['terms_conditions'] = array(
+  $tabs['terms_conditions'] = [
     'title' => E::ts('Terms &amp; Conditions'),
     'url' => $url,
     'active' => TRUE,
     'class' => 'ajaxForm',
-  );
+  ];
 }
 
 /*
@@ -446,12 +445,13 @@ function gdpr_civicrm_tabs(&$tabs, $contactID) {
 
 function _gdpr_addGDPRTab(&$tabs, $contactID) {
   $url = CRM_Utils_System::url('civicrm/gdpr/view/tab', "reset=1&cid={$contactID}");
-  $tabs[] = array( 'id'    => 'gdprTab',
+  $tabs[] = [
+    'id'    => 'gdprTab',
     'url'   => $url,
     'title' => E::ts('GDPR'),
     'weight' => 300,
     'class'  => 'livePage',
-  );
+  ];
 }
 
 /**
@@ -465,62 +465,38 @@ function _gdpr_isCiviCRMVersion47(){
 /**
  * Add navigation for GDPR Dashboard
  *
- * @param $params associated array of navigation menus
+ * @param array $menu associated array of navigation menus
  */
-function gdpr_civicrm_navigationMenu( &$params ) {
-  // get the id of Contacts Menu
-  // MV #9990, to get contact menu id including multi domain.
-  // CRM_Core_DAO::getFieldValue wouldn't return if more than one available.
-  // then we end up with no GDPR menu link not appear on list even though have enough permission.
-  // so use domain id in query to get contact menu id.
-  // $contactsMenuId = CRM_Core_DAO::getFieldValue('CRM_Core_BAO_Navigation', 'Contacts', 'id', 'name');
-  $domainID = CRM_Core_Config::domainID();
-  $sqlParams = array(
-    1 => array('Contacts', 'String'),
-    2 => array($domainID, 'Integer'),
-  );
-  $contactsMenuId = CRM_Core_DAO::singleValueQuery("
-    SELECT id FROM civicrm_navigation WHERE name = %1 AND domain_id = %2 AND is_active = 1
-  ", $sqlParams);
-
-  // skip adding menu if there is no contacts menu
-  if ($contactsMenuId) {
-    // get the maximum key under contacts menu
-    $maxKey = max( array_keys($params[$contactsMenuId]['child']));
-    $params[$contactsMenuId]['child'][$maxKey+1] =  array (
-      'attributes' => array (
-        'label'      => E::ts('GDPR Dashboard'),
-        'name'       => 'GDPR Dashboard',
-        'url'        => CRM_Utils_System::url('civicrm/gdpr/dashboard', 'reset=1'),
-        'permission' => 'access GDPR',
-        'operator'   => NULL,
-        'separator'  => FALSE,
-        'parentID'   => $contactsMenuId,
-        'navID'      => $maxKey+1,
-        'active'     => 1
-      )
-    );
-  }
+function gdpr_civicrm_navigationMenu(&$menu) {
+  _gdpr_civix_insert_navigation_menu($menu, 'Contacts', [
+    'label' => E::ts('GDPR Dashboard'),
+    'name' => 'GDPR Dashboard',
+    'url' => 'civicrm/gdpr/dashboard',
+    'permission' => 'access GDPR',
+    'operator' => 'OR',
+    'separator' => 0,
+  ]);
+  _gdpr_civix_navigationMenu($menu);
 }
 
 /**
  * implementation of hook_civicrm_token
  */
-function gdpr_civicrm_tokens( &$tokens ){
-  //Keeping this token only to sustain the old tokens otherwise,
-  //the token 'CommunicationPreferences' can be used in all places
+function gdpr_civicrm_tokens(&$tokens) {
+  // Keeping this token only to sustain the old tokens otherwise,
+  // the token 'CommunicationPreferences' can be used in all places
   $tokens['contact']['contact.comm_pref_supporter_url'] = E::ts("Communication Preferences URL");
   $tokens['contact']['contact.comm_pref_supporter_link'] = E::ts("Communication Preferences Link");
-  $tokens['CommunicationPreferences'] = array(
+  $tokens['CommunicationPreferences'] = [
     'CommunicationPreferences.comm_pref_supporter_url' => E::ts("Communication Preferences URL (Bulk Mailing)"),
     'CommunicationPreferences.comm_pref_supporter_link' => E::ts("Communication Preferences Link (Bulk Mailing)"),
-  );
+  ];
 }
 
 /**
  * implementation of hook_civicrm_tokenValues
  */
-function gdpr_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = array(), $context = null) {
+function gdpr_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = [], $context = null) {
   if (!empty($tokens['contact']) OR !empty($tokens['CommunicationPreferences'])) {
     /*
     THIS CHANGE IS ONLY FOR ACTIONSCHEDULE (SEND EMAIL USING SCHEDULE REMINDER)
@@ -541,14 +517,10 @@ function gdpr_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = array(
     the old token.
     IN FUTURE or V3.0, WE CAN REMOVE THIS CHANGE ALONG WITH CONTACT CUSTOM TOKEN ABOVE.
     */
-    $tokenValues = array();
+    $tokenValues = [];
     $cids = isset($cids) ? $cids : [];
     if ($context == 'CRM_Core_BAO_ActionSchedule') {
-      list($tokenValues) = CRM_Utils_Token::getTokenDetails($cids,
-        array(),
-        FALSE,
-        FALSE
-      );
+      list($tokenValues) = CRM_Utils_Token::getTokenDetails($cids, [], FALSE, FALSE);
     }
     foreach ($cids as $cid) {
       if (!empty($tokenValues[$cid])) {
@@ -569,36 +541,36 @@ function gdpr_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = array(
 /**
  * implementation of hook_civicrm_summaryActions
  */
-function gdpr_civicrm_summaryActions( &$actions, $contactID ) {
-  $actions['comm_pref'] = array(
+function gdpr_civicrm_summaryActions(&$actions, $contactID) {
+  $actions['comm_pref'] = [
     'title' => E::ts('Communication Preferences Link'),
     //need a weight parameter here, Contact BAO looking for weight key and returning notice message.
     'weight' => 60,
     'ref' => 'comm_pref',
     'key' => 'comm_pref',
     'href' => CRM_Gdpr_CommunicationsPreferences_Utils::getCommPreferenceURLForContact($contactID, TRUE),
-  );
+  ];
 }
 
 function gdpr_civicrm_permission(&$permissions) {
   $prefix = E::ts('CiviGDPR') . ': ';
-  $permissions += array(
-    'access GDPR' => array(
+  $permissions += [
+    'access GDPR' => [
       $prefix . E::ts('access GDPR'),
       E::ts('View GDPR related information'),
-    ),
-    'forget contact' => array(
+    ],
+    'forget contact' => [
       $prefix . E::ts('forget contact'),
       E::ts('Anonymize contacts'),
-    ),
-    'administer GDPR' => array(
+    ],
+    'administer GDPR' => [
       $prefix . E::ts('administer GDPR'),
       E::ts('Manage GDPR settings'),
-    ),
-  );
+    ],
+  ];
 }
 
-function gdpr_civicrm_searchTasks( $objectName, &$tasks ){
+function gdpr_civicrm_searchTasks($objectName, &$tasks) {
   if($objectName == 'contact'){
     if(CRM_Core_Permission::check('forget contact')) {
       $tasks[] = [
@@ -612,15 +584,15 @@ function gdpr_civicrm_searchTasks( $objectName, &$tasks ){
 /**
  * Implements hook_civicrm_pageRun()
  */
-function gdpr_civicrm_pageRun( &$page ) {
+function gdpr_civicrm_pageRun(&$page) {
   $pageName = $page->getVar('_name');
   if($pageName == 'CRM_Contact_Page_View_Summary') {
     $cid = $page->getVar('_contactId');
     $templatePath = realpath(dirname(__FILE__).'/templates');
     CRM_Core_Region::instance('page-body')->add(
-      array(
+      [
         'template' => "{$templatePath}/CRM/Gdpr/Page/ContactSummary.tpl"
-      )
+      ]
     );
     $accept_activity = CRM_Gdpr_SLA_Utils::getContactLastAcceptance($cid);
     $accept_date = NULL;
@@ -659,11 +631,11 @@ function gdpr_isExtensionEnabled($key) {
  *
  * @return void
  */
-function gdpr_includeShoreditchStylingIfEnabled () {
+function gdpr_includeShoreditchStylingIfEnabled() {
   if (!gdpr_isExtensionEnabled('org.civicrm.shoreditch')) {
     return;
   }
 
   CRM_Core_Resources::singleton()->
-    addStyleFile('uk.co.vedaconsulting.gdpr', 'css/shoreditch-only.min.css', 10);
+  addStyleFile('uk.co.vedaconsulting.gdpr', 'css/shoreditch-only.min.css', 10);
 }
