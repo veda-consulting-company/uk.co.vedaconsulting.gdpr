@@ -74,6 +74,9 @@ class CRM_Gdpr_SLA_Entity {
      return $this->getSetting('entity_tc');
   }
 
+  /**
+   * @return array
+   */
   public function getLinks() {
     $links = [];
     $url = $this->getUrl();
@@ -86,7 +89,6 @@ class CRM_Gdpr_SLA_Entity {
     }
     $global_link_url = CRM_Gdpr_SLA_Utils::getTermsConditionsUrl();
     $global_link_label = CRM_Gdpr_SLA_Utils::getLinkLabel();
-    $global_checkbox_text = CRM_Gdpr_SLA_Utils::getCheckboxText();
     if ($global_link_url) {
     $links['global'] = [
         'url' => $global_link_url,
@@ -96,6 +98,11 @@ class CRM_Gdpr_SLA_Entity {
     return $links;
   }
 
+  /**
+   * @param string $field_name
+   *
+   * @return mixed|void
+   */
   public function getValue($field_name) {
     $fields = $this->getCustomFields($this->customGroup);
     $field = !empty($fields[$field_name]) ? $fields[$field_name] : [];
@@ -154,14 +161,12 @@ class CRM_Gdpr_SLA_Entity {
    * @param CRM_Core_Form $form
    */
   public function addField($form) {
-    $type = strtolower($this->type);
     $settings = $this->settings;
     // Enabled just for this entity.
     if ($this->isEnabled()) {
       $intro = $this->getIntroduction();
       $links = $this->getLinks();
       $position = $this->getCheckboxPosition();
-      $text = $this->getCheckboxText();
     }
     elseif (!empty($settings['entity_tc']) || !empty($settings['entity_tc_link'])) {
       // If enabled for the type, use the defaults.
@@ -187,28 +192,14 @@ class CRM_Gdpr_SLA_Entity {
         }
 
         $text = $settings['entity_tc_checkbox_text'];
+        if (!empty($links['entity'])) {
+          $form->add('checkbox', 'accept_entity_tc', $text, [], TRUE);
+        }
       }
     }
-    if (!empty($links['entity'])) {
-      $form->add(
-        'checkbox',
-        'accept_entity_tc',
-        'Terms & Conditions',
-        $text,
-        TRUE,
-        []
-      );
-    }
+
     if (!empty($links['global'])) {
-      $text = CRM_Gdpr_SLA_Utils::getCheckboxText();
-      $form->add(
-        'checkbox',
-        'accept_tc',
-        'Terms & Conditions',
-        $text,
-        TRUE,
-        []
-      );
+      $form->add('checkbox', 'accept_tc', CRM_Gdpr_SLA_Utils::getCheckboxText(), [], TRUE);
     }
     if (!empty($links)) {
       $tc_vars = [
@@ -218,7 +209,6 @@ class CRM_Gdpr_SLA_Entity {
         'position' => $position,
       ];
       $form->assign('terms_conditions', $tc_vars);
-      $template_path = realpath(dirname(__FILE__) . '/templates/CRM/Gdpr');
       CRM_Core_Region::instance('page-body')->add([
         'template' => "CRM/Gdpr/TermsConditionsField.tpl"
       ]);
