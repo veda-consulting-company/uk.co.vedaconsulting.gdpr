@@ -671,7 +671,7 @@ function gdpr_civicrm_preProcess($formName, &$form) {
       'select' => [],
     ];
     $form->options[] = [
-      'key' => 'action', 
+      'key' => 'action',
       'components' => ['gdpr'],
       'options' => [
         'update-preferences' => 'Update preferences',
