@@ -193,10 +193,7 @@ class CRM_Gdpr_SLA_Entity {
       $form->add(
         'checkbox',
         'accept_entity_tc',
-        'Terms & Conditions',
         $text,
-        TRUE,
-        []
       );
     }
     if (!empty($links['global'])) {
@@ -204,10 +201,7 @@ class CRM_Gdpr_SLA_Entity {
       $form->add(
         'checkbox',
         'accept_tc',
-        'Terms & Conditions',
         $text,
-        TRUE,
-        []
       );
     }
     if (!empty($links)) {
