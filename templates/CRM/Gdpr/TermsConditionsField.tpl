@@ -20,7 +20,7 @@
       <div class="content terms-conditions-item">
         <a href="{$link.url}" class="terms-conditions-link" target="blank">{$link.label}</a>
         <div class="terms-conditions-checkbox">
-          {$form.accept_tc.html}
+          {$form.accept_tc.html} {$form.accept_tc.label}
         </div>
       </div>
     </div> {* end .crm-section *}
@@ -33,7 +33,7 @@
       <div class="content terms-conditions-item">
         <a href="{$link.url}" class="terms-conditions-link" target="blank">{$link.label}</a>
         <div class="terms-conditions-checkbox">
-          {$form.accept_entity_tc.html}
+          {$form.accept_entity_tc.html} {$form.accept_entity_tc.label}
         </div>
       </div>
     </div>{* end .crm-section *}
