@@ -1,5 +1,6 @@
 <?php
 use CRM_Gdpr_ExtensionUtil as E;
+
 /**
  * @file
  *  Base class for Terms and Conditions relating to a particular entity.
@@ -31,7 +32,6 @@ class CRM_Gdpr_SLA_Entity {
    * Default values are provided in the GDPR settings.
    */
   protected $settings = [];
-
 
   /**
    * Determines if this entity has terms and conditions enabled.
@@ -67,11 +67,11 @@ class CRM_Gdpr_SLA_Entity {
   }
 
   public function getUrl($useDefault = FALSE) {
-     $url = $this->getValue('Terms_and_Conditions_File');
-     if (!$useDefault) {
-       return $url;
-     }
-     return $this->getSetting('entity_tc');
+    $url = $this->getValue('Terms_and_Conditions_File');
+    if (!$useDefault) {
+      return $url;
+    }
+    return $this->getSetting('entity_tc');
   }
 
   public function getLinks() {
@@ -88,7 +88,7 @@ class CRM_Gdpr_SLA_Entity {
     $global_link_label = CRM_Gdpr_SLA_Utils::getLinkLabel();
     $global_checkbox_text = CRM_Gdpr_SLA_Utils::getCheckboxText();
     if ($global_link_url) {
-    $links['global'] = [
+      $links['global'] = [
         'url' => $global_link_url,
         'label' => $global_link_label,
       ];
@@ -128,7 +128,7 @@ class CRM_Gdpr_SLA_Entity {
     return $this->customFields[$group];
   }
 
-  function __construct($id, $type) {
+  public function __construct($id, $type) {
     $this->id = $id;
     $this->type = $type;
     $this->settings = CRM_Gdpr_Utils::getGDPRSettings();
@@ -171,7 +171,7 @@ class CRM_Gdpr_SLA_Entity {
         $position = $settings['entity_tc_position'];
         $links = $this->getLinks();
         $links['entity']['label'] = $settings['entity_tc_link_label'];
-        if(array_key_exists('entity_tc_option', $settings)){
+        if (array_key_exists('entity_tc_option', $settings)) {
           switch ($settings['entity_tc_option']) {
             // File uploaded
             case 1:
@@ -220,7 +220,7 @@ class CRM_Gdpr_SLA_Entity {
       $form->assign('terms_conditions', $tc_vars);
       $template_path = realpath(dirname(__FILE__) . '/templates/CRM/Gdpr');
       CRM_Core_Region::instance('page-body')->add([
-        'template' => "CRM/Gdpr/TermsConditionsField.tpl"
+        'template' => "CRM/Gdpr/TermsConditionsField.tpl",
       ]);
     }
   }
@@ -239,7 +239,7 @@ class CRM_Gdpr_SLA_Entity {
     $fields = $this->getCustomFields($this->activityCustomGroup);
     $url = $this->getUrl();
     $entity = $this->getEntity();
-    $source = $this->type . ': ' .  $entity['title'] . ' (' . $entity['id'] . ')';
+    $source = $this->type . ': ' . $entity['title'] . ' (' . $entity['id'] . ')';
     $params = [
       'source_contact_id' => $contactId,
       'target_id' => $contactId,
@@ -251,4 +251,5 @@ class CRM_Gdpr_SLA_Entity {
     ];
     $result = civicrm_api3('Activity', 'create', $params);
   }
+
 }
