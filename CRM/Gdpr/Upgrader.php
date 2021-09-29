@@ -170,7 +170,7 @@ class CRM_Gdpr_Upgrader extends CRM_Gdpr_Upgrader_Base {
    */
   public function upgrade_1201() {
     $this->ctx->log->info('Applying update 1.2.0.1');
-    CRM_Core_ManagedEntities::singleton(TRUE)->reconcileEnabledModules();
+    CRM_Core_ManagedEntities::singleton(TRUE)->reconcile();
     $this->executeCustomDataFile('xml/CustomGroupData.xml');
     return TRUE;
   }

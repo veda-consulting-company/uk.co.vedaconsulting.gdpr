@@ -1,4 +1,6 @@
 <?php
+
+use Civi\Api4\Activity;
 use CRM_Gdpr_ExtensionUtil as E;
 
 class CRM_Gdpr_CommunicationsPreferences_Utils {
@@ -330,6 +332,11 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
    *
    * Intended to be used for Event registration and contribution thank-you pages.
    */
+  /**
+   * @param CRM_Gdpr_Form_UpdatePreference|CRM_Core_Form $form
+   *
+   * @throws \CRM_Core_Exception
+   */
   public static function injectCommPreferenceFieldsIntoForm(&$form) {
 
     // Get the Comms pref options (yes/no) form option group.
@@ -357,7 +364,6 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
         $form->assign('channels_intro', $channelIntro);
       }
 
-
       foreach ($fieldsSettings['channels'] as $key => $value) {
         if ($value) {
           $name  = str_replace($containerPrefix, '', $key);
@@ -377,8 +383,8 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
 
     //Communication preference Group settings enabled ?
     $isGroupSettingEnabled = !empty($fieldsSettings['enable_groups']) ? $fieldsSettings['enable_groups'] : NULL;
+    $form->groupEleNames = [];
     if ($isGroupSettingEnabled) {
-
       if ($groupsHeading = $fieldsSettings['groups_heading']) {
         $form->assign('groups_heading', $groupsHeading);
       }
@@ -404,13 +410,13 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
           $form->_elements[$elemIndex]->_flagFrozen = 0;
         }
       }
-      $form->assign('groupEleNames', $form->groupEleNames);
-      $form->assign('groupEleNamesJSON', json_encode($form->groupEleNames));
       $form->assign('commPrefGroupsetting', $groupSettings);
       $intro = !empty($fieldsSettings['comm_pref_thankyou_embed_intro']) ? $fieldsSettings['comm_pref_thankyou_embed_intro'] : '';
 
       $form->assign('commPrefIntro', $intro);
     }
+    $form->assign('groupEleNames', $form->groupEleNames);
+    $form->assign('groupEleNamesJSON', json_encode($form->groupEleNames));
   }
 
   /**
@@ -587,35 +593,31 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
     }//end foreach groups
   }
 
+  /**
+   * @param int $contactID
+   * @param array $submittedValues
+   *
+   * @return array|false|null
+   * @throws \API_Exception
+   * @throws \Civi\API\Exception\UnauthorizedException
+   */
   public static function createCommsPrefActivity($contactID, $submittedValues = []) {
     if (empty($contactID)) {
       return FALSE;
     }
 
-    //Incase of offline communication preference update, Update logged in user as source contact,
-    $sourceContactID = $contactID;
-    $session = CRM_Core_Session::singleton();
-    if($userID = $session->get('userID')){
-      $sourceContactID = $userID;
+    // Create Activity for communication preference updated
+    $activity = Activity::create(FALSE)
+      ->addValue('activity_type_id:name', 'Update_Communication_Preferences')
+      ->addValue('source_contact_id', CRM_Core_Session::getLoggedInContactID() ?? $contactID)
+      ->addValue('target_contact_id', $contactID)
+      ->addValue('subject', $submittedValues['subject'] ?? E::ts('Communication Preferences updated'))
+      ->addValue('activity_date_time', date('Y-m-d H:i:s'))
+      ->addValue('status_id:name', 'Completed');
+    if (!empty($submittedValues['activity_source'])) {
+      $activity->addValue('details', $submittedValues['activity_source']);
     }
-
-    //Create Activity for communication preference updated
-    $activityTypeIds = array_flip(CRM_Core_PseudoConstant::activityType(TRUE, FALSE, FALSE, 'name'));
-    if (!empty($activityTypeIds[self::COMM_PREF_ACTIVITY_TYPE])) {
-      $activityParams = [
-        'activity_type_id'  => $activityTypeIds[self::COMM_PREF_ACTIVITY_TYPE],
-        'source_contact_id' => $sourceContactID,
-        'target_id'         => $contactID,
-        'subject'           => E::ts('Communication Preferences updated'),
-        'activity_date_time'=> date('Y-m-d H:i:s'),
-        'status_id'         => "Completed",
-      ];
-      if (!empty($submittedValues['activity_source'])) {
-        $activityParams['details'] = $submittedValues['activity_source'];
-      }
-      return civicrm_api3('Activity', 'Create', $activityParams);
-    }
-    return FALSE;
+    return $activity->execute()->first();
   }
 
   /**

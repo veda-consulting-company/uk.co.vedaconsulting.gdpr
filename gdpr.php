@@ -467,7 +467,33 @@ function gdpr_civicrm_navigationMenu(&$menu) {
     'operator' => 'OR',
     'separator' => 0,
   ]);
+
+  _gdpr_civix_insert_navigation_menu($menu, 'Administer', [
+    'label' => E::ts('GDPR'),
+    'name' => 'gdpr_admin',
+    'url' => NULL,
+    'permission' => 'administer GDPR',
+    'operator' => NULL,
+    'separator' => NULL,
+  ]);
+  _gdpr_civix_insert_navigation_menu($menu, 'Administer/gdpr_admin', [
+    'label' => E::ts('GDPR Settings'),
+    'name' => 'gdpr_admin_settings',
+    'url' => 'civicrm/gdpr/settings',
+    'permission' => 'administer GDPR',
+    'operator' => NULL,
+    'separator' => NULL,
+  ]);
+  _gdpr_civix_insert_navigation_menu($menu, 'Administer/gdpr_admin', [
+    'label' => E::ts('Communication Preferences Settings'),
+    'name' => 'gdpr_admin_commsprefs',
+    'url' => 'civicrm/gdpr/comms-prefs/settings',
+    'permission' => 'administer GDPR',
+    'operator' => NULL,
+    'separator' => NULL,
+  ]);
   _gdpr_civix_navigationMenu($menu);
+
 }
 
 /**
@@ -671,7 +697,7 @@ function gdpr_civicrm_preProcess($formName, &$form) {
       'select' => [],
     ];
     $form->options[] = [
-      'key' => 'action', 
+      'key' => 'action',
       'components' => ['gdpr'],
       'options' => [
         'update-preferences' => 'Update preferences',

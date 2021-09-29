@@ -75,7 +75,7 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
 
     //Display Page Title from settings
     if ($pageTitle = $this->commPrefSettings['page_title']) {
-      CRM_Utils_System::setTitle(E::ts($pageTitle));
+      $this->setTitle(E::ts($pageTitle));
     }
 
     //Display Page intro from settings.
@@ -324,6 +324,7 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
 
     //we have now moved this section into common helper function which reused in other place like event/contribution thank you to let update comms preference using embed form.
     U::updateCommsPrefByFormValues($contactID, $submittedValues);
+    $submittedValues['subject'] = E::ts('GDPR Communication Preferences Form');
     U::createCommsPrefActivity($contactID, $submittedValues);
 
     $this->sendConfirmation();

@@ -78,10 +78,10 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
       ]
     );
     $this->add(
-      'wysiwyg',
+      'text',
       'channels_intro',
-      E::ts('Introduction'),
-      $text_area_attributes
+      E::ts('Heading for the channels section'),
+      ['size' => 40]
     );
     $channel_group = $this->add(
       'group',
