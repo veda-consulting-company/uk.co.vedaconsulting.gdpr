@@ -3,62 +3,62 @@
   <div id="comm_pref_url" class="comm_pref_url_div">
     <div class="header-dark"> Communication Preferences </div>
     {if $link_intro}
-    <div id="comm_pref_intro">
-      <span>{$link_intro}</span>
-    </div>
+      <div id="comm_pref_intro">
+        <span>{$link_intro}</span>
+      </div>
     {/if}
     <div id="comm_pref_link">
       <span><a href="{$comm_pref_url}">{$link_label}</a></span>
     </div>
   </div>
-  
-  {literal}
+
+{literal}
   <script type="text/javascript">
     (function($) {
       var entity = "{/literal}{$entity}{literal}";
-      if (entity == 'Event') {
+      if (entity === 'Event') {
         $('#comm_pref_url').prependTo($('#crm-main-content-wrapper'));
       }
       else{
         $('#comm_pref_url').prependTo($('#crm-main-content-wrapper'));
       }
-    }(cj))
+    }(CRM.$))
   </script>
-  {/literal}  
+{/literal}
 {/if}
 {if $comm_pref_in_thankyou eq 'embed' && !$noperm}
   <div id="comms_pref_form">
     {if $commPrefIntro }
-    {$commPrefIntro}
+      {$commPrefIntro}
     {/if}
 
-  <!-- channels fieldset -->
-  <fieldset id="comm_pref_fields">
-    <div class="section-description">{$channels_intro}</div>
-    {foreach from=$channelEleNames item=elementName}
-      <div class="crm-section">
-        <div class="label">{$form.$elementName.label}</div>
-        <div class="content">{$form.$elementName.html}</div>
-        <div class="clear"></div>
-      </div>
-    {/foreach}
-  </fieldset>
-  
+    <!-- channels fieldset -->
+    <fieldset id="comm_pref_fields">
+      <div class="section-description">{$channels_intro}</div>
+      {foreach from=$channelEleNames item=elementName}
+        <div class="crm-section">
+          <div class="label">{$form.$elementName.label}</div>
+          <div class="content">{$form.$elementName.html}</div>
+          <div class="clear"></div>
+        </div>
+      {/foreach}
+    </fieldset>
+
     <!-- Groups Fieldset -->
-  <fieldset id="comm_pref_groups" class="groups-fieldset">
-    {if $groups_intro}
-      <div class="section-description">
-      {ts}{$groups_intro}{/ts}
-    </div>
-    {/if}
-    {foreach from=$groupEleNames item=elementName}
-      <div class="crm-section">
-        <div class="content group-channel-div">
-          {$form.$elementName.html}
-          {$form.$elementName.label}
-          {if $commPrefGroupsetting.$elementName.group_description}
-            <br>
-            <span class="group-description">
+    <fieldset id="comm_pref_groups" class="groups-fieldset">
+      {if $groups_intro}
+        <div class="section-description">
+          {ts}{$groups_intro}{/ts}
+        </div>
+      {/if}
+      {foreach from=$groupEleNames item=elementName}
+        <div class="crm-section">
+          <div class="content group-channel-div">
+            {$form.$elementName.html}
+            {$form.$elementName.label}
+            {if $commPrefGroupsetting.$elementName.group_description}
+              <br>
+              <span class="group-description">
               {$commPrefGroupsetting.$elementName.group_description}
               <br>
               {foreach from=$channelEleNames item=channelName}
@@ -70,20 +70,20 @@
                 {/if}
               {/foreach}
             </span>
-          {/if}
+            {/if}
+          </div>
+          <div class="clear"></div>
         </div>
-        <div class="clear"></div>
-      </div>
-    {/foreach}
-  </fieldset>
+      {/foreach}
+    </fieldset>
     <div class="submit-buttons">
-    <input type="button" name="comm_pref_submit" id="comm_pref_submit" value="Submit" class="crm-button" />
-  </div>
-  
+      <input type="button" name="comm_pref_submit" id="comm_pref_submit" value="Submit" class="crm-button" />
+    </div>
+
   </div>
 
 
-  {literal}
+{literal}
   <script type="text/javascript">
     (function($) {
       var entity = "{/literal}{$entity}{literal}";
@@ -93,7 +93,7 @@
       var containerPrefix = "{/literal}{$containerPrefix}{literal}";
       var channelEleNames = {/literal}{$channelEleNamesJSON}{literal};
       var groupEleNames = {/literal}{$groupEleNamesJSON}{literal};
-      if (entity == 'Event') {
+      if (entity === 'Event') {
         $('#comms_pref_form').prependTo($('#crm-main-content-wrapper'));
       }
       else{
@@ -107,8 +107,7 @@
         //gather all information we need to update comms preference
         var updatePreferenceData = {};
         $(channelEleNames).each(function(index, value){
-          var data = $('#'+value).val();
-          updatePreferenceData[value] = data;
+          updatePreferenceData[value] = $('#'+value).val();
         });
 
         //gather all groups Informations
@@ -124,7 +123,7 @@
         $.ajax({
           type: "POST",
           url: ajaxURL,
-          data: { 
+          data: {
             contactId : contactId,
             contact_cs : checksum,
             preference :  updatePreferenceData
@@ -134,7 +133,7 @@
           } //end of success
         }); //end of ajax
       });
-    }(cj))
+    }(CRM.$))
   </script>
-  {/literal}
+{/literal}
 {/if}
