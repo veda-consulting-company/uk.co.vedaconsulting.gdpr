@@ -75,7 +75,7 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
 
     //Display Page Title from settings
     if ($pageTitle = $this->commPrefSettings['page_title']) {
-      CRM_Utils_System::setTitle(E::ts($pageTitle));
+      $this->setTitle(E::ts($pageTitle));
     }
 
     //Display Page intro from settings.

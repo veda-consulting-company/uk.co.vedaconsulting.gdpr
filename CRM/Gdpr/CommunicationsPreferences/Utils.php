@@ -330,6 +330,11 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
    *
    * Intended to be used for Event registration and contribution thank-you pages.
    */
+  /**
+   * @param CRM_Gdpr_Form_UpdatePreference|CRM_Core_Form $form
+   *
+   * @throws \CRM_Core_Exception
+   */
   public static function injectCommPreferenceFieldsIntoForm(&$form) {
 
     // Get the Comms pref options (yes/no) form option group.
@@ -357,7 +362,6 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
         $form->assign('channels_intro', $channelIntro);
       }
 
-
       foreach ($fieldsSettings['channels'] as $key => $value) {
         if ($value) {
           $name  = str_replace($containerPrefix, '', $key);
@@ -377,8 +381,8 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
 
     //Communication preference Group settings enabled ?
     $isGroupSettingEnabled = !empty($fieldsSettings['enable_groups']) ? $fieldsSettings['enable_groups'] : NULL;
+    $form->groupEleNames = [];
     if ($isGroupSettingEnabled) {
-
       if ($groupsHeading = $fieldsSettings['groups_heading']) {
         $form->assign('groups_heading', $groupsHeading);
       }
@@ -404,13 +408,13 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
           $form->_elements[$elemIndex]->_flagFrozen = 0;
         }
       }
-      $form->assign('groupEleNames', $form->groupEleNames);
-      $form->assign('groupEleNamesJSON', json_encode($form->groupEleNames));
       $form->assign('commPrefGroupsetting', $groupSettings);
       $intro = !empty($fieldsSettings['comm_pref_thankyou_embed_intro']) ? $fieldsSettings['comm_pref_thankyou_embed_intro'] : '';
 
       $form->assign('commPrefIntro', $intro);
     }
+    $form->assign('groupEleNames', $form->groupEleNames);
+    $form->assign('groupEleNamesJSON', json_encode($form->groupEleNames));
   }
 
   /**
