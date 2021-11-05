@@ -28,29 +28,29 @@ class CRM_Gdpr_Form_Search_GroupcontactDetails extends CRM_Contact_Form_Search_C
     );
 
     //Contact Field
-    $contactTypes = array('' => E::ts('- any contact type -')) + CRM_Contact_BAO_ContactType::getSelectElements();
+    $contactTypes = ['' => E::ts('- any contact type -')] + CRM_Contact_BAO_ContactType::getSelectElements();
     $form->add('select', 'contact_type',
       E::ts('is...'),
       $contactTypes,
       FALSE,
-      array('class' => 'crm-select2')
+      ['class' => 'crm-select2']
     );
 
     //Groups
     // Arrange groups into hierarchical listing (child groups follow their parents and have indentation spacing in title)
     $allGroups = CRM_Core_PseudoConstant::group();
     $groupHierarchy = CRM_Contact_BAO_Group::getGroupsHierarchy($allGroups, NULL, '&nbsp;&nbsp;', TRUE);
-    $groupSelect = array('' => E::ts('- select group -')) + $groupHierarchy;
+    $groupSelect = ['' => E::ts('- select group -')] + $groupHierarchy;
 
     $form->add('select', 'group_id',
       E::ts('in...'),
       $groupSelect,
       TRUE,
-      array('class' => 'crm-select2')
+      ['class' => 'crm-select2']
     );
 
     //Group contact status
-    $group_contact_status = array();
+    $group_contact_status = [];
     foreach (CRM_Core_SelectValues::groupContactStatus() as $k => $v) {
       if (!empty($k)) {
         $group_contact_status[] = $form->createElement('checkbox', $k, NULL, $v);
@@ -67,7 +67,7 @@ class CRM_Gdpr_Form_Search_GroupcontactDetails extends CRM_Contact_Form_Search_C
      * if you are using the standard template, this array tells the template what elements
      * are part of the search criteria
      */
-    $form->assign('elements', array('sort_name', 'contact_type', 'group_id', 'group_contact_status', 'subscription_date'));
+    $form->assign('elements', ['sort_name', 'contact_type', 'group_id', 'group_contact_status', 'subscription_date']);
   }
 
   /**
@@ -79,10 +79,10 @@ class CRM_Gdpr_Form_Search_GroupcontactDetails extends CRM_Contact_Form_Search_C
    */
   function summary() {
     return NULL;
-    // return array(
+    // return [
     //   'summary' => 'This is a summary',
     //   'total' => 50.0,
-    // );
+    // ];
   }
 
   /**
@@ -92,13 +92,13 @@ class CRM_Gdpr_Form_Search_GroupcontactDetails extends CRM_Contact_Form_Search_C
    */
   function &columns() {
     // return by reference
-    $columns = array(
+    $columns = [
       E::ts('Contact Id') => 'contact_id',
       E::ts('Contact Type') => 'contact_type',
       E::ts('Name') => 'sort_name',
       E::ts('Status') => 'group_contact_status',
       E::ts('Subscription Date') => 'subscription_date',
-    );
+    ];
     return $columns;
   }
 
@@ -152,11 +152,11 @@ class CRM_Gdpr_Form_Search_GroupcontactDetails extends CRM_Contact_Form_Search_C
    * @return string, sql fragment with conditional expressions
    */
   function where($includeContactIDs = FALSE) {
-    $params = array();
+    $params = [];
     $where = "";
 
     $count  = 1;
-    $clause = array();
+    $clause = [];
     $this->_params = CRM_Contact_BAO_Query::convertFormValues($this->_formValues);
 
     //Filter by Name
@@ -165,7 +165,7 @@ class CRM_Gdpr_Form_Search_GroupcontactDetails extends CRM_Contact_Form_Search_C
       if (strpos($name, '%') === FALSE) {
         $name = "%{$name}%";
       }
-      $params[$count] = array($name, 'String');
+      $params[$count] = [$name, 'String'];
       $clause[] = "contact_a.sort_name LIKE %{$count}";
       $count++;
     }
@@ -173,7 +173,7 @@ class CRM_Gdpr_Form_Search_GroupcontactDetails extends CRM_Contact_Form_Search_C
     //filter by Group
     $group_id   = CRM_Utils_Array::value('group_id', $this->_formValues);
     if ($group_id != NULL) {
-      $params[$count] = array($group_id, 'Integer');
+      $params[$count] = [$group_id, 'Integer'];
       $clause[] = "group_contact.group_id = %{$count}";
       $count++;
     }

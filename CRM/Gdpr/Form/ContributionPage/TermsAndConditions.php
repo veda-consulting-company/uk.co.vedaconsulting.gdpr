@@ -43,10 +43,10 @@ class CRM_Gdpr_Form_ContributionPage_TermsAndConditions extends CRM_Contribute_F
    */
   private function getGroupId() {
     if (!$this->groupId)
-      $result = civicrm_api3('CustomGroup', 'get', array(
+      $result = civicrm_api3('CustomGroup', 'get', [
         'sequential' => 1,
         'name' => 'Contribution_Page_terms_and_conditions',
-      ));
+      ]);
     if (!empty($result['values'][0])) {
       $this->groupId = $result['values'][0]['id'];
     }
@@ -57,7 +57,7 @@ class CRM_Gdpr_Form_ContributionPage_TermsAndConditions extends CRM_Contribute_F
    * Gets Custom field from the group tree by name.
    */
   private function getFieldByName($field_name) {
-    static $fields = array();
+    static $fields = [];
     if (empty($fields)) {
       $tree = $this->_groupTree;
       $group = reset($tree);
@@ -81,24 +81,24 @@ class CRM_Gdpr_Form_ContributionPage_TermsAndConditions extends CRM_Contribute_F
         }
       }
     }
-    return $fields[$field_name] ? $fields[$field_name] : array();
+    return $fields[$field_name] ? $fields[$field_name] : [];
   }
   
   /**
    * Fetches a Custom Field definition from the API.
    */
   private function lookupFieldById($field_id) {
-    static $fields = array();
+    static $fields = [];
     if (!$fields) {
-      $results = civicrm_api3('CustomField', 'get', array(
+      $results = civicrm_api3('CustomField', 'get', [
         'custom_group_id' => $this->groupId,
         'sequential' => 0,
-      ));
+      ]);
       if (!empty($results['values'])) {
         $fields = $results['values'];
       }
     }
-    return isset($fields[$field_id]) ? $fields[$field_id] : array();
+    return isset($fields[$field_id]) ? $fields[$field_id] : [];
   }
 
   /**
@@ -110,7 +110,7 @@ class CRM_Gdpr_Form_ContributionPage_TermsAndConditions extends CRM_Contribute_F
    */
   private function getElementByFieldName($field_name) {
     $field = $this->getFieldByName($field_name);
-    $element = array();
+    $element = [];
     if ($field) {
       $element = $this->getElement($field['element_name']);
     }
@@ -152,10 +152,10 @@ class CRM_Gdpr_Form_ContributionPage_TermsAndConditions extends CRM_Contribute_F
         $upload_name,
         'Terms &amp; Conditions File'
       );
-      $tc_current = array(
+      $tc_current = [
         'url' => $tc_field['element_value'],
         'label' => basename($tc_field['element_value']),
-      );
+      ];
       $tc_value = $tc_field['element_value'];
       // Provide some variables so the template can display the upload field in
       // place of the link field.
@@ -228,7 +228,7 @@ class CRM_Gdpr_Form_ContributionPage_TermsAndConditions extends CRM_Contribute_F
   private function assignDescriptions() {
     $tree = $this->_groupTree;
     $group = reset($tree);
-    $descriptions = array();
+    $descriptions = [];
     if (!empty($group['fields'])) {
       foreach ($group['fields'] as $fid => $field) {
         $descriptions[$field['element_name']] = !empty($field['help_pre']) ?  $field['help_pre'] : '';
@@ -240,14 +240,14 @@ class CRM_Gdpr_Form_ContributionPage_TermsAndConditions extends CRM_Contribute_F
   /**
    * Get the fields/elements defined in this form.
    *
-   * @return array (string)
+   * @return [string]
    */
   public function getRenderableElementNames() {
     // The _elements list includes some items which should not be
     // auto-rendered in the loop -- such as "qfKey" and "buttons".  These
     // items don't have labels.  We'll identify renderable by filtering on
     // the 'label'.
-    $elementNames = array();
+    $elementNames = [];
     foreach ($this->_elements as $element) {
       /** @var HTML_QuickForm_Element $element */
       $label = $element->getLabel();

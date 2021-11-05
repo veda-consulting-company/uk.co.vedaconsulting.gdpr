@@ -23,13 +23,13 @@ class CRM_Gdpr_Form_Activitycontact extends CRM_Core_Form {
     );
 
     $this->addButtons(
-      array(
-        array(
+      [
+        [
           'type' => 'refresh',
           'name' => E::ts('Search'),
           'isDefault' => TRUE,
-        ),
-      )
+        ],
+      ]
     );
     
     parent::buildQuickForm();

@@ -13,10 +13,7 @@
 	</ul>
 
 	<div class="crm-submit-buttons">
-		<span class="crm-button crm-i-button">
-		<i class="crm-i fa-check"></i>
-		<input class="crm-form-submit default validate" crm-icon="fa-check" name="fix_custom_data" value="Fix Custom Data" type="button" id="fix_custom_data">
-		</span>
+    <button type="submit" class="button crm-button fix-custom-data" name="fix_custom_data" id="fix_custom_data"><span><i class="crm-i fa-gear" aria-hidden="true"></i> Fix Custom Data</span></button>
 	</div>
 </div>
 {/if}

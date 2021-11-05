@@ -38,15 +38,15 @@ class CRM_Gdpr_Utils {
    */
   public static function getAllActivityTypes() {
 
-    $actTypes = array();
+    $actTypes = [];
 
     // Get all membership types from CiviCRM
-    $result = self::CiviCRMAPIWrapper('OptionValue', 'get', array(
+    $result = self::CiviCRMAPIWrapper('OptionValue', 'get', [
       'sequential' => 1,
       'is_active' => 1,
       'option_group_id' => "activity_type",
-      'options' => array('limit' => 0),
-    ));
+      'options' => ['limit' => 0],
+    ]);
 
     if (!empty($result['values'])) {
       foreach($result['values'] as $key => $value) {
@@ -64,16 +64,16 @@ class CRM_Gdpr_Utils {
    */
   public static function getAllContactTypes($parentOnly = FALSE) {
 
-    $contactTypes = array();
+    $contactTypes = [];
 
-    $contactTypeParams = array(
+    $contactTypeParams = [
       'sequential' => 1,
       'is_active' => 1,
-    );
+    ];
 
     // Check if we need to get only the parent contact types
     if ($parentOnly) {
-      $contactTypeParams['parent_id'] = array('IS NULL' => 1);
+      $contactTypeParams['parent_id'] = ['IS NULL' => 1];
     }
 
     // Get all membership types from CiviCRM
@@ -91,22 +91,22 @@ class CRM_Gdpr_Utils {
   /**
    * Function to get all group subscription
    *
-   * @return array()
+   * @return []
    */
   public static function getallGroupSubscription($contactId) {
     if (empty($contactId)) {
       return;
     }
 
-    $groupSubscriptions = array();
+    $groupSubscriptions = [];
     $sql = "SELECT c.sort_name, g.title, s.date, s.id, s.contact_id, s.group_id, s.status, g.is_active, CASE WHEN g.visibility = 'Public Pages' THEN 1 ELSE 0 END as is_public FROM
 civicrm_subscription_history s
 INNER JOIN civicrm_contact c ON s.contact_id = c.id
 INNER JOIN civicrm_group g ON g.id = s.group_id
 WHERE s.contact_id = %1 ORDER BY s.date DESC";
-    $resource = CRM_Core_DAO::executeQuery($sql, array( 1 => array($contactId, 'Integer')));
+    $resource = CRM_Core_DAO::executeQuery($sql, [ 1 => [$contactId, 'Integer']]);
     while ($resource->fetch()) {
-      $groupSubscriptions[$resource->id] = array(
+      $groupSubscriptions[$resource->id] = [
         'id' => $resource->id,
         'contact_id' => $resource->contact_id,
         'group_id' => $resource->group_id,
@@ -116,7 +116,7 @@ WHERE s.contact_id = %1 ORDER BY s.date DESC";
         'status' => $resource->status,
         'is_active' => $resource->is_active,
         'is_public' => $resource->is_public,
-      );
+      ];
     }
 
     return $groupSubscriptions;
@@ -134,17 +134,17 @@ WHERE s.contact_id = %1 ORDER BY s.date DESC";
     }
 
     // Get all membership types from CiviCRM
-    $result = self::CiviCRMAPIWrapper('OptionValue', 'get', array(
+    $result = self::CiviCRMAPIWrapper('OptionValue', 'get', [
       'sequential' => 1,
       'option_group_id' => "custom_search",
       'name' => $name,
-    ));
+    ]);
 
     //MV: Returns lot of notice message when there is no result found.
     if (empty($result['count'])) {
-      return array('id' => NULL, 'label' => NULL);
+      return ['id' => NULL, 'label' => NULL];
     }
-    return array('id' => $result['values'][0]['value'], 'label' => $result['values'][0]['description']);
+    return ['id' => $result['values'][0]['value'], 'label' => $result['values'][0]['description']];
   }
 
   /**
@@ -159,7 +159,7 @@ WHERE s.contact_id = %1 ORDER BY s.date DESC";
       CRM_Gdpr_Constants::GDPR_SETTING_NAME
     );
 
-    return $settingsStr ? unserialize($settingsStr) : array();
+    return $settingsStr ? unserialize($settingsStr) : [];
   }
 
   /**
@@ -169,7 +169,7 @@ WHERE s.contact_id = %1 ORDER BY s.date DESC";
    */
   public static function getGDPRActivityTypes() {
 
-    $gdprActTypes = array();
+    $gdprActTypes = [];
 
     // Get GDPR settings
     $settings = CRM_Gdpr_Utils::getGDPRSettings();
@@ -229,7 +229,7 @@ WHERE s.contact_id = %1 ORDER BY s.date DESC";
    */
   public static function getNoActivityContactsList($params) {
 
-    $contactList = array();
+    $contactList = [];
 
     $contactListSql = self::getActivityContactSQL($params, FALSE, TRUE);
     if ($contactListSql) {
@@ -242,10 +242,10 @@ WHERE s.contact_id = %1 ORDER BY s.date DESC";
   WHERE ac.record_type_id = 3 AND a.activity_type_id = %1 AND ac.contact_id = %2
   ORDER BY a.activity_date_time LIMIT 1
         ";
-        $lastActParams = array(
-          1 => array($params['activity_type_id'], 'Integer'),
-          2 => array($resource->id, 'Integer'),
-        );
+        $lastActParams = [
+          1 => [$params['activity_type_id'], 'Integer'],
+          2 => [$resource->id, 'Integer'],
+        ];
         $lastActResource = CRM_Core_DAO::executeQuery($lastActSql, $lastActParams);
         $lastActDateTime = '';
         if ($lastActResource->fetch()) {
@@ -253,11 +253,11 @@ WHERE s.contact_id = %1 ORDER BY s.date DESC";
         }*/
 
         $url = CRM_Utils_System::url('civicrm/contact/view', 'reset=1&cid='.$resource->id);
-        $contactList[$resource->id] = array(
+        $contactList[$resource->id] = [
           'id' => $resource->id,
           'sort_name' => "<a href='{$url}'>".$resource->sort_name."</a>",
           //'activity_date_time' => '',
-        );
+        ];
       }
     }
     return $contactList;
@@ -402,10 +402,10 @@ WHERE url.time_stamp > '{$date}'";
 
 
     // Retrieve the contact, to check it exists.
-    $contactResult = CRM_Gdpr_Utils::CiviCRMAPIWrapper('Contact', 'get', array(
+    $contactResult = CRM_Gdpr_Utils::CiviCRMAPIWrapper('Contact', 'get', [
       'id' => $contactId,
       'sequential' => 1,
-    ));
+    ]);
     if (empty($contactResult['values'][0])) {
       return $contactResult;
     }
@@ -413,19 +413,19 @@ WHERE url.time_stamp > '{$date}'";
       $currentContact = $contactResult['values'][0];
     }
     // get all fields of contact API
-    $fieldsResult = CRM_Gdpr_Utils::CiviCRMAPIWrapper('Contact', 'getfields', array(
+    $fieldsResult = CRM_Gdpr_Utils::CiviCRMAPIWrapper('Contact', 'getfields', [
       'sequential' => 1,
-    ));
+    ]);
 
-    $fields = array();
+    $fields = [];
     if ($fieldsResult && !empty($fieldsResult['values'])) {
       $fields = $fieldsResult['values'];
     }
 
     // setting up params to update contact record
-    $params = array(
+    $params = [
       'sequential' => 1,
-    );
+    ];
 
     // Loop through fields and set them empty
     $isCiviCRMVersion47 = _gdpr_isCiviCRMVersion47();
@@ -467,7 +467,7 @@ WHERE url.time_stamp > '{$date}'";
     }
 
     // Update all privacy options to make sure we dont send any communications by mistake
-    $privacyFlags = array('do_not_email', 'do_not_phone', 'do_not_mail', 'do_not_sms', 'do_not_trade', 'is_opt_out');
+    $privacyFlags = ['do_not_email', 'do_not_phone', 'do_not_mail', 'do_not_sms', 'do_not_trade', 'is_opt_out'];
     foreach($privacyFlags as $flag) {
       $params[$flag] = 1;
     }
@@ -476,12 +476,12 @@ WHERE url.time_stamp > '{$date}'";
     CRM_Gdpr_Hook::alterAnonymizeContactParams($params);
 
     $updateResult = CRM_Gdpr_Utils::CiviCRMAPIWrapper('Contact', 'create', $params);
-    $types = array(
+    $types = [
       'Email',
       'Phone',
       'IM',
       'Website',
-    );
+    ];
     if (array_key_exists('forgetme_email', $settings) && $settings['forgetme_email']) {
       self::anonymizeEmails($contactId, $settings['forgetme_email']);
       unset($types[array_search('Email', $types)]);
@@ -544,9 +544,9 @@ WHERE url.time_stamp > '{$date}'";
     $dao = CRM_Core_DAO::executeQuery($query);
     while ($dao->fetch()) {
       $queryDelete = "DELETE FROM {$dao->table_name} WHERE entity_id = %1";
-      $params = array(
-        1 => array($contactId, 'Integer'),
-      );
+      $params = [
+        1 => [$contactId, 'Integer'],
+      ];
       CRM_Core_DAO::executeQuery($queryDelete, $params);
     }
   }
@@ -559,16 +559,16 @@ WHERE url.time_stamp > '{$date}'";
    *
    */
   static function cancelAllActiveMemberships($contactId) {
-    self::CiviCRMAPIWrapper('Membership', 'get', array(
+    self::CiviCRMAPIWrapper('Membership', 'get', [
       'sequential' => 1,
       'contact_id' => $contactId,
       'active_only' => 1,
-      'api.Membership.create' => array(
+      'api.Membership.create' => [
         'id' => "\$value.id",
         'status_id' => "GDPR_Cancelled",
         'is_override' => 1,
-      ),
-    ));
+      ],
+    ]);
   }
 
 
@@ -585,25 +585,25 @@ WHERE url.time_stamp > '{$date}'";
    *   - Website
    *   - Address
    */
-  static function deleteContactAssociatedData($contactId, $types = array('Email', 'Phone')) {
-    $validTypes = array('Email', 'Phone', 'IM', 'Website', 'Address');
-    $delResult = array();
+  static function deleteContactAssociatedData($contactId, $types = ['Email', 'Phone']) {
+    $validTypes = ['Email', 'Phone', 'IM', 'Website', 'Address'];
+    $delResult = [];
     foreach ($types as $entity) {
       if (!in_array($entity, $validTypes)) {
         continue;
       }
-      $getResult = CRM_Gdpr_Utils::CiviCRMAPIWrapper($entity, 'get', array(
+      $getResult = CRM_Gdpr_Utils::CiviCRMAPIWrapper($entity, 'get', [
         'sequential' => 1,
         'contact_id' => $contactId,
-      ));
+      ]);
 
       if (!empty($getResult['values'])) {
         foreach ($getResult['values'] as $data) {
           $id = $data['id'];
-          $delResult[$entity][$id] = CRM_Gdpr_Utils::CiviCRMAPIWrapper($entity, 'delete', array(
+          $delResult[$entity][$id] = CRM_Gdpr_Utils::CiviCRMAPIWrapper($entity, 'delete', [
             'id' => $id,
             'sequential' => 1,
-          ));
+          ]);
         }
       }
     }
@@ -641,8 +641,8 @@ WHERE url.time_stamp > '{$date}'";
 
     //Check the all the custom data from XML has been created during installation.
     $dom = new DomDocument();
-    $status = array();
-    foreach (array('CustomData_v1', 'CustomGroupData') as $fileName) {
+    $status = [];
+    foreach (['CustomData_v1', 'CustomGroupData'] as $fileName) {
       $file = E::path("xml/{$fileName}.xml");
       $xmlString = file_get_contents($file);
       $load = $dom->loadXML($xmlString);
@@ -653,12 +653,12 @@ WHERE url.time_stamp > '{$date}'";
       $xml = simplexml_import_dom($dom);
 
       //check CustomGroups are exists
-      $mapArray = array(
+      $mapArray = [
         'CustomGroups' => 'CustomGroup',
         'CustomFields' => 'CustomField',
         'OptionGroups' => 'OptionGroup',
         'OptionValues' => 'OptionValue'
-      );
+      ];
 
       foreach ($mapArray as $entityMap => $entities) {
         foreach ($xml->$entityMap as $entityMapXML) {
@@ -679,9 +679,14 @@ WHERE url.time_stamp > '{$date}'";
 
   public static function reRunInstallationCustomXML() {
     $import = new CRM_Utils_Migrate_Import();
-    foreach (array('CustomData_v1', 'CustomGroupData') as $fileName) {
+    foreach (['CustomData_v1', 'CustomGroupData'] as $fileName) {
       $file = E::path("xml/{$fileName}.xml");
-      $import->run($file);
+      try {
+        $import->run($file);
+      }
+      catch (Exception $e) {
+        // Do nothing, sometimes it fails with "already exists"
+      }
     }
   }
 
@@ -693,22 +698,22 @@ WHERE url.time_stamp > '{$date}'";
    * @throws \Exception
    */
   private static function anonymizeEmails($contactId, $forgetMeEmail) {
-    $updateResult = array();
-    $getResult = CRM_Gdpr_Utils::CiviCRMAPIWrapper('Email', 'get', array(
+    $updateResult = [];
+    $getResult = CRM_Gdpr_Utils::CiviCRMAPIWrapper('Email', 'get', [
       'sequential' => 1,
       'contact_id' => $contactId,
-    ));
+    ]);
 
     if (!empty($getResult['values'])) {
       foreach ($getResult['values'] as $data) {
         $id = $data['id'];
         $randomEmail = self::randomEmail($forgetMeEmail);
-        $updateResult['Email'][$id] = CRM_Gdpr_Utils::CiviCRMAPIWrapper('Email', 'create', array(
+        $updateResult['Email'][$id] = CRM_Gdpr_Utils::CiviCRMAPIWrapper('Email', 'create', [
           'sequential' => 1,
           'id' => $id,
           'email' => $randomEmail,
           'on_hold' => 1,
-        ));
+        ]);
       }
     }
 

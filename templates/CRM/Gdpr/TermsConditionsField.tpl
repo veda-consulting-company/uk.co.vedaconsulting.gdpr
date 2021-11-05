@@ -14,26 +14,30 @@
   </div>{* end crm-section *}
   <div class="clear"></div>
   {if $terms_conditions.links.global}
-   <div class="crm-section">
+   <div class="crm-section" id='editrow-accept_tc'>
     {assign var="link" value=$terms_conditions.links.global}
       <div class="label"><label></label></div>
       <div class="content terms-conditions-item">
-        <a href="{$link.url}" class="terms-conditions-link" target="blank">{$link.label}</a>
+        <div class="terms-conditions-link">
+          <a href="{$link.url}" class="terms-conditions-link" target="blank">{$link.label}</a>
+        </div>
         <div class="terms-conditions-checkbox">
-          {$form.accept_tc.html}
+          {$form.accept_tc.html} {$form.accept_tc.label}
         </div>
       </div>
     </div> {* end .crm-section *}
     <div class="clear"></div>
   {/if}
-  {if $terms_conditions.links.entity}
+  {if !empty($terms_conditions.links.entity)}
     {assign var="link" value=$terms_conditions.links.entity}
-    <div class="crm-section">
+    <div class="crm-section" id='editrow-accept_entity_tc'>
       <div class="label"><label></label></div>
       <div class="content terms-conditions-item">
-        <a href="{$link.url}" class="terms-conditions-link" target="blank">{$link.label}</a>
+        <div class="terms-conditions-link">
+          <a href="{$link.url}" class="terms-conditions-link" target="blank">{$link.label}</a>
+        </div>
         <div class="terms-conditions-checkbox">
-          {$form.accept_entity_tc.html}
+          {$form.accept_entity_tc.html} {$form.accept_entity_tc.label}
         </div>
       </div>
     </div>{* end .crm-section *}

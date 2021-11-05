@@ -10,7 +10,7 @@ In order to record the acceptance of the data policy, including a copy of the po
 
 Under the general settings within the GDPR extension there is a section dedicated to your organisations **Data Policy**
 
-![Data Policy Settings](images/data-policy-settings.png)
+![Data Policy Settings](./images/data-policy-settings.png)
 
 * **Acceptance period (months)** The period of time that the system will allow before a reconfirmation is requested from the supporter.
 * **Data Policy file** The Data Policy statement for your organisation. A version history is kept if updated versions of the document are uploaded.
@@ -21,7 +21,7 @@ Under the general settings within the GDPR extension there is a section dedicate
 
 An example of the settings can be seen on the communication preference page, as below
 
-![Data Policy Settings](images/data-policy-example.png)
+![Data Policy Settings](./images/data-policy-example.png)
 
 On submission an Activity is recorded against the supporter with a link to a copy of the data policy at the time of acceptance.
 

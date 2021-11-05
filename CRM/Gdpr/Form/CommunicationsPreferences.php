@@ -12,19 +12,19 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
   /**
    * API values of public groups.
    */
-  protected $groups = array();
+  protected $groups = [];
 
-  protected $groupContainerNames = array();
+  protected $groupContainerNames = [];
 
   public function buildQuickForm() {
     CRM_Utils_System::setTitle(E::ts('Communications Preferences'));
     $channels = U::getChannelOptions();
-    $text_area_attributes = array('cols' => 60, 'rows' => 5);
+    $text_area_attributes = ['cols' => 60, 'rows' => 5];
     $this->add(
       'text',
       'page_title',
       E::ts('Page title'),
-      array('size' => 40)
+      ['size' => 40]
     );
     $this->add(
       'wysiwyg',
@@ -57,13 +57,13 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
     $recaptchaSettingsUrl = CRM_Utils_System::url('civicrm/admin/setting/misc', 'reset=1');
     $descriptions['add_captcha'] = E::ts('Check to use reCAPTCHA in Communications Preferences page. Make sure you have configured the <a href="'.$recaptchaSettingsUrl.'">reCAPTCHA keys</a>.');
     // Let the template know about elements in this section.
-    $page_elements = array(
+    $page_elements = [
       'page_title',
       'page_intro',
       'profile',
       'use_as_mailing_subscribe',
       'add_captcha'
-    );
+    ];
     $this->assign('page_elements', $page_elements);
     // Comms prefs channels
     $this->add(
@@ -72,16 +72,16 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
       E::ts('Enable Channels'),
       '',
       false,
-      array(
+      [
         'data-toggle' => '.channels-wrapper',
         'class' => 'toggle-control'
-      )
+      ]
     );
     $this->add(
-      'wysiwyg',
+      'text',
       'channels_intro',
-      E::ts('Introduction'),
-      $text_area_attributes
+      E::ts('Heading for the channels section'),
+      ['size' => 40]
     );
     $channel_group = $this->add(
       'group',
@@ -94,15 +94,15 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
         'enable_' . $channel,
         $label,
         $label,
-        array('class' => 'enable-channel')
+        ['class' => 'enable-channel']
       );
       $channel_checkboxes[] = $elem;
     }
     $channel_group->setElements($channel_checkboxes);
-    $channels_elements = array(
+    $channels_elements = [
       'channels_intro',
       'channels',
-    );
+    ];
     $this->assign('channels_elements', $channels_elements);
     $this->add(
       'checkbox',
@@ -110,16 +110,16 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
       E::ts('Allow users to opt-in to mailing groups.'),
       '',
       false,
-      array(
+      [
         'data-toggle' => '.groups-wrapper',
         'class' => 'toggle-control'
-      )
+      ]
     );
     $this->add(
       'text',
       'groups_heading',
       E::ts('Heading for the groups section'),
-      array('size' => 40)
+      ['size' => 40]
     );
     $this->add(
       'wysiwyg',
@@ -128,7 +128,7 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
       $text_area_attributes
     );
     $groups = $this->getGroups();
-    $group_containers = array();
+    $group_containers = [];
     foreach ($groups as $group) {
       $container_name = 'group_' . $group['id'];
       $this->groupContainerNames[] = $container_name;
@@ -138,21 +138,21 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
         $container_name,
         $group['title']
       );
-      $group_elems = array();
+      $group_elems = [];
       $group_elems[] = HTML_QuickForm::createElement(
         'advcheckbox',
         'group_enable',
         E::ts('Enable'),
         '',
-        array(
+        [
          'data-group-id' => $group['id'],
-        )
+        ]
       );
       $group_elems[] = HTML_QuickForm::createElement(
         'text',
         'group_title',
         $group['title'],
-        array('size' => 30)
+        ['size' => 30]
       );
       $weight_opts = range(0, 50);
       $weight_opts = array_combine($weight_opts, $weight_opts);
@@ -167,10 +167,10 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
         'textarea',
         'group_description',
         'Description',
-        array(
+        [
           'cols' => 30,
           'rows' => 6
-          )
+        ]
       );
       foreach ($channels as $key => $label) {
         $group_elems[] = HTML_Quickform::createElement(
@@ -186,13 +186,13 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
     $this->addRadio(
       'completion_redirect',
       E::ts('On completion'),
-      array(1 => E::ts('Redirect to another page'), 0 => E::ts('Display a message on the form page.'))
+      [1 => E::ts('Redirect to another page'), 0 => E::ts('Display a message on the form page.')]
     );
     $this->add(
       'text',
       'completion_url',
       E::ts('Completion page'),
-      array('size' => 50)
+      ['size' => 50]
     );
     $descriptions['completion_url'] = E::ts('Add the a URL for a page to redirect the user after they complete the form. The page should already exist. The URL may be absolute (http://example.com/thank-you) or relative (thank-you), with no leading forward slash. Leave blank to redirect to the front page.');
     $this->add(
@@ -203,10 +203,10 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
     );
     $descriptions['completion_message'] = E::ts('A message to display to the user after the form is submitted. ');
     // Let the template know about which fields belong in the groups section.
-    $groups_elements = array(
+    $groups_elements = [
       'groups_heading',
       'groups_intro',
-    );
+    ];
     $this->assign('descriptions', $descriptions);
     $this->assign('groups_elements', $groups_elements);
     $this->assign('group_containers', $group_containers);
@@ -220,20 +220,20 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
     $this->addRadio(
       'comm_pref_in_thankyou',
       E::ts('Add to Event and Contribution Thank-you pages'),
-      array(
+      [
         'embed' => E::ts('Embed the Communication Preferences form'),
         'link' => E::ts('Add a link to the form'),
         'none' => E::ts('Do Nothing')
-      ),
-      array(
+      ],
+      [
         'class' => 'toggle-select thank-you-select',
         'data-toggle-mapping' => json_encode(
-          array(
+          [
             'embed' => '.thank-you-embed-wrapper',
             'link' => '.thank-you-link-wrapper'
-          )
+          ]
         )
-      )
+      ]
     );
     $this->add(
       'wysiwyg',
@@ -261,13 +261,13 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
 
     $this->buildMailBlock();
 
-    $this->addButtons(array(
-      array(
+    $this->addButtons([
+      [
         'type' => 'submit',
         'name' => E::ts('Save'),
         'isDefault' => TRUE,
-      ),
-    ));
+      ],
+    ]);
     parent::buildQuickForm();
   }
 
@@ -295,26 +295,24 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
     $settings = U::getSettings();
     $key = U::SETTING_NAME;
     $group_key = U::GROUP_SETTING_NAME;
-    $defaults = array();
-    $group_settings = $settings[$group_key] ? $settings[$group_key] : array();
+    $defaults = [];
+    $group_settings = $settings[$group_key] ? $settings[$group_key] : [];
     $groups = $this->getGroups();
-    $map = array(
+    $map = [
       'group_title' => 'title',
       'group_description' => 'description',
-    );
+    ];
     foreach($groups as $id => $grp) {
       if (!empty($group_settings['group_' . $id])) {
         $item = $group_settings['group_' . $id];
       }
       else {
-        $item = array();
+        $item = [];
       }
       // If value is missing in the setting, take the corresponding value from the
       // group.
       foreach($map as $setting_key => $group_key) {
-        if (empty($item[$setting_key]) && !empty($grp[$group_key])) {
-          $item[$setting_key] = $grp[$group_key];
-        }
+        $item[$setting_key] = $item[$setting_key] ?? $grp['frontend_' . $group_key] ?? $grp[$group_key];
       }
       // Set default weight.
       if (empty($item['group_weight'])) {
@@ -337,11 +335,11 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
   function getGroups() {
     if (!$this->groups) {
       $groups = U::getGroups();
-      $this->groups = U::sortGroups($groups, array(
+      $this->groups = U::sortGroups($groups, [
         'group_enable' => 'desc',
         'group_weight' => 'asc',
         'group_title' => 'asc',
-      ));
+      ]);
     }
     return $this->groups;
   }
@@ -366,16 +364,16 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
         $settings[$settingName] = $values[$settingName];
       }
     }
-    $groupSettings = array();
+    $groupSettings = [];
     foreach ($groupContainers as $key) {
       if (isset($values[$key])) {
         $groupSettings[$key] = $values[$key];
       }
     }
-    $save = array(
+    $save = [
       U::SETTING_NAME => $settings,
       U::GROUP_SETTING_NAME => $groupSettings,
-    );
+    ];
     U::saveSettings($save);
     $url = CRM_Utils_System::url('civicrm/gdpr/dashboard', 'reset=1');
     CRM_Core_Session::setStatus('Settings Saved.', 'GDPR', 'success');
@@ -390,14 +388,14 @@ class CRM_Gdpr_Form_CommunicationsPreferences extends CRM_Core_Form {
   /**
    * Get the fields/elements defined in this form.
    *
-   * @return array (string)
+   * @return array string
    */
   public function getRenderableElementNames() {
     // The _elements list includes some items which should not be
     // auto-rendered in the loop -- such as "qfKey" and "buttons".  These
     // items don't have labels.  We'll identify renderable by filtering on
     // the 'label'.
-    $elementNames = array();
+    $elementNames = [];
     foreach ($this->_elements as $element) {
       /** @var HTML_QuickForm_Element $element */
       $label = $element->getLabel();

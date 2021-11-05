@@ -8,7 +8,7 @@ Part of the GDPR extension introduces a custom search, which identifies supporte
 
 These settings can be controlled within the GDPR setup
 
-![Communication Preferences Main](images/inactive-settings.png)
+![Communication Preferences Main](./images/inactive-settings.png)
 
 * **Contact Types** - The contact types that should be included in the search, for example it may not be necessary to identify organisations without activity.
 * **Activity Types** - A list of the activities that the organisation deems to be engagement and therefore exclude any contacts who have had the activity recorded on their record.
@@ -18,8 +18,8 @@ These settings can be controlled within the GDPR setup
 
 The GDPR dashboard will show the contacts who meet the criteria that have been configured.
 
-![Communication Preferences Main](images/inactive-dashboard.png)
+![Communication Preferences Main](./images/inactive-dashboard.png)
 
 Clicking on the number will then present the contacts who have been identified, from the results you can perform an action, for example add to a group for a final communication or delete the contacts if they are invalid.
 
-![Communication Preferences Main](images/inactive-actions.png)
+![Communication Preferences Main](./images/inactive-actions.png)
