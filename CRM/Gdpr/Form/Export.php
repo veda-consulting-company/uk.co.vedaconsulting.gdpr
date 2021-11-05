@@ -127,7 +127,28 @@ class CRM_Gdpr_Form_Export extends CRM_Core_Form {
     $exportData = $pdfColumn = [];
     $values = $this->exportValues();
     foreach ($values['export_entities'] as $entity => $value) {
-      $exportableFields = $entities[$entity]['bao']::exportableFields();
+
+      // GDPR data
+      // We will process this separately as GDPR data needs to be computed
+      if ($entity == 'gdpr') {
+        self::getGDPRData($this->_contactID, $values['export_format'], $exportData, $pdfColumn);
+        continue;
+      }
+
+      // get exportable fields for core entity
+      if (isset($entities[$entity]['bao']) && method_exists($entities[$entity]['bao'], $entities[$entity]['method'])) {
+        $exportableFields = call_user_func($entities[$entity]['bao'].'::'.$entities[$entity]['method']);
+      }
+
+      // get exportable fields for custom group
+      if (isset($entities[$entity]['is_custom_group']) && isset($entities[$entity]['custom_group_id'])) {
+        $exportableFields = self::exportableCustomFieldsForGroup($entities[$entity]['custom_group_id']);
+      }
+
+      // Do not continue if we do know the fields to export
+      if (empty($exportableFields)) {
+        continue;
+      }
 
       // We need to change certain field names for case record
       // to fetch correct data via API
@@ -138,7 +159,7 @@ class CRM_Gdpr_Form_Export extends CRM_Core_Form {
 
       // Prepare header and fields for which values to be fetched
       $entityHeader = $entityFields = $emptyRow = [];
-      $entityFields = [];
+      $entityFields = $customDataColumns = [];
       foreach ($exportableFields as $field_key => $field_value) {
         // Check if we have a name for exportable field
         if (empty($field_value['name'])) {
@@ -152,6 +173,9 @@ class CRM_Gdpr_Form_Export extends CRM_Core_Form {
 
         $entityHeader[$field_value['name']] = $field_value['title'];
         $entityFields[] = $field_value['name'];
+        if (isset($field_value['column_name'])) {
+          $customDataColumns[$field_value['name']] = $field_value['column_name'];
+        }
         $emptyRow[$field_value['name']] = '';
         // Get values for pseudoconstant, if available
         if (isset($field_value['pseudoconstant'])) {
@@ -183,21 +207,30 @@ class CRM_Gdpr_Form_Export extends CRM_Core_Form {
       // Clean fields array
       $entityFields = array_filter($entityFields);
 
-      // Get data for the entity via API
-      $entityParams = [
-        'sequential' => 1,
-        'is_test' => 0, // Exclude any test records
-        $entities[$entity]['search_field'] => $this->_contactID,
-        'return' => $entityFields,
-        'options' => ['limit' => 0],
-      ];
+      // Get Custom Data via SQL
+      if (isset($entities[$entity]['is_custom_group']) && isset($entities[$entity]['custom_group_id'])) {
+        $customDataColumns = array_filter($customDataColumns);
+        $entityData = self::getCustomDataForEntity($entities[$entity], $this->_contactID, $entityFields, $customDataColumns);
+      } else { // Get Core Data via API
+        // Get data for the entity via API
+        $entityParams = [
+          'sequential' => 1,
+          $entities[$entity]['search_field'] => $this->_contactID,
+          'return' => $entityFields,
+          'options' => ['limit' => 0],
+        ];
 
-      // Skip sending return parameter to Case API, as it returns only limited information
-      if ($entity == 'case') {
-        unset($entityParams['return']);
+        // Add 'is_test' flag for entities which support test records
+        if ($entities[$entity]['exclude_test']) {
+          $entityParams['is_test'] = 0;
+        }
+
+        // Skip sending return parameter to Case API, as it returns only limited information
+        if ($entity == 'case') {
+          unset($entityParams['return']);
+        }
+        $entityData = CRM_Gdpr_Utils::CiviCRMAPIWrapper($entity, 'get', $entityParams);
       }
-
-      $entityData = CRM_Gdpr_Utils::CiviCRMAPIWrapper($entity, 'get', $entityParams);
 
       // Add header only if we have data for the entity
       if (!empty($entityData['values'])) {
@@ -250,6 +283,25 @@ class CRM_Gdpr_Form_Export extends CRM_Core_Form {
           }
         }
 
+        // Add 'contact_id_a_name' for relationship data
+        if ($entity == 'relationship') {
+          if ($row_value['contact_id_a'] == $this->_contactID) {
+            $row_value['contact_id_a'] = $this->_contactName;
+            $row_value['contact_id_b'] = $row_value['display_name'];
+          } else {
+            $row_value['contact_id_a'] = $row_value['display_name'];
+            $row_value['contact_id_b'] = $this->_contactName;
+          }
+        }
+
+        // Ignore 'Bulk Email' activities
+        if ($entity == 'activity') {
+          $bulkActivityTypeID = CRM_Core_PseudoConstant::getKey('CRM_Activity_BAO_Activity', 'activity_type_id', 'Bulk Email');
+          if ($row_value['activity_type_id'] == $bulkActivityTypeID) {
+            continue;
+          }
+        }
+
         foreach ($row_value as $entity_field_key => $entity_field_value) {
           // Check if the values is for the expected exportable fields
           if (!isset($exportRow[$entity_field_key])) {
@@ -272,7 +324,13 @@ class CRM_Gdpr_Form_Export extends CRM_Core_Form {
               $exportRow[$entity_field_key] = @implode(CRM_Core_DAO::VALUE_SEPARATOR, $multivalue_data);
             } else if (isset($options[$entity_field_value])){
               // Single value select/checkbox/radio, etc
-              $exportRow[$entity_field_key] = $options[$entity_field_value];
+              //$exportRow[$entity_field_key] = $options[$entity_field_value];
+              if ($values['export_format'] == 1) {
+                $exportRow[$entity_field_key] = '"'.$options[$entity_field_value].'"';
+              }
+              else {
+                $exportRow[$entity_field_key] = $options[$entity_field_value];
+              }
             }
           } else {
             // This is text field or similar
@@ -418,6 +476,9 @@ class CRM_Gdpr_Form_Export extends CRM_Core_Form {
       //$html[] = "<table width='100%' border='1' cellspacing='0' cellpadding='5'>";
       foreach ($rows as $row) {
         foreach ($row as $key => $data) {
+          if (trim($data) == '') {
+            continue;
+          }
           $columnName = $columnNames[$key];
           $html[] = "<tr>";
           $html[] = "<td width='25%' style='background-color: #bcbcbc;'><b>{$columnName}</b></td><td width='75%'>{$data}</td>";
@@ -450,12 +511,23 @@ class CRM_Gdpr_Form_Export extends CRM_Core_Form {
       'contact' => [
         'label' => E::ts('Contact'),
         'bao' => 'CRM_Contact_BAO_Contact',
+        'method' => 'exportableFields',
         'search_field' => 'id',
+        'exclude_test' => 0,
       ],
       'activity' => [
         'label' => E::ts('Activity'),
         'bao' => 'CRM_Activity_BAO_Activity',
+        'method' => 'exportableFields',
         'search_field' => 'target_contact_id',
+        'exclude_test' => 1,
+      ],
+      'relationship' => [
+        'label' => E::ts('Relationship'),
+        'bao' => 'CRM_Contact_DAO_Relationship',
+        'method' => 'fields',
+        'search_field' => 'contact_id',
+        'exclude_test' => 0,
       ],
     ];
     
@@ -465,7 +537,9 @@ class CRM_Gdpr_Form_Export extends CRM_Core_Form {
       $exportOptions['contribution'] = [
         'label' => E::ts('Contribution'),
         'bao' => 'CRM_Contribute_BAO_Contribution',
+        'method' => 'exportableFields',
         'search_field' => 'contact_id',
+        'exclude_test' => 1,
       ];
     }
 
@@ -473,7 +547,9 @@ class CRM_Gdpr_Form_Export extends CRM_Core_Form {
       $exportOptions['membership'] = [
         'label' => E::ts('Membership'),
         'bao' => 'CRM_Member_BAO_Membership',
+        'method' => 'exportableFields',
         'search_field' => 'contact_id',
+        'exclude_test' => 1,
       ];
     }
 
@@ -481,7 +557,9 @@ class CRM_Gdpr_Form_Export extends CRM_Core_Form {
       $exportOptions['participant'] = [
         'label' => E::ts('Participant'),
         'bao' => 'CRM_Event_BAO_Participant',
+        'method' => 'exportableFields',
         'search_field' => 'contact_id',
+        'exclude_test' => 1,
       ];
     }
 
@@ -489,27 +567,138 @@ class CRM_Gdpr_Form_Export extends CRM_Core_Form {
       $exportOptions['case'] = [
         'label' => E::ts('Case'),
         'bao' => 'CRM_Case_BAO_Case',
+        'method' => 'exportableFields',
         'search_field' => 'contact_id',
+        'exclude_test' => 0,
       ];
     }
 
-    /*if (isset($compInfo['CiviPledge'])) {
-      $exportOptions['pledge'] = [
-        'label' => E::ts('Pledge'),
-        'bao' => 'CRM_Pledge_BAO_Pledge',
-        'search_field' => 'contact_id',
+    // Check if GA extension is installed
+    if(CRM_Extension_System::singleton()->getMapper()->isActiveModule('civigiftaid')) {
+      // Get custom group id
+      $CGResult = civicrm_api3('CustomGroup', 'getsingle', [
+        'sequential' => 1,
+        'name' => "Gift_Aid_Declaration",
+      ]);
+      $exportOptions['civigiftaid'] = [
+        'label' => E::ts('Gift Aid Declaration'),
+        'is_custom_group' => 1,
+        'custom_group_id' => $CGResult['id'],
+        'entity' => 'Contact',
+        'search_field' => 'id',
+        'exclude_test' => 0,
+        'table_name' => $CGResult['table_name'],
       ];
     }
 
-    if (isset($compInfo['CiviGrant'])) {
-      $exportOptions['grant'] = [
-        'label' => E::ts('Grant'),
-        'bao' => 'CRM_Grant_BAO_Grant',
-        'search_field' => 'contact_id',
-      ];
-    }*/
+    // GDPR data
+    $exportOptions['gdpr'] = [
+      'label' => E::ts('GDPR'),
+      'is_custom_group' => 1,
+      'custom_group_id' => '',
+      'entity' => 'Contact',
+      'search_field' => 'id',
+      'exclude_test' => 0,
+      'table_name' => '',
+    ];
 
     return $exportOptions;
+  }
+
+  /**
+   * Get exportable fields for custom group
+   * assuming all fields are exportable in custom groups
+   *
+   * @return array
+   */
+  public static function exportableCustomFieldsForGroup($id) {
+    $result = civicrm_api3('CustomField', 'get', [
+      'sequential' => 1,
+      'custom_group_id' => $id,
+    ]);
+
+    $fields = [];
+    foreach ($result['values'] as $key => $value) {
+      $field = [
+        'custom_field_id' => $value['id'],
+        'name' => 'custom_'.$value['id'],
+        'column_name' => $value['column_name'],
+        'title' => $value['label'],
+      ];
+      if (isset($value['option_group_id']) && !empty($value['option_group_id'])) {
+        $field['option_group_id'] = $value['option_group_id'];
+      }
+      $fields[] = $field;
+    }
+
+    return $fields;
+  }
+
+  /**
+   * Get custom data for any entity
+   * Using SQL to get custom data
+   * as API does not return multi-row custom daya
+   *
+   * @return array
+   */
+  public static function getCustomDataForEntity($entity, $entityId, $entityFields, $columns) {
+    if (empty($entity) || empty($entityId)) {
+      return;
+    }
+
+    $selectColumns = implode(',', array_values($columns));
+
+    // Using SQL to get custom data
+    // as multi-row custom data are not returned via API
+    $tableName = $entity['table_name'];
+    $sql = "SELECT {$selectColumns} FROM {$tableName} WHERE entity_id = %1";
+    $params = array(1 => array($entityId, 'Integer'));
+    $dao = CRM_Core_DAO::executeQuery($sql, $params);
+    $customData = [];
+    while($dao->fetch()) {
+      $customRow = [];
+      foreach ($columns as $key => $value) {
+        $customRow[$key] = $dao->{$value};
+      }
+      $customData[] = $customRow;
+    }
+
+    return['values' => $customData];
+  }
+
+  /**
+   * GDPR data for export
+   * We will process this separately as GDPR data needs to be computed
+   *
+   * @return array
+   */
+  public static function getGDPRData($contactId, $exportFormat, &$exportData, &$pdfColumn) {
+    if (empty($contactId)) {
+      return;
+    }
+
+    if ($exportFormat == 2) {
+      $pdfColumn['gdpr'] = ['title' => 'Subject', 'details' => 'Status', 'date' => 'Date'];
+    } else {
+      $exportData['gdpr'][] = ['GDPR'];
+      $exportData['gdpr'][] = ['title' => 'Subject', 'details' => 'Status', 'date' => 'Date'];
+    }
+
+    //$gdprRows[] = ['Subject', 'Status', 'Date'];
+    $gdpr = new CRM_Gdpr_Page_Tab();
+    $exportData['gdpr'][] = $gdpr->getCommunicationsPreferencesDetails($contactId);
+    $exportData['gdpr'][] = $gdpr->getDataPolicyDetails($contactId);
+    $groupSubscriptions = CRM_Gdpr_Utils::getallGroupSubscription($contactId);
+    if (!empty($groupSubscriptions)) {
+      $exportData['gdpr'][] = ['Group Subscription Log'];
+      if ($exportFormat == 1) {
+        $exportData['gdpr'][] = ['Group Title', 'Status', 'Date'];
+      }
+
+      foreach ($groupSubscriptions as $key => $value) {
+        $exportData['gdpr'][] = ['title' => $value['title'], 'details' => $value['status'], 'date' => $value['date']];
+      }
+    }
   }
 
   /**
