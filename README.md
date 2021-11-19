@@ -54,6 +54,7 @@ More options for 'Export' functionality in GDPR tab:
 
 v3.3 Includes:
 
+- WP Shortcode
 - Fixes in documentation & call to reconcile modules #295
 - Set subject on 'Update Communication Preferences' based on source form
 - Convert to use API4 for creating the activity
