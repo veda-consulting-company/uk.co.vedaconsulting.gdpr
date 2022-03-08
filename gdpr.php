@@ -372,7 +372,7 @@ function gdpr_civicrm_tabset($tabsetName, &$tabs, $context) {
  * Implements hook_civicrm_export().
  */
 function gdpr_civicrm_export($exportTempTable, $headerRows, $sqlColumns, $exportMode, $componentTable = '', $ids = []) {
-  $trackExports = CRM_Core_BAO_Setting::getItem(CRM_Gdpr_Constants::GDPR_SETTING_GROUP,'track_exports',NULL, FALSE);
+  $trackExports = CRM_Gdpr_Utils::getItem(CRM_Gdpr_Constants::GDPR_SETTING_GROUP, 'track_exports', NULL, FALSE);
   if (version_compare(CRM_Utils_System::version(), '5.8.0', '>=') && $trackExports) {
     switch ($exportMode) {
       case CRM_Export_Form_Select::CONTACT_EXPORT:
