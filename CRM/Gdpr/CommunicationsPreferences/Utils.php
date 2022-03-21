@@ -58,7 +58,7 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
     $settings = [];
     $defaults = $use_defaults ? self::getSettingsDefaults() : [];
     foreach ([self::SETTING_NAME, self::GROUP_SETTING_NAME] as $setting_name) {
-      $serialized = CRM_Core_BAO_Setting::getItem(self::SETTING_GROUP, $setting_name);
+      $serialized = CRM_Gdpr_Utils::getItem(self::SETTING_GROUP, $setting_name);
       if (!$serialized && $use_defaults)  {
         $settings[$setting_name] = !empty($defaults[$setting_name]) ? $defaults[$setting_name] : [];
       }
@@ -118,7 +118,7 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
     foreach ([self::SETTING_NAME, self::GROUP_SETTING_NAME] as $setting_name) {
       if (isset($settings_array[$setting_name])) {
         $setting_serialized = serialize($settings_array[$setting_name]);
-        CRM_Core_BAO_Setting::setItem($setting_serialized, self::SETTING_GROUP, $setting_name);
+        CRM_Gdpr_Utils::setItem($setting_serialized, self::SETTING_GROUP, $setting_name);
       }
     }
   }
