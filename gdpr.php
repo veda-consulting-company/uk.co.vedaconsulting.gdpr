@@ -196,8 +196,13 @@ function gdpr_civicrm_alterContent(&$content, $context, $tplName, &$object) {
             var split = data.split('|');
             if( split[0] != 0 ){
             var linkHtml = '<div class="crm-content" align="right"><a href="javascript:void(0);" id="address_history_dialog_link"> Address History ('+split[0]+') </a></div>';
-
-            cj(linkHtml).insertAfter('#website-block');
+            
+            // check if we are using standard layout or contact summary layout
+            if (cj('#website-block').length > 0) {
+              cj(linkHtml).insertAfter('#website-block');
+            } else {
+              cj(linkHtml).insertBefore('.crm-address_1');
+            }
             cj(linkHtml).wrap('<div class="contact_panel"></div>');
             cj('#address_history_dialog_link').click(function(){
               var oTable = cj(split[1]).dataTable({
