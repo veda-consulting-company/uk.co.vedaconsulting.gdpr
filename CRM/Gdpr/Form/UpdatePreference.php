@@ -230,7 +230,7 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
     if (!empty($form->groupEleNames)) {
       foreach ($form->groupEleNames as $groupName => $groupEleName) {
         //get the channel array and group channel array
-        $groupChannelArray = [];
+        $groupChannelArray = $channelArray = [];
         foreach ($form->channelEleNames as $channel) {
           $groupChannel = str_replace($form->containerPrefix, '', $channel);
           $channelSettingValue = $form->commPrefGroupsetting[$groupEleName][$groupChannel];
