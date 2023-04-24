@@ -518,11 +518,12 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
         'return' => ["preferred_communication_method"],
         'id' => $contactId,
       ]);
-
-      $existingPreferredMethod = $apiResult['preferred_communication_method'];
-      $existingPreferredMethod = array_fill_keys($existingPreferredMethod, 1);
+      if (!empty($apiResult['preferred_communication_method'])) {
+        $existingPreferredMethod = $apiResult['preferred_communication_method'];
+        $existingPreferredMethod = array_fill_keys($existingPreferredMethod, 1);
+      }
     } catch (Exception $e) {
-      CRM_Core_Error::debug_var('updateCommsPrefByFormValues', $e);
+      CRM_Core_Error::debug_var('updateCommsPrefByFormValues', $e->getMessage());
     }
 
     //FIXME, this must go under constant file
