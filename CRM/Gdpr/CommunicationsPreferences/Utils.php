@@ -513,7 +513,7 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
         'id' => $contactId,
       ));
 
-      $existingPreferredMethod = $apiResult['preferred_communication_method'];
+      $existingPreferredMethod = (array) $apiResult['preferred_communication_method'];
       $existingPreferredMethod = array_fill_keys($existingPreferredMethod, 1);
     } catch (Exception $e) {
       CRM_Core_Error::debug_var('updateCommsPrefByFormValues', $e);
