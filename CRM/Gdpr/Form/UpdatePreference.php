@@ -160,6 +160,18 @@ class CRM_Gdpr_Form_UpdatePreference extends CRM_Core_Form {
   }
 
   /**
+   * Is this being called from an entity reference field.
+   *
+   * E.g clicking on 'New Organization' from the employer field
+   * would create a link with the context = 'dialog' in the url.
+   *
+   * @return bool
+   */
+  public function isEntityReferenceContactCreateMode(): bool {
+    return $this->_context === 'dialog';
+  }
+
+  /**
    * Add the custom fields.
    *
    * @param int $id
