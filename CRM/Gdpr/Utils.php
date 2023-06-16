@@ -519,7 +519,7 @@ WHERE url.time_stamp > '{$date}'";
       'options' => ['limit' => 0],
       'return' => ['id', 'activity_type_id'],
       'activity_type_id' => ['IN' => $actTypeIds],
-    ]['values']);
+    ])['values'];
     foreach ($results as $data) {
       // Not-required, but still need to do validation for being safe.
       // Check if the activity type needs to be deleted
