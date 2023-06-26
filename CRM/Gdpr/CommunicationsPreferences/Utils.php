@@ -512,7 +512,7 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
     $commPref = ['id' => $contactId];
 
     // get existing preferred communication methods
-    $existingPreferredMethod = NULL;
+    $existingPreferredMethod = [];
     try {
       $apiResult = civicrm_api3('Contact', 'getsingle', [
         'return' => ["preferred_communication_method"],
@@ -520,6 +520,12 @@ class CRM_Gdpr_CommunicationsPreferences_Utils {
       ]);
 
       $existingPreferredMethod = $apiResult['preferred_communication_method'];
+      
+        if( !is_array( $existingPreferredMethod ) ){
+          // create an empty array to avoid error message
+          $existingPreferredMethod = [];
+        }
+      
       $existingPreferredMethod = array_fill_keys($existingPreferredMethod, 1);
     } catch (Exception $e) {
       CRM_Core_Error::debug_var('updateCommsPrefByFormValues', $e);
