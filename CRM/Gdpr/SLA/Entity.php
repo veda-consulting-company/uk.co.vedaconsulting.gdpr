@@ -190,12 +190,12 @@ class CRM_Gdpr_SLA_Entity {
               break;
           }
         }
-
-        $text = $settings['entity_tc_checkbox_text'];
-        if (!empty($links['entity'])) {
-          $form->add('checkbox', 'accept_entity_tc', $text, NULL, TRUE);
-        }
       }
+    }
+
+    if (!empty($links['entity'])) {
+      $text = $settings['entity_tc_checkbox_text'];
+      $form->add('checkbox', 'accept_entity_tc', $text, NULL, TRUE);
     }
 
     if (!empty($links['global'])) {
