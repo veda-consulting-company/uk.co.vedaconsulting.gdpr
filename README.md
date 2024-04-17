@@ -1,5 +1,6 @@
 # GDPR #
 
+## PLEASE NOTE THIS EXTENSION HAS MOVED TO https://lab.civicrm.org/extensions/gdpr ##
 
 ### Overview ###
 
