@@ -531,8 +531,8 @@ function gdpr_civicrm_pageRun(&$page) {
     $accept_date = NULL;
     if (!empty($accept_activity['activity_date_time'])) {
       $accept_date = date('d/m/Y', strtotime($accept_activity['activity_date_time']));
-      $page->assign('lastAcceptanceDate', $accept_date);
     }
+    $page->assign('lastAcceptanceDate', $accept_date);
   }
   if ($pageName == 'CRM_Event_Page_EventInfo') {
     CRM_Core_Resources::singleton()->addStyleFile('uk.co.vedaconsulting.gdpr', 'css/gdpr.css');
